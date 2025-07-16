@@ -14,24 +14,28 @@ namespace SplineMesh {
     /// </summary>
     [ExecuteInEditMode]
     [RequireComponent(typeof(Spline))]
-    public class ExampleContortAlong : MonoBehaviour {
+    public class ExampleContortAlong : MonoBehaviour
+    {
         private Spline spline;
         private float rate = 0;
         private MeshBender meshBender;
 
-        [HideInInspector]
-        public GameObject generated;
+        [HideInInspector] public GameObject generated;
 
         public Mesh mesh;
         public Material material;
         public Vector3 rotation;
         public Vector3 scale;
 
+      
+
         public float DurationInSecond;
         public float processRate = 0f;
         public float currentTime = 0f;
         public bool onPlay = false;
-        private void OnEnable() {
+
+        private void OnEnable()
+        {
             rate = 0;
             Init();
 // #if UNITY_EDITOR
@@ -50,7 +54,8 @@ namespace SplineMesh {
             EditorUpdate();
         }
 
-        private void OnValidate() {
+        private void OnValidate()
+        {
             Init();
         }
 
@@ -62,6 +67,7 @@ namespace SplineMesh {
                 Contort();
                 return;
             }
+
             currentTime += Time.deltaTime;
             rate = currentTime / DurationInSecond;
             processRate = rate;
@@ -70,17 +76,20 @@ namespace SplineMesh {
                 currentTime = 0f;
                 rate--;
             }
+
             Contort();
         }
 
+        #region Buttons
+
         [Button]
-        private void Play()
+        public void Play()
         {
             onPlay = true;
             if (rate > 1)
                 RePlay();
         }
-        
+
         [Button]
         private void Pause()
         {
@@ -94,6 +103,22 @@ namespace SplineMesh {
             rate = 0;
             onPlay = true;
         }
+
+        #endregion
+
+        #region Animation
+
+        private void OnBlock()
+        {
+            
+        }
+
+        private void OnComplete()
+        {
+            
+        }
+
+        #endregion
 
         private void Contort() {
             if (generated != null) {
