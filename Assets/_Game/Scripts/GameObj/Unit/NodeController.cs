@@ -1,7 +1,9 @@
+
 using System;
 using System.Collections.Generic;
 using LitMotion;
 using SplineMesh;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
@@ -9,23 +11,24 @@ namespace _Game.Scripts.GameObj.Unit
     [System.Serializable]
     public class NodeController
     {
-        public UnityEngine.GameObject objTokenCancelMove;
+        public GameObject objTokenCancelMove;
         public SplineNode splineNode;
         public Vector3 currentPosition = new();
         public List<Vector3> pointMoves = new();
         public float speed = 1f;
 
-        private void ChangePosition(Vector3 vectorChange)
-        {
-            Debug.Log($"node {splineNode.Position} change to {vectorChange}");
-            splineNode.Position = vectorChange;
-        }
-
-        private Action _moveDoneCallback;
+        private Action moveDoneCallback;
+        private Action<float3, float3> onMoveUpdateCallback;
         public Action MoveDoneCallback
         {
-            get => _moveDoneCallback;
-            set => _moveDoneCallback = value;
+            get => moveDoneCallback;
+            set => moveDoneCallback = value;
+        }
+        
+        public Action<float3, float3> MoveUpdateCallback
+        {
+            get => onMoveUpdateCallback;
+            set => onMoveUpdateCallback = value;
         }
         
         public void SetPathPoints(List<Vector3> pathPoints)
@@ -57,7 +60,7 @@ namespace _Game.Scripts.GameObj.Unit
                         }
                         else
                         {
-                            _moveDoneCallback?.Invoke();
+                            moveDoneCallback?.Invoke();
                             _pointIndex = 0; // Reset to the first point if needed
                         }
                     })
@@ -65,6 +68,7 @@ namespace _Game.Scripts.GameObj.Unit
                     {
                         currentPosition = x;
                         splineNode.Position = x;
+                        onMoveUpdateCallback?.Invoke(x, splineNode.Direction);
                     }
                     ).AddTo(objTokenCancelMove);
         }

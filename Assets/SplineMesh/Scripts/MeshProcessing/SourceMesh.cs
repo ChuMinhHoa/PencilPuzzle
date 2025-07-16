@@ -118,15 +118,15 @@ namespace SplineMesh {
         private void BuildData() {
             // if the mesh is reversed by scale, we must change the culling of the faces by inversing all triangles.
             // the mesh is reverse only if the number of resersing axes is impair.
-            bool reversed = scale.x < 0;
+            var reversed = scale.x < 0;
             if (scale.y < 0) reversed = !reversed;
             if (scale.z < 0) reversed = !reversed;
             triangles = reversed ? MeshUtility.GetReversedTriangles(Mesh) : Mesh.triangles;
 
             // we transform the source mesh vertices according to rotation/translation/scale
-            int i = 0;
+            var i = 0;
             vertices = new List<MeshVertex>(Mesh.vertexCount);
-            foreach (Vector3 vert in Mesh.vertices) {
+            foreach (var vert in Mesh.vertices) {
                 var transformed = new MeshVertex(vert, Mesh.normals[i++]);
                 //  application of rotation
                 if (rotation != Quaternion.identity) {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SplineMesh;
 using UnityEngine;
 
-namespace _Game.Scripts.Unit
+namespace _Game.Scripts.GameObj.Unit
 {
     public class SplineOutController : MonoBehaviour
     {
@@ -14,10 +14,11 @@ namespace _Game.Scripts.Unit
 
             for (var i = 0; i < splineOut.nodes.Count-1; i++)
             {
-                pathPoints.Add(splineOut.nodes[i].Position);
+                var newPoint = splineOut.nodes[i].Position;
+                pathPoints.Add(newPoint);
             }
-            
-            var lastPoint = splineOut.nodes[^1].Position - Vector3.up * pointIndex;
+            var newLastPoint = splineOut.nodes[^1].Position;
+            var lastPoint = newLastPoint - Vector3.up * pointIndex;
             pathPoints.Add(lastPoint);
             return pathPoints;
         }
