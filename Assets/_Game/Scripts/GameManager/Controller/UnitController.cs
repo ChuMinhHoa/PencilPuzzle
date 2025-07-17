@@ -10,12 +10,12 @@ namespace _Game.Scripts.GameManager.Controller
     public class UnitController : MonoBehaviour
     {
         public List<UnitBase> units = new();
-
-        private async void Awake()
+        public async UniTask InitData()
         {
             for (var i = 0; i < units.Count; i++)
             {
                 units[i].gameObject.SetActive(true);
+                units[i].InitData();
                 await UniTask.WaitForEndOfFrame();
             }
         }

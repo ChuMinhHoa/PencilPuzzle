@@ -17,18 +17,18 @@ namespace _Game.Scripts.GameObj.Unit
         public List<Vector3> pointMoves = new();
         public float speed = 1f;
 
-        private Action moveDoneCallback;
-        private Action<float3, float3> onMoveUpdateCallback;
-        public Action MoveDoneCallback
+        private Action _moveDoneCallback;
+        private Action<float3, float3> _onMoveUpdateCallback;
+        public Action moveDoneCallback
         {
-            get => moveDoneCallback;
-            set => moveDoneCallback = value;
+            get => _moveDoneCallback;
+            set => _moveDoneCallback = value;
         }
         
-        public Action<float3, float3> MoveUpdateCallback
+        public Action<float3, float3> moveUpdateCallback
         {
-            get => onMoveUpdateCallback;
-            set => onMoveUpdateCallback = value;
+            get => _onMoveUpdateCallback;
+            set => _onMoveUpdateCallback = value;
         }
         
         public void SetPathPoints(List<Vector3> pathPoints)
@@ -60,7 +60,8 @@ namespace _Game.Scripts.GameObj.Unit
                         }
                         else
                         {
-                            moveDoneCallback?.Invoke();
+                            splineNode.Up = Vector3.forward;
+                            _moveDoneCallback?.Invoke();
                             _pointIndex = 0; // Reset to the first point if needed
                         }
                     })
@@ -68,9 +69,15 @@ namespace _Game.Scripts.GameObj.Unit
                     {
                         currentPosition = x;
                         splineNode.Position = x;
-                        onMoveUpdateCallback?.Invoke(x, splineNode.Direction);
+                        _onMoveUpdateCallback?.Invoke(x, splineNode.Direction);
                     }
                     ).AddTo(objTokenCancelMove);
+        }
+
+        public void ClearPath()
+        {
+            splineNode.Up = Vector3.up;
+            pointMoves.Clear();
         }
     }
 }

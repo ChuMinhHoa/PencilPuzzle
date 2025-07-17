@@ -56,6 +56,7 @@ namespace SplineMesh {
         [Tooltip("The mode to use to fill the choosen interval with the bent mesh.")]
         public MeshBender.FillingMode mode = MeshBender.FillingMode.StretchToInterval;
 
+        [Button]
         private void OnEnable()
         {
             //mesh = CreateNewMesh();
@@ -104,8 +105,6 @@ namespace SplineMesh {
 //             if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null) return;
 // #endif
             var used = new List<GameObject>();
-
-            Debug.Log("Create mesh");
             if (curveSpace)
             {
                 int i = 0;
