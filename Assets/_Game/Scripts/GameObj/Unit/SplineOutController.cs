@@ -9,9 +9,9 @@ namespace _Game.Scripts.GameObj.Unit
     {
         public Spline splineOut;
 
-        public List<Vector3> GetPathOut(int pointIndex, Transform parents)
+        public List<float3> GetPathOut(int pointIndex, Transform parents)
         {
-            var pathPoints = new List<Vector3>();
+            var pathPoints = new List<float3>();
 
             for (var i = 0; i < splineOut.nodes.Count-1; i++)
             {

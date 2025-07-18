@@ -140,6 +140,7 @@ MonoBehaviour:
   trsHead: {fileID: 4310045879347579088}
   trsBottom: {fileID: 99041474920853590}
   trsLastPencil: {fileID: 3217568049960559765}
+  trsCheckPoint: {fileID: 4377499100730276001}
   spline: {fileID: 9032276189140421657}
   splineMeshTiling: {fileID: 7621731579206075032}
   splineOut: {fileID: 2615808527274960970}
@@ -181,6 +182,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   lastPencilMeshRenderer: {fileID: 4389942855906648058}
+  distanceCheck: 10
 --- !u!1 &338856019168256365
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +218,7 @@ Transform:
   m_Children:
   - {fileID: 856143720363463051}
   - {fileID: 6677961361797347965}
+  - {fileID: 4377499100730276001}
   m_Father: {fileID: 4186100736370799228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9032276189140421657
@@ -789,6 +792,37 @@ Transform:
   m_Children:
   - {fileID: 4310045879347579088}
   - {fileID: 99041474920853590}
+  m_Father: {fileID: 5821770977527117217}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4966212036967489852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4377499100730276001}
+  m_Layer: 0
+  m_Name: CheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4377499100730276001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4966212036967489852}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
   m_Father: {fileID: 5821770977527117217}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3111319275050550142

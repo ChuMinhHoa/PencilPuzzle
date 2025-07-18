@@ -16,13 +16,13 @@ MonoBehaviour:
   unitPositionConfig:
   - unitId: 0
     unitColor: 1
-    unitLength: 0
+    unitLength: 2
     position:
       x: 0
       y: 0
-      z: 0
+      z: 5.5
     eulerAngles:
-      x: 0
+      x: -0
       y: 0
       z: 0
     pathMesh:
@@ -40,13 +40,13 @@ MonoBehaviour:
       z: 2
   - unitId: 1
     unitColor: 1
-    unitLength: 0
+    unitLength: 2
     position:
-      x: 0
+      x: 2.08935
       y: 0
-      z: 0
+      z: 5.68117
     eulerAngles:
-      x: 0
+      x: -0
       y: 0
       z: 0
     pathMesh:
@@ -74,9 +74,9 @@ MonoBehaviour:
     - x: 0
       y: 0
       z: 0
-    - x: 0
+    - x: 0.009491325
       y: 0
-      z: 1
+      z: 0.9902822
     - x: -1.0000002
       y: 0
       z: 1.0000004

@@ -29,11 +29,14 @@ namespace _Game.Scripts.GameObj.Unit
         private UnitConfig _unitConfig;
         private UnitPositionConfig _unitPositionConfig;
 
-        [Title("GameObject")] [SerializeField] private GameObject objSpline;
+        [Title("GameObject")] 
+        [SerializeField] private GameObject objSpline;
 
-        [Title("Transform")] [SerializeField] private Transform trsHead;
+        [Title("Transform")] 
+        [SerializeField] private Transform trsHead;
         [SerializeField] private Transform trsBottom;
         [SerializeField] private Transform trsLastPencil;
+        [SerializeField] private Transform trsCheckPoint;
         private Transform _trsGoal;
 
         [Title("Spline")] [SerializeField] private Spline spline;
@@ -48,7 +51,8 @@ namespace _Game.Scripts.GameObj.Unit
 
         public AnimationCurve curveComplete;
         public MeshRenderer lastPencilMeshRenderer;
-
+        
+        public float distanceCheck = 0.5f;
         #region Init Data
 
         [Button]
@@ -78,13 +82,7 @@ namespace _Game.Scripts.GameObj.Unit
 
             for (var i = 0; i < spline.nodes.Count; i++)
             {
-                NodeController node = new()
-                {
-                    objTokenCancelMove = gameObject,
-                    currentPosition = spline.nodes[i].Position,
-                    splineNode = spline.nodes[i],
-                    speed = speed
-                };
+                NodeController node = new(spline.nodes[i], gameObject, speed);
                 nodes.Add(node);
             }
 
@@ -92,7 +90,7 @@ namespace _Game.Scripts.GameObj.Unit
 
             nodes[^1].moveDoneCallback = ActionMoveDoneCallBack;
             nodes[^1].moveUpdateCallback = AlignBottomTransform;
-
+     
             AlignHeaderWithFirstNode(trsHead, true);
             AlignHeaderWithFirstNode(trsBottom, false);
         }
@@ -100,6 +98,30 @@ namespace _Game.Scripts.GameObj.Unit
         #endregion
 
         #region Move
+
+        [Button]
+        private void TryMOveOut()
+        {
+            var hit = CheckCanMove();
+            if (hit != null)  
+            {
+                Debug.Log(hit);
+                MoveOutFail(hit.Value);
+            }
+            else
+            {
+                MoveOut();
+            }
+        }
+
+        private void MoveOutFail(float3 hit)
+        {
+            for (var i = 0; i < nodes.Count; i++)
+            {
+                nodes[i].SetPathPoints(GetPathPointToHit(i, hit));
+                nodes[i].MoveToNextPoint();
+            }
+        }
 
         [Button]
         private void MoveOut()
@@ -120,18 +142,40 @@ namespace _Game.Scripts.GameObj.Unit
             AnimOnComplete();
         }
 
-        private List<Vector3> GetPathPoints(int nodeIndex)
+        private List<float3> GetPathPoints(int nodeIndex)
         {
-            var pathPoints = new List<Vector3>();
+            var pathPoints = new List<float3>();
+            pathPoints.AddRange(GetPathPointToOtherPoint(nodeIndex));
+            pathPoints.AddRange(splineOut.GetPathOut(nodeIndex, transform));
+
+            return pathPoints;
+        }
+
+        private List<float3> GetPathPointToOtherPoint(int nodeIndex)
+        {
+            var pathPoints = new List<float3>();
             for (var i = nodeIndex - 1; i >= 0; i--)
             {
                 var newPoint = nodes[i].currentPosition;
                 pathPoints.Add(newPoint);
             }
 
-            pathPoints.AddRange(splineOut.GetPathOut(nodeIndex, transform));
-
             return pathPoints;
+        }
+
+        private List<float3> GetPathPointToHit(int nodeIndex, float3 hit)
+        {
+            var pathPoints = GetPathPointToOtherPoint(nodeIndex);
+            pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
+            return pathPoints;
+        }
+
+        private float3 GetLastPointToHit(int nodeIndex, float3 hit)
+        {
+            Vector3 lastPoint = hit;
+            var dir = (lastPoint - nodes[0].currentPosition).normalized;
+            lastPoint -= dir * nodeIndex;
+            return lastPoint;
         }
 
         public void SetPointGoal(Transform pointGoalPointGoal) => _trsGoal = pointGoalPointGoal;
@@ -144,6 +188,8 @@ namespace _Game.Scripts.GameObj.Unit
         {
             trsHead.localPosition = position;
             trsHead.LookAt(dir);
+            trsCheckPoint.localPosition = position;
+            trsCheckPoint.LookAt(spline.transform.TransformPoint(dir));
         }
 
         private void AlignBottomTransform(float3 position, float3 dir)
@@ -272,24 +318,19 @@ namespace _Game.Scripts.GameObj.Unit
         #endregion
 
         [Button]
-        private void Update()
+        private float3? CheckCanMove()
         {
-            CheckCanMove();
-        }
-
-        public void CheckCanMove()
-        {
-            if (Physics.Linecast(trsHead.position, trsHead.position - trsHead.forward, out var hit))
+            if (Physics.Linecast(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, out var hit))
             {
-                //Debug.Log("Cannot move, hit: " + hit.collider.name);
-                Debug.DrawLine(trsHead.position, hit.point, Color.red);
+                Debug.DrawLine(trsCheckPoint.position, hit.point, Color.red);
+                return hit.point;
             }
             else
             {
-                //Debug.Log("Can move");
-
-                Debug.DrawLine(trsHead.position, trsHead.position - trsHead.forward, Color.green);
+                Debug.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, Color.green);
+                return null;
             }
+          
         }
     }
 }
