@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _Game.Scripts.GameManager;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.ScriptAbleObject;
+using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
 using SplineMesh;
@@ -22,7 +24,8 @@ namespace _Game.Scripts.GameObj.Unit
 
     public class UnitBase : MonoBehaviour
     {
-        [Title("Unit define")] public int unitId;
+        [Title("Unit define")] 
+        public int unitId;
         public UnitLengthType unitLength;
         public SharpenerColorType colorType;
 
@@ -37,22 +40,30 @@ namespace _Game.Scripts.GameObj.Unit
         [SerializeField] private Transform trsBottom;
         [SerializeField] private Transform trsLastPencil;
         [SerializeField] private Transform trsCheckPoint;
+        [SerializeField] private Transform trsFollowHit;
         private Transform _trsGoal;
 
-        [Title("Spline")] [SerializeField] private Spline spline;
+        [Title("Spline")] 
+        [SerializeField] private Spline spline;
         [SerializeField] private SplineMeshTiling splineMeshTiling;
         public SplineOutController splineOut;
         public InitSpline initSpline;
 
         public List<NodeController> nodes = new();
 
-        [Title("Animation")] public float speed = 2f;
+        [Title("Animation")]
+        public float speed = 2f;
         public float magnitude = 2f;
 
         public AnimationCurve curveComplete;
         public MeshRenderer lastPencilMeshRenderer;
         
-        public float distanceCheck = 0.5f;
+        [Title("Move out")]
+        public float distanceCheck = 10f;
+
+        public float distanceOffSetStop = 0.5f;
+        
+        
         #region Init Data
 
         [Button]
@@ -71,8 +82,8 @@ namespace _Game.Scripts.GameObj.Unit
             lastPencilMeshRenderer.material = mat;
             AlignPencil();
             nodes.Clear();
-            transform.position = _unitPositionConfig.position;
-            transform.eulerAngles = _unitPositionConfig.eulerAngles;
+            //transform.position = _unitPositionConfig.position;
+            //transform.eulerAngles = _unitPositionConfig.eulerAngles;
         }
 
         public virtual void InitData()
@@ -82,13 +93,13 @@ namespace _Game.Scripts.GameObj.Unit
 
             for (var i = 0; i < spline.nodes.Count; i++)
             {
-                NodeController node = new(spline.nodes[i], gameObject, speed);
+                NodeController node = new(spline.nodes[i], gameObject, speed, i);
                 nodes.Add(node);
             }
 
             nodes[0].moveUpdateCallback = AlignHeaderTransform;
 
-            nodes[^1].moveDoneCallback = ActionMoveDoneCallBack;
+            //nodes[^1].moveDoneCallback = ActionMoveDoneCallBack;
             nodes[^1].moveUpdateCallback = AlignBottomTransform;
      
             AlignHeaderWithFirstNode(trsHead, true);
@@ -99,14 +110,14 @@ namespace _Game.Scripts.GameObj.Unit
 
         #region Move
 
+        private float3? _hitTemp = null;
         [Button]
         private void TryMOveOut()
         {
-            var hit = CheckCanMove();
-            if (hit != null)  
+            _hitTemp = CheckCanMove();
+            if (_hitTemp != null)  
             {
-                Debug.Log(hit);
-                MoveOutFail(hit.Value);
+                MoveOutFail(_hitTemp.Value);
             }
             else
             {
@@ -116,9 +127,12 @@ namespace _Game.Scripts.GameObj.Unit
 
         private void MoveOutFail(float3 hit)
         {
+            _currentNodeBack = 0;
+            var distanceToHit = Vector3.Distance(trsCheckPoint.position, hit);
             for (var i = 0; i < nodes.Count; i++)
             {
-                nodes[i].SetPathPoints(GetPathPointToHit(i, hit));
+                var pathPoints = GetPathPointToHit(i, hit,true, distanceToHit);
+                nodes[i].SetUpMoveOutFail(()=>_ = MoveBack(), pathPoints);
                 nodes[i].MoveToNextPoint();
             }
         }
@@ -130,7 +144,8 @@ namespace _Game.Scripts.GameObj.Unit
             {
                 for (var i = 0; i < nodes.Count; i++)
                 {
-                    nodes[i].SetPathPoints(GetPathPoints(i));
+                    var pathPoints = GetPathPoints(i);
+                    nodes[i].SetUpMoveOut(ActionMoveDoneCallBack, pathPoints);
                     nodes[i].MoveToNextPoint();
                 }
             }
@@ -140,6 +155,23 @@ namespace _Game.Scripts.GameObj.Unit
         {
             Debug.Log("all move done next step");
             AnimOnComplete();
+        }
+
+        private int _currentNodeBack;
+        private async Task MoveBack()
+        {
+            Debug.Log("Move back called");
+            _currentNodeBack++;
+            Debug.Log("Current node back: " + _currentNodeBack);
+            if(_currentNodeBack == nodes.Count)
+            {
+                await UniTask.WaitForSeconds(0.15f);
+                for (var i = nodes.Count - 1; i >= 0; i--)
+                {
+                    nodes[i].SetUpMoveBack();
+                    nodes[i].MoveToNextPoint();
+                }
+            }
         }
 
         private List<float3> GetPathPoints(int nodeIndex)
@@ -163,10 +195,16 @@ namespace _Game.Scripts.GameObj.Unit
             return pathPoints;
         }
 
-        private List<float3> GetPathPointToHit(int nodeIndex, float3 hit)
+        private List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false, float distanceToHit = 0f)
         {
             var pathPoints = GetPathPointToOtherPoint(nodeIndex);
             pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
+            
+            if (getByHit && distanceToHit < spline.nodes.Count)
+            {
+                var totalRemove = (int)distanceToHit;
+            }
+            
             return pathPoints;
         }
 
@@ -174,7 +212,7 @@ namespace _Game.Scripts.GameObj.Unit
         {
             Vector3 lastPoint = hit;
             var dir = (lastPoint - nodes[0].currentPosition).normalized;
-            lastPoint -= dir * nodeIndex;
+            lastPoint -= dir * nodeIndex + dir * distanceOffSetStop - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
             return lastPoint;
         }
 
@@ -322,15 +360,24 @@ namespace _Game.Scripts.GameObj.Unit
         {
             if (Physics.Linecast(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, out var hit))
             {
-                Debug.DrawLine(trsCheckPoint.position, hit.point, Color.red);
-                return hit.point;
+                trsFollowHit.position = hit.point;
+                return transform.TransformPoint(hit.point);
+            }
+            return null;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (_hitTemp!= null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(trsCheckPoint.position, trsFollowHit.position);
             }
             else
             {
-                Debug.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, Color.green);
-                return null;
+                Gizmos.color = Color.green;
+                Gizmos.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck);
             }
-          
         }
     }
 }
