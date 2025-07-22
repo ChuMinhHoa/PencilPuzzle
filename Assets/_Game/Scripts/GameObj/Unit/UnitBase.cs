@@ -110,14 +110,14 @@ namespace _Game.Scripts.GameObj.Unit
 
         #region Move
 
-        private float3? _hitTemp = null;
+        private float3? hitTemp = null;
         [Button]
         private void TryMOveOut()
         {
-            _hitTemp = CheckCanMove();
-            if (_hitTemp != null)  
+            hitTemp = CheckCanMove();
+            if (hitTemp != null)  
             {
-                MoveOutFail(_hitTemp.Value);
+                MoveOutFail(hitTemp.Value);
             }
             else
             {
@@ -127,7 +127,7 @@ namespace _Game.Scripts.GameObj.Unit
 
         private void MoveOutFail(float3 hit)
         {
-            _currentNodeBack = 0;
+            currentNodeBack = 0;
             var distanceToHit = Vector3.Distance(trsCheckPoint.position, hit);
             for (var i = 0; i < nodes.Count; i++)
             {
@@ -157,13 +157,11 @@ namespace _Game.Scripts.GameObj.Unit
             AnimOnComplete();
         }
 
-        private int _currentNodeBack;
+        private int currentNodeBack;
         private async Task MoveBack()
         {
-            Debug.Log("Move back called");
-            _currentNodeBack++;
-            Debug.Log("Current node back: " + _currentNodeBack);
-            if(_currentNodeBack == nodes.Count)
+            currentNodeBack++;
+            if(currentNodeBack == nodes.Count)
             {
                 await UniTask.WaitForSeconds(0.15f);
                 for (var i = nodes.Count - 1; i >= 0; i--)
@@ -199,10 +197,17 @@ namespace _Game.Scripts.GameObj.Unit
         {
             var pathPoints = GetPathPointToOtherPoint(nodeIndex);
             pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
-            
             if (getByHit && distanceToHit < spline.nodes.Count)
             {
-                var totalRemove = (int)distanceToHit;
+                var totalRemove = (int)distanceToHit > 1? (int)distanceToHit : 1;
+                Debug.Log($"total remove{totalRemove}");
+                for (var i = pathPoints.Count - 1; i >= 0; i--)
+                {
+                    if (pathPoints.Count > totalRemove)
+                        pathPoints.RemoveAt(i);
+                    else
+                        break;
+                }
             }
             
             return pathPoints;
@@ -277,7 +282,7 @@ namespace _Game.Scripts.GameObj.Unit
 
         #region Animation
 
-        private MotionHandle _moveCompleteHandle;
+        private MotionHandle moveCompleteHandle;
 
         private void AnimOnBlock()
         {
@@ -290,11 +295,11 @@ namespace _Game.Scripts.GameObj.Unit
 
             objSpline.SetActive(false);
             trsLastPencil.gameObject.SetActive(true);
-            if (_moveCompleteHandle.IsPlaying())
-                _moveCompleteHandle.TryCancel();
+            if (moveCompleteHandle.IsPlaying())
+                moveCompleteHandle.TryCancel();
             var progress = 0f;
             var duration = curveComplete.keys[^1].time;
-            _moveCompleteHandle = LMotion.Create(trsLastPencil.position, _trsGoal.position, duration)
+            moveCompleteHandle = LMotion.Create(trsLastPencil.position, _trsGoal.position, duration)
                 .Bind(x =>
                 {
                     progress = Mathf.Clamp01(progress / duration);
@@ -368,7 +373,7 @@ namespace _Game.Scripts.GameObj.Unit
 
         private void OnDrawGizmos()
         {
-            if (_hitTemp!= null)
+            if (hitTemp!= null)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawLine(trsCheckPoint.position, trsFollowHit.position);

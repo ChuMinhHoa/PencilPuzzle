@@ -116,7 +116,6 @@ namespace _Game.Scripts.GameObj.Unit
         [Button]
         private async UniTask ScaleHandle(Vector2 vectorScale, float duration)
         {
-            Debug.Log("Scale handle");
             await LMotion.Create(splineNode.Scale, vectorScale, duration/2).WithDelay(duration).Bind(x =>splineNode.Scale = x).AddTo(objTokenCancelMove);
             await LMotion.Create(vectorScale, Vector2.one, duration/2).Bind(x => splineNode.Scale = x).AddTo(objTokenCancelMove);
         }
