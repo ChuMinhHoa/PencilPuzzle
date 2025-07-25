@@ -17,14 +17,6 @@ MonoBehaviour:
   - unitId: 0
     unitColor: 1
     unitLength: 2
-    position:
-      x: 0
-      y: 0
-      z: 5.5
-    eulerAngles:
-      x: -0
-      y: 0
-      z: 0
     pathMesh:
     - x: 0
       y: 0
@@ -41,14 +33,6 @@ MonoBehaviour:
   - unitId: 1
     unitColor: 1
     unitLength: 2
-    position:
-      x: 2.08935
-      y: 0
-      z: 5.68117
-    eulerAngles:
-      x: -0
-      y: 0
-      z: 0
     pathMesh:
     - x: 0
       y: 0
@@ -62,14 +46,6 @@ MonoBehaviour:
   - unitId: 2
     unitColor: 9
     unitLength: 2
-    position:
-      x: -2
-      y: 0
-      z: 7
-    eulerAngles:
-      x: -0
-      y: 90
-      z: -0
     pathMesh:
     - x: 0
       y: 0
@@ -80,4 +56,9 @@ MonoBehaviour:
     - x: -1.0000002
       y: 0
       z: 1.0000004
+  waveConfig:
+  - waveId: 1
+    sharpenerColors: 01000000
+  - waveId: 2
+    sharpenerColors: 020000000300000004000000
   levelPrefab: {fileID: 0}

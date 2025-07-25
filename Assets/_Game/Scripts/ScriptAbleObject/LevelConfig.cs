@@ -13,8 +13,9 @@ namespace _Game.Scripts.ScriptAbleObject
     {
         public int level;
         public List<UnitPositionConfig> unitPositionConfig;
+        public List<WaveConfig> waveConfig;
         public GameObject levelPrefab;
-
+        
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {
             return unitPositionConfig.Find(config => config.unitId == unitId);
@@ -24,9 +25,8 @@ namespace _Game.Scripts.ScriptAbleObject
             int unitId,
             UnitLengthType unitLength,
             SharpenerColorType colorType,
-            List<SplineNode> splineNodes,
-            float3 transformEulerAngles, 
-            float3 position)
+            List<SplineNode> splineNodes
+            )
         {
             for (var i = 0; i < unitPositionConfig.Count; i++)
             {
@@ -35,9 +35,7 @@ namespace _Game.Scripts.ScriptAbleObject
                     unitPositionConfig[i].SaveData(
                         colorType, 
                         unitLength, 
-                        splineNodes, 
-                        transformEulerAngles, 
-                        position
+                        splineNodes
                     );
                     return;
                 }
@@ -48,15 +46,18 @@ namespace _Game.Scripts.ScriptAbleObject
             newUnitConfig.SaveData(
                 colorType, 
                 unitLength, 
-                splineNodes, 
-                transformEulerAngles, 
-                position
+                splineNodes
             );
             
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
 #endif
+        }
+
+        public WaveConfig GetWaveConfig(int currentWaveIndex)
+        {
+            return waveConfig[currentWaveIndex];
         }
     }
 
@@ -66,21 +67,14 @@ namespace _Game.Scripts.ScriptAbleObject
         public int unitId;
         public SharpenerColorType unitColor;
         public UnitLengthType unitLength;
-        public float3 position;
-        public float3 eulerAngles;
         public List<float3> pathMesh = new();
 
         public void SaveData(SharpenerColorType colorType,
             UnitLengthType lengthType,
-            List<SplineNode> splineNodes,
-            float3 newEulerAngles,
-            float3 unitPosition)
+            List<SplineNode> splineNodes)
         {
             unitColor = colorType;
             unitLength = lengthType;
-            position = splineNodes[0].Position;
-            eulerAngles = newEulerAngles;
-            position = unitPosition;
 
             pathMesh.Clear();
             
@@ -89,5 +83,12 @@ namespace _Game.Scripts.ScriptAbleObject
                 pathMesh.Add(splineNodes[i].Position);
             }
         }
+    }
+    
+    [System.Serializable]
+    public class WaveConfig
+    {
+        public int waveId;
+        public List<SharpenerColorType> sharpenerColors;
     }
 }

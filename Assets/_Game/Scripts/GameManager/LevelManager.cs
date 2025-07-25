@@ -7,7 +7,6 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using TW.Utility.DesignPattern;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game.Scripts.GameManager
 {
@@ -17,6 +16,7 @@ namespace _Game.Scripts.GameManager
         public SharpenerController sharpenerController;
         public UnitController unitController;
         public LevelConfig currentLevelConfig;
+        public int currentWaveIndex;
 
         protected override void Awake()
         {
@@ -29,6 +29,15 @@ namespace _Game.Scripts.GameManager
         {
             currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
             await unitController.InitData();
+            currentWaveIndex = 0;
+        }
+
+        [Button]
+        private void SpawnNextWave()
+        {
+            var waveConfig = currentLevelConfig.GetWaveConfig(currentWaveIndex);
+            sharpenerController.SpawnSharpener(waveConfig);
+            currentWaveIndex++;
         }
 
         public bool TryResolveUnit(UnitBase unitBase)
@@ -47,7 +56,7 @@ namespace _Game.Scripts.GameManager
                 return TryResolveToTemp(unitBase);
             }
             
-            ResolveDone(pointGoal, unitBase);
+            ResolveDone(sharpener.id, pointGoal, unitBase);
             return true;
         }
 
@@ -63,25 +72,28 @@ namespace _Game.Scripts.GameManager
                 return false;
             }
 
-            ResolveDone(pointGoal, unitBase);
+            ResolveDone(sharpener.id, pointGoal, unitBase);
             return true;
         }
 
-        private void ResolveDone(PointGoal pointGoal, UnitBase unitBase)
+        private void ResolveDone(int sharpenerID, PointGoal pointGoal, UnitBase unitBase)
         {
             pointGoal.SetUnit(unitBase);
             
             unitBase.SetPointGoal(pointGoal.pointGoal);
+            unitBase.SetIDSharpener(sharpenerID);
             
             Debug.Log("point goal set for unit: " + unitBase.name);
-#if UNITY_EDITOR
-            UnityEditor.Selection.activeGameObject = unitBase.gameObject;
-#endif
         }
 
         public UnitPositionConfig GetUnitPositionConfig(int unitId)
         {
             return currentLevelConfig.GetLevelUnitPositionConfig(unitId);
+        }
+
+        public void SharpenerEndAnimAndCheck(int sharpenerID)
+        {
+            sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
         }
     }
 }

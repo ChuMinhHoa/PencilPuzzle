@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.GlobalConfig;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
@@ -32,8 +33,6 @@ namespace _Game.Scripts.GameObj.Unit
         private Action<float3, float3> _onMoveUpdateCallback;
 
         public float3 defaultPosition;
-
-        public Vector2 vectorScaleHit = new(1.2f, 1.2f);
         public bool isHit = false;
 
         public NodeController(SplineNode node, GameObject gameObject, float speedChange, int splineIndex)
@@ -97,10 +96,19 @@ namespace _Game.Scripts.GameObj.Unit
                             // Reset to the first point if needed
                             }
                             _moveDoneCallback?.Invoke();
-                            _pointIndex = 0; 
-                            if ( isHit && splineIndex == 0 && currentState == NodeControllerState.MoveOutHit)
-                                _ = ScaleHandle(vectorScaleHit, duration);
+                            _pointIndex = 0;
+                            
                         }
+
+                        if (_pointIndex == pointMoves.Count - 1)
+                        {
+                            if (isHit && splineIndex == 0 && currentState == NodeControllerState.MoveOutHit)
+                            {
+                                _ = ScaleHandle();
+                            }  
+                        }
+                        
+                         
                     }).WithEase(Ease.Linear)
                     .Bind(x =>
                         {
@@ -109,15 +117,15 @@ namespace _Game.Scripts.GameObj.Unit
                             _onMoveUpdateCallback?.Invoke(x, splineNode.Direction);
                         }
                     ).AddTo(objTokenCancelMove);
-            
-                
         }
 
         [Button]
-        private async UniTask ScaleHandle(Vector2 vectorScale, float duration)
+        private async UniTask ScaleHandle()
         {
-            await LMotion.Create(splineNode.Scale, vectorScale, duration/2).WithDelay(duration).Bind(x =>splineNode.Scale = x).AddTo(objTokenCancelMove);
-            await LMotion.Create(vectorScale, Vector2.one, duration/2).Bind(x => splineNode.Scale = x).AddTo(objTokenCancelMove);
+            var vectorScaleHit = Vector2.one * UnitGlobalConfig.Instance.unitScaleHit;
+            var duration = UnitGlobalConfig.Instance.unitScaleHitDuration;
+            await LMotion.Create(splineNode.Scale, vectorScaleHit, duration/2).Bind(x =>splineNode.Scale = x).AddTo(objTokenCancelMove);
+            await LMotion.Create(vectorScaleHit, Vector2.one, duration/2).Bind(x => splineNode.Scale = x).AddTo(objTokenCancelMove);
         }
         
         public void ReversePath()

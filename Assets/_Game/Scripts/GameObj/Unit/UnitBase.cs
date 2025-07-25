@@ -11,6 +11,7 @@ using Sirenix.OdinInspector;
 using SplineMesh;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.GameObj.Unit
 {
@@ -26,6 +27,7 @@ namespace _Game.Scripts.GameObj.Unit
     {
         [Title("Unit define")] 
         public int unitId;
+        [FormerlySerializedAs("sharpener")] [FormerlySerializedAs("goalId")] public int sharpenerID;
         public UnitLengthType unitLength;
         public SharpenerColorType colorType;
 
@@ -34,13 +36,12 @@ namespace _Game.Scripts.GameObj.Unit
 
         [Title("GameObject")] 
         [SerializeField] private GameObject objSpline;
+        [SerializeField] private MeshRenderer headMeshRenderer;
 
         [Title("Transform")] 
         [SerializeField] private Transform trsHead;
-        [SerializeField] private Transform trsBottom;
         [SerializeField] private Transform trsLastPencil;
         [SerializeField] private Transform trsCheckPoint;
-        [SerializeField] private Transform trsFollowHit;
         private Transform _trsGoal;
 
         [Title("Spline")] 
@@ -56,19 +57,17 @@ namespace _Game.Scripts.GameObj.Unit
         public float magnitude = 2f;
 
         public AnimationCurve curveComplete;
-        public MeshRenderer lastPencilMeshRenderer;
         
         [Title("Move out")]
         public float distanceCheck = 10f;
-
-        public float distanceOffSetStop = 0.5f;
-        
+        public LastPencilController lastPencil;
         
         #region Init Data
 
         [Button]
         private void InitDataEditor()
         {
+            lastPencil.InitData(colorType, unitLength);
             _unitPositionConfig = LevelManager.Instance.GetUnitPositionConfig(unitId);
 
             colorType = _unitPositionConfig.unitColor;
@@ -79,9 +78,11 @@ namespace _Game.Scripts.GameObj.Unit
             initSpline.SetUpSpline(spline, _unitPositionConfig.pathMesh);
             var mat = UnitGlobalConfig.Instance.GetUnitMaterial(colorType);
             splineMeshTiling.material = mat;
-            lastPencilMeshRenderer.material = mat;
             AlignPencil();
             nodes.Clear();
+            var headMat = UnitGlobalConfig.Instance.GetTipMaterial(colorType);
+            headMeshRenderer.material = headMat;
+            trsLastPencil.gameObject.SetActive(true);
             //transform.position = _unitPositionConfig.position;
             //transform.eulerAngles = _unitPositionConfig.eulerAngles;
         }
@@ -98,23 +99,20 @@ namespace _Game.Scripts.GameObj.Unit
             }
 
             nodes[0].moveUpdateCallback = AlignHeaderTransform;
-
+            trsLastPencil.gameObject.SetActive(false);
             //nodes[^1].moveDoneCallback = ActionMoveDoneCallBack;
-            nodes[^1].moveUpdateCallback = AlignBottomTransform;
-     
-            AlignHeaderWithFirstNode(trsHead, true);
-            AlignHeaderWithFirstNode(trsBottom, false);
         }
 
         #endregion
 
         #region Move
-
-        private float3? hitTemp = null;
+        /// <summary>
+        /// Cố gắng di chuyển ra ngoài nếu không có va chạm
+        /// </summary>
         [Button]
         private void TryMOveOut()
         {
-            hitTemp = CheckCanMove();
+            var hitTemp = CheckCanMove();
             if (hitTemp != null)  
             {
                 MoveOutFail(hitTemp.Value);
@@ -125,6 +123,9 @@ namespace _Game.Scripts.GameObj.Unit
             }
         }
 
+        /// <summary>
+        /// Di chuyển đến điểm va chạm nếu có
+        /// </summary>
         private void MoveOutFail(float3 hit)
         {
             currentNodeBack = 0;
@@ -136,7 +137,9 @@ namespace _Game.Scripts.GameObj.Unit
                 nodes[i].MoveToNextPoint();
             }
         }
-
+        /// <summary>
+        /// Di chuyển ra ngoài theo đường dẫn đã được xác định
+        /// </summary>
         [Button]
         private void MoveOut()
         {
@@ -153,17 +156,20 @@ namespace _Game.Scripts.GameObj.Unit
 
         private void ActionMoveDoneCallBack()
         {
-            Debug.Log("all move done next step");
+           // Debug.Log("all move done next step");
             AnimOnComplete();
         }
 
         private int currentNodeBack;
+        /// <summary>
+        /// Di chuyển ngược lại sau khi va chạm
+        /// </summary>
         private async Task MoveBack()
         {
             currentNodeBack++;
             if(currentNodeBack == nodes.Count)
             {
-                await UniTask.WaitForSeconds(0.15f);
+                await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.unitScaleHitDuration);
                 for (var i = nodes.Count - 1; i >= 0; i--)
                 {
                     nodes[i].SetUpMoveBack();
@@ -171,7 +177,10 @@ namespace _Game.Scripts.GameObj.Unit
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Lấy các điểm di chuyển nếu không bị va chạm
+        /// </summary>
         private List<float3> GetPathPoints(int nodeIndex)
         {
             var pathPoints = new List<float3>();
@@ -181,6 +190,9 @@ namespace _Game.Scripts.GameObj.Unit
             return pathPoints;
         }
 
+        /// <summary>
+        /// Lấy các điểm di chuyển đến các điểm còn lại
+        /// </summary>
         private List<float3> GetPathPointToOtherPoint(int nodeIndex)
         {
             var pathPoints = new List<float3>();
@@ -193,113 +205,117 @@ namespace _Game.Scripts.GameObj.Unit
             return pathPoints;
         }
 
+        /// <summary>
+        /// Lấy các điểm di chuyển đến điểm va chạm
+        /// Nếu khoảng cách nhỏ hơn độ dài của spline thì cần phải xóa đi các điểm di chuyển
+        /// </summary>
         private List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false, float distanceToHit = 0f)
         {
             var pathPoints = GetPathPointToOtherPoint(nodeIndex);
             pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
             if (getByHit && distanceToHit < spline.nodes.Count)
             {
-                var totalRemove = (int)distanceToHit > 1? (int)distanceToHit : 1;
-                Debug.Log($"total remove{totalRemove}");
+                var countRemaining = (int)distanceToHit > 1? (int)distanceToHit : 1;
+                //Debug.Log($"total remove{countRemaining}");
                 for (var i = pathPoints.Count - 1; i >= 0; i--)
                 {
-                    if (pathPoints.Count > totalRemove)
+                    if (pathPoints.Count > countRemaining)
                         pathPoints.RemoveAt(i);
                     else
                         break;
+                }
+
+                if (countRemaining == 1 && distanceToHit < 1)
+                {
+                    var lastPoint = GetPathPointNotMove(nodeIndex);
+                    pathPoints[^1] = lastPoint ?? pathPoints[^1];
                 }
             }
             
             return pathPoints;
         }
+        /// <summary>
+        /// lấy điểm di chuển cuối nếu khoảng cách nhỏ hơn 1
+        /// </summary>>
+        private float3? GetPathPointNotMove(int nodeIndex)
+        {
+            if (nodeIndex == 0) return null;
+            var previousPosition = nodes[nodeIndex - 1].currentPosition;
+            var dir = previousPosition - nodes[nodeIndex].currentPosition;
+            dir.Normalize();
+            var lastPoint = nodes[nodeIndex].currentPosition + dir * UnitGlobalConfig.Instance.distanceMoveToNearHit;
+            return lastPoint;
+        }
 
+        /// <summary>
+        /// Lấy điểm cuối cùng để dừng lại
+        /// </summary>
         private float3 GetLastPointToHit(int nodeIndex, float3 hit)
         {
             Vector3 lastPoint = hit;
             var dir = (lastPoint - nodes[0].currentPosition).normalized;
-            lastPoint -= dir * nodeIndex + dir * distanceOffSetStop - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
+            lastPoint -= dir * nodeIndex + dir * UnitGlobalConfig.Instance.sizeUnitHead - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
             return lastPoint;
         }
 
         public void SetPointGoal(Transform pointGoalPointGoal) => _trsGoal = pointGoalPointGoal;
 
+        public void SetIDSharpener(int id) => sharpenerID = id;
+
         #endregion
 
         #region Align Head and Bottom
 
+        [Button]
         private void AlignHeaderTransform(float3 position, float3 dir)
         {
             trsHead.localPosition = position;
-            trsHead.LookAt(dir);
+            trsHead.LookAt(spline.transform.TransformPoint(dir));
             trsCheckPoint.localPosition = position;
             trsCheckPoint.LookAt(spline.transform.TransformPoint(dir));
         }
-
-        private void AlignBottomTransform(float3 position, float3 dir)
-        {
-            trsBottom.localPosition = position;
-            trsBottom.LookAt(dir);
-        }
-
+        
         [Button]
-        private void Align()
+        private void AlignHeaderEditor()
         {
-            AlignHeaderWithFirstNode(trsHead, true);
-            AlignHeaderWithFirstNode(trsBottom, false);
+            var position = spline.nodes[0].Position;
+            var dir = spline.nodes[0].Direction;
+            trsHead.localPosition = position;
+            trsHead.LookAt(spline.transform.TransformPoint(dir));
         }
-
         [Button]
         private void AlignPencil()
         {
             var positionPencil = splineOut.GetLastPointOut(transform);
-            positionPencil.y -= _unitConfig.size;
+            //positionPencil.y -= _unitConfig.size;
 
             trsLastPencil.transform.localPosition = positionPencil;
             trsLastPencil.eulerAngles = new float3(90, 0, 0);
-        }
-
-        private void AlignHeaderWithFirstNode(Transform trsLock, bool header = true)
-        {
-            if (spline.nodes.Count == 0)
-            {
-                Debug.LogError("Spline has no nodes to align with.");
-                return;
-            }
-
-            var index = header ? 0 : spline.nodes.Count - 1;
-
-            trsLock.localPosition = spline.nodes[index].Position;
-
-            var oppositeDirection = spline.nodes[index].Direction;
-
-            if (oppositeDirection != Vector3.zero)
-            {
-                trsLock.LookAt(oppositeDirection);
-            }
         }
 
         #endregion
 
         #region Animation
 
-        private MotionHandle moveCompleteHandle;
-
-        private void AnimOnBlock()
-        {
-        }
+        private MotionHandle _moveCompleteHandle;
 
         private void AnimOnComplete()
         {
-            Debug.Log("Animation complete for unit: " + gameObject.name);
+            //Debug.Log("Animation complete for unit: " + gameObject.name);
             //LMotion.Create(transform.position, )
 
             objSpline.SetActive(false);
             trsLastPencil.gameObject.SetActive(true);
-            if (moveCompleteHandle.IsPlaying())
-                moveCompleteHandle.TryCancel();
+            if (_moveCompleteHandle.IsPlaying())
+                _moveCompleteHandle.TryCancel();
             var progress = 0f;
             var duration = curveComplete.keys[^1].time;
-            moveCompleteHandle = LMotion.Create(trsLastPencil.position, _trsGoal.position, duration)
+            _moveCompleteHandle = LMotion.Create(trsLastPencil.position, _trsGoal.position, duration)
+                .WithOnComplete(() =>
+                {
+                    trsLastPencil.SetParent(_trsGoal);
+                    LevelManager.Instance.SharpenerEndAnimAndCheck(sharpenerID);
+                })
                 .Bind(x =>
                 {
                     progress = Mathf.Clamp01(progress / duration);
@@ -311,12 +327,16 @@ namespace _Game.Scripts.GameObj.Unit
                     progress += Time.deltaTime;
                 })
                 .AddTo(this);
-
-            LMotion.Create(trsLastPencil.eulerAngles, new float3(-90, 0, 0), 0.25f)
-                .Bind(x => trsLastPencil.eulerAngles = x)
+            var currentEuler = trsLastPencil.eulerAngles.x;
+            LMotion.Create(currentEuler, 270f, 0.25f)
+                .Bind(x =>
+                {
+                    Debug.Log(x);
+                    trsLastPencil.eulerAngles = new float3(x, 0f, 0f);
+                })
                 .AddTo(this);
 
-            LMotion.Create(trsLastPencil.localScale, Vector3.one, 0.25f)
+            LMotion.Create(trsLastPencil.localScale, Vector3.one*0.7f, 0.25f)
                 .Bind(x => trsLastPencil.localScale = x)
                 .AddTo(this);
         }
@@ -352,9 +372,7 @@ namespace _Game.Scripts.GameObj.Unit
                 unitId,
                 unitLength,
                 colorType,
-                spline.nodes,
-                transform.eulerAngles,
-                transform.position
+                spline.nodes
             );
         }
 
@@ -365,24 +383,9 @@ namespace _Game.Scripts.GameObj.Unit
         {
             if (Physics.Linecast(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, out var hit))
             {
-                trsFollowHit.position = hit.point;
                 return transform.TransformPoint(hit.point);
             }
             return null;
-        }
-
-        private void OnDrawGizmos()
-        {
-            if (hitTemp!= null)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(trsCheckPoint.position, trsFollowHit.position);
-            }
-            else
-            {
-                Gizmos.color = Color.green;
-                Gizmos.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck);
-            }
         }
     }
 }

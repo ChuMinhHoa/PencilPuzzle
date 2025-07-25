@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fed568d2094fc144a15d8f0b53ff92d, type: 3}
   m_Name: UnitGlobalConfig
   m_EditorClassIdentifier: 
+  unitScaleHit: 1.5
+  distanceMoveToNearHit: 0.15
+  unitScaleHitDuration: 0.15
+  sizeUnitHead: 0.3
   unitConfigs:
   - unitLength: 3
     size: 1.5
@@ -20,7 +24,48 @@ MonoBehaviour:
   - unitLength: 1
     size: 0.5
   unitMaterial:
+  - colorType: 0
+    colorMat: {fileID: 0}
   - colorType: 1
-    colorMat: {fileID: 2100000, guid: 2c81f1b861e6983479649ce333820ca8, type: 2}
+    colorMat: {fileID: 2100000, guid: 9a573ea4ae17d6040820cf34f4433537, type: 2}
+  - colorType: 2
+    colorMat: {fileID: 2100000, guid: 6636bc9f6995c544b9961f9a689e39f8, type: 2}
+  - colorType: 3
+    colorMat: {fileID: 2100000, guid: 180d06dc7055a634886212080f9a1468, type: 2}
+  - colorType: 4
+    colorMat: {fileID: 2100000, guid: de736c9b5a766704d84dd4f73c75418f, type: 2}
+  - colorType: 5
+    colorMat: {fileID: 2100000, guid: 391a37b44aa6dd14ea1479dd50a07565, type: 2}
+  - colorType: 6
+    colorMat: {fileID: 2100000, guid: 15572ac09355f1d47b9000b79e6a1031, type: 2}
+  - colorType: 7
+    colorMat: {fileID: 2100000, guid: caba9e41b87ec144ebf53c718132afd5, type: 2}
+  - colorType: 8
+    colorMat: {fileID: 0}
   - colorType: 9
-    colorMat: {fileID: 2100000, guid: ae86eb387af296042b9d34b070784a82, type: 2}
+    colorMat: {fileID: 0}
+  - colorType: 10
+    colorMat: {fileID: 0}
+  tipMaterial:
+  - colorType: 0
+    colorMat: {fileID: 0}
+  - colorType: 1
+    colorMat: {fileID: 2100000, guid: 92a49ccec73c2744a84c002f8bd0630f, type: 2}
+  - colorType: 2
+    colorMat: {fileID: 2100000, guid: 88df803acf969f540a9a1b0f281c643a, type: 2}
+  - colorType: 3
+    colorMat: {fileID: 2100000, guid: 37c95b04ea75f2042b9c42bd38d19201, type: 2}
+  - colorType: 4
+    colorMat: {fileID: 2100000, guid: f64b84e00fafa3247804014541caac0e, type: 2}
+  - colorType: 5
+    colorMat: {fileID: 2100000, guid: 2d9f36175f47a3145859c11c6fbe1043, type: 2}
+  - colorType: 6
+    colorMat: {fileID: 2100000, guid: 91cffcd36bf656c489e7dc5b4d98f95f, type: 2}
+  - colorType: 7
+    colorMat: {fileID: 2100000, guid: e72b0bb99eec73743a261f5cb28daa18, type: 2}
+  - colorType: 8
+    colorMat: {fileID: 0}
+  - colorType: 9
+    colorMat: {fileID: 0}
+  - colorType: 10
+    colorMat: {fileID: 0}
