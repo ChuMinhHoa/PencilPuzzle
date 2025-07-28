@@ -1,5 +1,6 @@
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
+using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -42,7 +43,7 @@ namespace _Game.Scripts.GameObj.Unit
         public Vector3 vectorScaleHit;
         [BoxGroup("Anim hit")]
         [Button]
-        public async void AnimHit()
+        public async UniTask AnimHit()
         {
             await LMotion.Create(pencilBody.localScale, vectorScaleHit, 0.15f)
                 .Bind(x=>pencilBody.localScale = x).AddTo(this);

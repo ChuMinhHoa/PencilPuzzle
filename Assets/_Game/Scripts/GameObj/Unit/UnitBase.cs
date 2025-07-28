@@ -65,7 +65,7 @@ namespace _Game.Scripts.GameObj.Unit
         #region Init Data
 
         [Button]
-        private void InitDataEditor()
+        public void InitDataEditor()
         {
             lastPencil.InitData(colorType, unitLength);
             _unitPositionConfig = LevelManager.Instance.GetUnitPositionConfig(unitId);
@@ -329,15 +329,14 @@ namespace _Game.Scripts.GameObj.Unit
                 .WithOnComplete(() =>
                 {
                     trsLastPencil.SetParent(_pointGoal.pointGoal);
-                    lastPencil.AnimHit();
+                    _ = lastPencil.AnimHit();
                     _ = _pointGoal.OnHit();
                     LevelManager.Instance.SharpenerEndAnimAndCheck(sharpenerID);
                 })
                 .Bind(x =>
                 {
-                    progress = Mathf.Clamp01(progress / duration);
-                    Debug.Log("Progress: " + progress);
-                    float3 position = x;
+                    progress = Mathf.Clamp(progress, 0f, duration);
+                    var position = x;
                     position.y += curveComplete.Evaluate(progress) * magnitude;
 
                     trsLastPencil.position = position;

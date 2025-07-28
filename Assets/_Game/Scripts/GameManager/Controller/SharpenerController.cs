@@ -70,7 +70,8 @@ namespace _Game.Scripts.GameManager.Controller
             {
                 if (currentSharpeners[i].id == sharpenerID)
                 {
-                    currentSharpeners[i].AnimDone();
+                    _ = currentSharpeners[i].AnimDone();
+                    return;
                 }
             }
         }

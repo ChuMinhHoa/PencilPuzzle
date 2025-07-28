@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Game.Scripts.GameManager;
 using _Game.Scripts.GlobalConfig;
+using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
 using SplineMesh;
@@ -27,12 +28,14 @@ namespace _Game.Scripts.GameObj.Sharpener
     public class Sharpener : MonoBehaviour
     {
         public int id;
-        
+
         public SharpenerColorType sharpenerColorType;
 
         public MeshRenderer sharpenerMesh;
 
         private MotionHandle _moveHandle;
+
+        public Animator anim;
         //public ExampleContortAlong contortAlong;
 
         public List<PointGoal> pointGoals = new();
@@ -50,12 +53,13 @@ namespace _Game.Scripts.GameObj.Sharpener
             return null;
         }
 
-        public void ClearSharpener()
+        private void ClearSharpener()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
                 pointGoals[i].ClearPointGoal();
             }
+
             LevelManager.Instance.sharpenerController.RemoveSharpener(this);
             //contortAlong.gameObject.SetActive(true);
             //contortAlong.Play();
@@ -78,10 +82,7 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             TryCancelMove();
             _moveHandle = LMotion.Create(transform.position, trsTarget.position, .5f)
-                .WithOnComplete(() =>
-                {
-                    onFinished?.Invoke();
-                })
+                .WithOnComplete(() => { onFinished?.Invoke(); })
                 .Bind(x => transform.position = x);
         }
 
@@ -93,22 +94,33 @@ namespace _Game.Scripts.GameObj.Sharpener
             }
         }
 
-        private void CheckClear()
+        private async UniTask CheckClear()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
                 if (pointGoals[i].IsFree())
                     return;
             }
-            
+
+            PlayAnimRoll();
+            await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeSharpenerRoll);
             ClearSharpener();
             LevelManager.Instance.ClearThatSharpener(id);
         }
 
-        public void AnimDone()
+        public async UniTask AnimDone()
         {
             Debug.Log("Anim Move Done");
-            CheckClear();
+            PlayAnimGoal();
+            await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeAnimGoal);
+            await CheckClear();
         }
+
+        #region Animation
+
+            private void PlayAnimGoal()=>anim.Play(MyCache.animClaimGoal);
+            private void PlayAnimRoll()=>anim.Play(MyCache.animRoll);
+
+        #endregion
     }
 }

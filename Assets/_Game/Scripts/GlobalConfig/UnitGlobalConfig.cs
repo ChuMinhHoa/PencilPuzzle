@@ -18,11 +18,13 @@ namespace _Game.Scripts.GlobalConfig
         public float unitScaleHitDuration = 0.2f;
         public float sizeUnitHead = 0.3f;
         public float distanceBtNode = 0.5f;
+        public float timeAnimGoal = 0.5f;
+        public float timeSharpenerRoll = 1f;
         public Vector3 vectorHeadScaleHit;
         public List<UnitConfig> unitConfigs = new();
         public List<SharpenerColor> unitMaterial = new();
         public List<SharpenerColor> tipMaterial = new();
-        
+
         public UnitConfig GetUnitConfig(UnitLengthType unitLengthType)
         {
             return unitConfigs.Find(config => config.unitLength == unitLengthType);
