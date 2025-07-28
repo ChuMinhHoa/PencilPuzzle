@@ -74,5 +74,19 @@ namespace _Game.Scripts.GameManager.Controller
                 }
             }
         }
+
+        public bool ClearThatSharpener(int id)
+        {
+            for (var i = 0; i < currentSharpeners.Count; i++)
+            {
+                if (currentSharpeners[i].id == id)
+                {
+                    currentSharpeners.RemoveAt(i);
+                    break;
+                }
+            }
+
+            return currentSharpeners.Count == 0;
+        }
     }
 }

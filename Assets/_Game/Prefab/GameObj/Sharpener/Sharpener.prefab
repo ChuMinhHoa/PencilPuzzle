@@ -103,6 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c12fdc7679b3cbd4392a2ada0f61f898, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
   sharpenerColorType: 1
   sharpenerMesh: {fileID: 4706623746564043402}
   pointGoals:

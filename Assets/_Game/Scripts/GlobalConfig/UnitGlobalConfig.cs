@@ -17,6 +17,8 @@ namespace _Game.Scripts.GlobalConfig
         public float distanceMoveToNearHit = 0.15f;
         public float unitScaleHitDuration = 0.2f;
         public float sizeUnitHead = 0.3f;
+        public float distanceBtNode = 0.5f;
+        public Vector3 vectorHeadScaleHit;
         public List<UnitConfig> unitConfigs = new();
         public List<SharpenerColor> unitMaterial = new();
         public List<SharpenerColor> tipMaterial = new();

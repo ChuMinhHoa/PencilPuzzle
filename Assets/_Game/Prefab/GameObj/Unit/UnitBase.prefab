@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitId: 0
+  sharpenerID: 0
   unitLength: 2
   colorType: 1
   objSpline: {fileID: 338856019168256365}
@@ -61,36 +62,36 @@ MonoBehaviour:
   initSpline: {fileID: 7224436007732149382}
   nodes: []
   speed: 10
-  magnitude: 5
+  magnitude: 10
   curveComplete:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 2.35876
-      outSlope: 2.35876
+      inSlope: 1.9160457
+      outSlope: 1.9160457
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.08681134
+      outWeight: 0.070116855
     - serializedVersion: 3
-      time: 0.5
+      time: 0.25
       value: 0.5
-      inSlope: -0.021774052
-      outSlope: -0.021774052
+      inSlope: -0.0067087053
+      outSlope: -0.0067087053
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.21869767
+      outWeight: 0.33909237
     - serializedVersion: 3
-      time: 1
+      time: 0.5
       value: 0
-      inSlope: -2.2323492
-      outSlope: -2.2323492
+      inSlope: -1.9559582
+      outSlope: -1.9559582
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.07679486
+      inWeight: 0.060100317
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -801,6 +802,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 134221245916066866}
     m_Modifications:
+    - target: {fileID: 1033965657950382995, guid: bb85953fd48effb478d30a9f8653e0d7, type: 3}
+      propertyPath: vectorScaleHit.x
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033965657950382995, guid: bb85953fd48effb478d30a9f8653e0d7, type: 3}
+      propertyPath: vectorScaleHit.y
+      value: 1.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1033965657950382995, guid: bb85953fd48effb478d30a9f8653e0d7, type: 3}
+      propertyPath: vectorScaleHit.z
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 1232744588261493196, guid: bb85953fd48effb478d30a9f8653e0d7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.00000023841858

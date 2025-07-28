@@ -30,12 +30,20 @@ namespace _Game.Scripts.GameManager
             currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
             await unitController.InitData();
             currentWaveIndex = 0;
+            SpawnNextWave();
         }
 
         [Button]
         private void SpawnNextWave()
         {
             var waveConfig = currentLevelConfig.GetWaveConfig(currentWaveIndex);
+            if (waveConfig == null)
+            {
+                Debug.Log("win game");
+                return;
+            }
+            
+
             sharpenerController.SpawnSharpener(waveConfig);
             currentWaveIndex++;
         }
@@ -80,7 +88,7 @@ namespace _Game.Scripts.GameManager
         {
             pointGoal.SetUnit(unitBase);
             
-            unitBase.SetPointGoal(pointGoal.pointGoal);
+            unitBase.SetPointGoal(pointGoal);
             unitBase.SetIDSharpener(sharpenerID);
             
             Debug.Log("point goal set for unit: " + unitBase.name);
@@ -94,6 +102,15 @@ namespace _Game.Scripts.GameManager
         public void SharpenerEndAnimAndCheck(int sharpenerID)
         {
             sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
+        }
+
+        public void ClearThatSharpener(int id)
+        {
+            var result = sharpenerController.ClearThatSharpener(id);
+            if (result)
+            {
+                SpawnNextWave();
+            }
         }
     }
 }

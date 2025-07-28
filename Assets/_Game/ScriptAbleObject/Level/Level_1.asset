@@ -34,31 +34,79 @@ MonoBehaviour:
     unitColor: 1
     unitLength: 2
     pathMesh:
-    - x: 0
+    - x: 3.5
       y: 0
       z: 0
-    - x: 0
+    - x: 4
       y: 0
-      z: 1
-    - x: 0
+      z: 0
+    - x: 4.5
       y: 0
-      z: 2
+      z: 0
+    - x: 5
+      y: 0
+      z: 0
   - unitId: 2
-    unitColor: 9
+    unitColor: 1
     unitLength: 2
     pathMesh:
     - x: 0
       y: 0
+      z: -1
+    - x: -0.5
+      y: 0
+      z: -1
+    - x: -0.9764281
+      y: 0
+      z: -1.0596983
+    - x: -1
+      y: 0
+      z: -1.5
+    - x: -1
+      y: 0
+      z: -2
+  - unitId: 3
+    unitColor: 3
+    unitLength: 2
+    pathMesh:
+    - x: 1
+      y: 0
       z: 0
-    - x: 0.009491325
+    - x: 1
       y: 0
-      z: 0.9902822
-    - x: -1.0000002
+      z: 0.5
+    - x: 1
       y: 0
-      z: 1.0000004
+      z: 1
+    - x: 1.0649039
+      y: 0
+      z: 1.4295812
+    - x: 1.5
+      y: 0
+      z: 1.5
+    - x: 2
+      y: 0
+      z: 1.5
+  - unitId: 4
+    unitColor: 3
+    unitLength: 2
+    pathMesh:
+    - x: 2.5
+      y: 0
+      z: -1
+    - x: 2
+      y: 0
+      z: -1
+    - x: 1.5
+      y: 0
+      z: -1
+    - x: 1
+      y: 0
+      z: -1
+    - x: 0.5
+      y: 0
+      z: -1
   waveConfig:
   - waveId: 1
     sharpenerColors: 01000000
-  - waveId: 2
-    sharpenerColors: 020000000300000004000000
   levelPrefab: {fileID: 0}

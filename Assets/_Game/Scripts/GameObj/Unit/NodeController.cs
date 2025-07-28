@@ -29,8 +29,10 @@ namespace _Game.Scripts.GameObj.Unit
         public List<float3> pointMoves = new();
         public float speed;
 
-        private Action _moveDoneCallback;
-        private Action<float3, float3> _onMoveUpdateCallback;
+        private Action<int> _moveDoneCallback;
+        private Action _callBackScaleHit;
+        private Action _callBackMoveBack;
+        private Action _onMoveUpdateCallback;
 
         public float3 defaultPosition;
         public bool isHit = false;
@@ -49,14 +51,8 @@ namespace _Game.Scripts.GameObj.Unit
         {
             currentState = newState;
         }
-
-        public Action moveDoneCallback
-        {
-            get => _moveDoneCallback;
-            set => _moveDoneCallback = value;
-        }
         
-        public Action<float3, float3> moveUpdateCallback
+        public Action moveUpdateCallback
         {
             get => _onMoveUpdateCallback;
             set => _onMoveUpdateCallback = value;
@@ -95,7 +91,7 @@ namespace _Game.Scripts.GameObj.Unit
                                 splineNode.Up = Vector3.forward;
                             // Reset to the first point if needed
                             }
-                            _moveDoneCallback?.Invoke();
+                            _moveDoneCallback?.Invoke(splineIndex);
                             _pointIndex = 0;
                             
                         }
@@ -104,17 +100,18 @@ namespace _Game.Scripts.GameObj.Unit
                         {
                             if (isHit && splineIndex == 0 && currentState == NodeControllerState.MoveOutHit)
                             {
+                                _callBackScaleHit?.Invoke();
                                 _ = ScaleHandle();
                             }  
                         }
-                        
+                        _onMoveUpdateCallback?.Invoke();
                          
                     }).WithEase(Ease.Linear)
                     .Bind(x =>
                         {
                             currentPosition = x;
                             splineNode.Position = x;
-                            _onMoveUpdateCallback?.Invoke(x, splineNode.Direction);
+                            _onMoveUpdateCallback?.Invoke();
                         }
                     ).AddTo(objTokenCancelMove);
         }
@@ -124,8 +121,13 @@ namespace _Game.Scripts.GameObj.Unit
         {
             var vectorScaleHit = Vector2.one * UnitGlobalConfig.Instance.unitScaleHit;
             var duration = UnitGlobalConfig.Instance.unitScaleHitDuration;
-            await LMotion.Create(splineNode.Scale, vectorScaleHit, duration/2).Bind(x =>splineNode.Scale = x).AddTo(objTokenCancelMove);
-            await LMotion.Create(vectorScaleHit, Vector2.one, duration/2).Bind(x => splineNode.Scale = x).AddTo(objTokenCancelMove);
+            await LMotion.Create(splineNode.Scale, vectorScaleHit, duration/2)
+                .Bind(x =>splineNode.Scale = x)
+                .AddTo(objTokenCancelMove);
+            await LMotion.Create(vectorScaleHit, Vector2.one, duration/2)
+                .Bind(x => splineNode.Scale = x)
+                .AddTo(objTokenCancelMove);
+            _callBackMoveBack?.Invoke();
         }
         
         public void ReversePath()
@@ -152,7 +154,7 @@ namespace _Game.Scripts.GameObj.Unit
             }
         }
 
-        public void SetUpMoveOut(Action actionMoveDoneCallBack, List<float3> pathPoints)
+        public void SetUpMoveOut(Action<int> actionMoveDoneCallBack, List<float3> pathPoints)
         {
             ChangeState(NodeControllerState.MoveOut);
             _moveDoneCallback = actionMoveDoneCallBack;
@@ -160,18 +162,20 @@ namespace _Game.Scripts.GameObj.Unit
             isHit = false;
         }
 
-        public void SetUpMoveOutFail(Action actionMoveDoneCallBack, List<float3> pathPoints)
+        public void SetUpMoveOutFail(Action actionMoveDoneCallBack, List<float3> pathPoints, Action callBackScale)
         {
             ChangeState(NodeControllerState.MoveOutHit);
-            _moveDoneCallback = actionMoveDoneCallBack;
+            //_moveDoneCallback = actionMoveDoneCallBack;
+            _callBackMoveBack = actionMoveDoneCallBack;
             SetPathPoints(pathPoints);
             isHit = true;
+            _callBackScaleHit = callBackScale;
         }
         
-        public void SetUpMoveBack()
+        public void SetUpMoveBack(Action<int> moveDoneCallback)
         {
             ChangeState(NodeControllerState.MoveBack);
-            _moveDoneCallback = null;
+            _moveDoneCallback = moveDoneCallback;
             ReversePath();
             isHit = false;
         }

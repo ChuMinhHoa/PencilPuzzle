@@ -48,7 +48,7 @@ namespace _Game.Scripts.ScriptAbleObject
                 unitLength, 
                 splineNodes
             );
-            
+            unitPositionConfig.Add(newUnitConfig);
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
@@ -57,6 +57,8 @@ namespace _Game.Scripts.ScriptAbleObject
 
         public WaveConfig GetWaveConfig(int currentWaveIndex)
         {
+            if (currentWaveIndex >= waveConfig.Count)
+                return null;
             return waveConfig[currentWaveIndex];
         }
     }

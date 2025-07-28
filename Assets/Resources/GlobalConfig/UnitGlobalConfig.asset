@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fed568d2094fc144a15d8f0b53ff92d, type: 3}
   m_Name: UnitGlobalConfig
   m_EditorClassIdentifier: 
-  unitScaleHit: 1.5
+  unitScaleHit: 1.2
   distanceMoveToNearHit: 0.15
-  unitScaleHitDuration: 0.15
+  unitScaleHitDuration: 0.3
   sizeUnitHead: 0.3
+  distanceBtNode: 0.5
+  vectorHeadScaleHit: {x: 1.15, y: 1.15, z: 0.7}
   unitConfigs:
   - unitLength: 3
     size: 1.5

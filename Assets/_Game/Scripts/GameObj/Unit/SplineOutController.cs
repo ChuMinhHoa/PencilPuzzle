@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Game.Scripts.GlobalConfig;
 using SplineMesh;
 using Unity.Mathematics;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace _Game.Scripts.GameObj.Unit
             }
             
             var newLastPoint = splineOut.nodes[^1].Position;
-            var lastPoint = newLastPoint - Vector3.up * pointIndex;
+            var lastPoint = newLastPoint - Vector3.up * pointIndex * UnitGlobalConfig.Instance.distanceBtNode;
             
             var worldLastPoint = transform.TransformPoint(lastPoint);
             var newLasPoint = parents.InverseTransformPoint(worldLastPoint);

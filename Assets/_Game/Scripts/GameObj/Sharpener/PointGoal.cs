@@ -1,5 +1,8 @@
 using System;
+using _Game.Scripts.GameManager;
 using _Game.Scripts.GameObj.Unit;
+using Cysharp.Threading.Tasks;
+using LitMotion;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Sharpener
@@ -11,6 +14,7 @@ namespace _Game.Scripts.GameObj.Sharpener
 
         public void SetActionCallBack(Action action) => _actionCallBack = action;
         [field: SerializeField] public Transform pointGoal { get; set; }
+        [field: SerializeField] public Transform pointSpawnHit { get; set; }
 
         public void SetUnit(UnitBase unit)
         {
@@ -27,9 +31,12 @@ namespace _Game.Scripts.GameObj.Sharpener
             currentUnit = null;
         }
 
-        public void OnCheckClearSharpener()
+        public async UniTask OnHit()
         {
-            _actionCallBack?.Invoke();
+            var effect = PoolingObject.Instance.GetHitEffect(pointSpawnHit);
+            effect.parent = pointSpawnHit;
+            await UniTask.WaitForSeconds(0.5f);
+            effect.gameObject.SetActive(false);
         }
     }
 }

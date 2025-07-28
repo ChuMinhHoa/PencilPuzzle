@@ -1,5 +1,6 @@
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
+using LitMotion;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -35,6 +36,18 @@ namespace _Game.Scripts.GameObj.Unit
         {
             var length = ((float)lengthType-0.5f) / 1.5f;
             pencilBody.localScale = new Vector3(1, 1, length);
+        }
+
+        [BoxGroup("Anim hit")]
+        public Vector3 vectorScaleHit;
+        [BoxGroup("Anim hit")]
+        [Button]
+        public async void AnimHit()
+        {
+            await LMotion.Create(pencilBody.localScale, vectorScaleHit, 0.15f)
+                .Bind(x=>pencilBody.localScale = x).AddTo(this);
+            await LMotion.Create(vectorScaleHit, Vector3.one, 0.15f)
+                .Bind(x=>pencilBody.localScale = x).AddTo(this);
         }
     }
 }

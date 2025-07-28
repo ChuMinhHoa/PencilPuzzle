@@ -82,7 +82,6 @@ namespace _Game.Scripts.GameObj.Sharpener
                 {
                     onFinished?.Invoke();
                 })
-                .WithEase(Ease.OutBack)
                 .Bind(x => transform.position = x);
         }
 
@@ -103,6 +102,7 @@ namespace _Game.Scripts.GameObj.Sharpener
             }
             
             ClearSharpener();
+            LevelManager.Instance.ClearThatSharpener(id);
         }
 
         public void AnimDone()
