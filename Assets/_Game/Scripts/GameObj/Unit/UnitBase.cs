@@ -151,7 +151,7 @@ namespace _Game.Scripts.GameObj.Unit
                     duration/2)
                 .Bind(x => trsHead.localScale = x)
                 .AddTo(this);
-            await LMotion.Create(trsHead.localScale, Vector3.one,
+            await LMotion.Create(trsHead.localScale, UnitGlobalConfig.Instance.unitHeadScale,
                     duration/2)
                 .Bind(x => trsHead.localScale = x)
                 .AddTo(this);
@@ -277,7 +277,7 @@ namespace _Game.Scripts.GameObj.Unit
             Vector3 lastPoint = hit;
             var dir = (lastPoint - nodes[0].currentPosition).normalized;
             var distanceBtNode = UnitGlobalConfig.Instance.distanceBtNode;
-            lastPoint -= dir * (distanceBtNode * nodeIndex) + dir * UnitGlobalConfig.Instance.sizeUnitHead - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
+            lastPoint -= dir * (distanceBtNode * nodeIndex) + dir * UnitGlobalConfig.Instance.sizeUnitHead - dir * (0.35f * (nodeIndex == 0 ? 0 : 1));
             
 
             return lastPoint;

@@ -56,6 +56,7 @@ namespace _Game.Scripts.Manager
         #region Level Control
         private void SpawnLevel()
         {
+            Debug.Log("SpawnLevel");
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
             currentLevelManager = Instantiate(levelConfig.levelPrefab, transform);
             _ = currentLevelManager.InitData(levelConfig);
@@ -75,6 +76,7 @@ namespace _Game.Scripts.Manager
             }
             if(currentLevelManager)
                 Destroy(currentLevelManager.gameObject);
+            currentLevelManager = null;
             SpawnLevel();
         }
 

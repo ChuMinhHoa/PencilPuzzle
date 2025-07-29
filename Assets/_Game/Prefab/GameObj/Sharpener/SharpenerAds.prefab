@@ -53,6 +53,7 @@ MonoBehaviour:
   - {fileID: 8357191757157919643}
   - {fileID: 7571263417553725692}
   - {fileID: 5791654862114666851}
+  isUnlock: 0
 --- !u!1 &3332168425399770135
 GameObject:
   m_ObjectHideFlags: 0
@@ -14905,6 +14906,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6745417087615684856, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.33
+      objectReference: {fileID: 0}
     - target: {fileID: 7720176982608089289, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
       propertyPath: m_Name
       value: PointGoals
@@ -14986,6 +14991,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6745417087615684856, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.33
+      objectReference: {fileID: 0}
     - target: {fileID: 7720176982608089289, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
       propertyPath: m_Name
       value: PointGoals (1)
@@ -15066,6 +15075,10 @@ PrefabInstance:
     - target: {fileID: 5957909815597978382, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6745417087615684856, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 7720176982608089289, guid: a1225fcd679ea974fb84ab2159f089d7, type: 3}
       propertyPath: m_Name

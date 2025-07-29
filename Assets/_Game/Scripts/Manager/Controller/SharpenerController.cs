@@ -53,6 +53,7 @@ namespace _Game.Scripts.Manager.Controller
         {
             for (var i = 0; i < waveConfig.sharpenerColors.Count; i++)
             {
+                Debug.Log("Spawn Sharpener: " + waveConfig.sharpenerColors[i]);
                 var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
                 sharpenerTemp.InitData(waveConfig.sharpenerColors[i]);
                 sharpenerTemp.AnimMove(trsMoveTo[i],
