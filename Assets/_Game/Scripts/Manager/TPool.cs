@@ -4,7 +4,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace _Game.Scripts.GameManager
+namespace _Game.Scripts.Manager
 {
     [Serializable]
     public class TPool<T> where T : Component
@@ -55,11 +55,9 @@ namespace _Game.Scripts.GameManager
             {
                 Pool.Remove(t);
                 DisableT.Add(t);
+                t.transform.SetParent(parentTrs);
+                t.transform.localPosition = Vector3.zero;
                 t.gameObject.SetActive(false);
-            }
-            else
-            {
-                Debug.LogWarning("Trying to despawn an object that is not in the pool.");
             }
         }
     }

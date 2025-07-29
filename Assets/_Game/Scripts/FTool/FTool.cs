@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using _Game.Scripts.GameManager;
 using _Game.Scripts.GameObj.Unit;
+using _Game.Scripts.Manager;
 using Sirenix.OdinInspector;
+using TW.Utility.DesignPattern;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game.Scripts.FTool
 {
@@ -49,7 +49,8 @@ namespace _Game.Scripts.FTool
                 Debug.Log("New Unit is null.");
                 return;
             }
-            newUnit.unitId = levelManager.unitController.units.Count;
+            newUnit.unitId = levelManager.unitController.units.Count - 1;
+            newUnit.name = "UnitBase_" + newUnit.unitId;
             levelManager.unitController.units.Add(newUnit);
             currentUnit = newUnit;
         }

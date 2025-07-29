@@ -1,16 +1,15 @@
-using _Game.Scripts.GameManager.Controller;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.Manager.Controller;
 using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
-using TW.Utility.DesignPattern;
 using UnityEngine;
 
-namespace _Game.Scripts.GameManager
+namespace _Game.Scripts.Manager
 {
-    public class LevelManager : Singleton<LevelManager>
+    public class LevelManager : MonoBehaviour
     {
         public int level;
         public SharpenerController sharpenerController;
@@ -18,16 +17,21 @@ namespace _Game.Scripts.GameManager
         public LevelConfig currentLevelConfig;
         public int currentWaveIndex;
 
-        protected override void Awake()
+        [Button]
+        public async UniTask ReplayLevel()
         {
-            base.Awake();
-            _ = InitData();
+            currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
+            unitController.ResetAllUnits();
+            await unitController.InitData();
+            sharpenerController.ResetAllSharpeners();
+            currentWaveIndex = 0;
+            SpawnNextWave();
         }
 
         [Button]
-        private async UniTask InitData()
+        public async UniTask InitData(LevelConfig levelConfig)
         {
-            currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
+            currentLevelConfig = levelConfig;
             await unitController.InitData();
             currentWaveIndex = 0;
             SpawnNextWave();
@@ -39,28 +43,25 @@ namespace _Game.Scripts.GameManager
             var waveConfig = currentLevelConfig.GetWaveConfig(currentWaveIndex);
             if (waveConfig == null)
             {
-                Debug.Log("win game");
+                GameManager.Instance.LevelComplete();
                 return;
             }
-            
-
             sharpenerController.SpawnSharpener(waveConfig);
+          
             currentWaveIndex++;
         }
 
         public bool TryResolveUnit(UnitBase unitBase)
         {
             var sharpener = sharpenerController.TryGetSharpener(unitBase.colorType);
-            if (sharpener == null)
+            if (!sharpener)
             {
-                Debug.Log("null sharpener");
-                return false;
+                return TryResolveToTemp(unitBase);
             }
 
             var pointGoal = sharpener.TryGetPointGoal();
-            if (pointGoal == null)
+            if (!pointGoal)
             {
-                Debug.Log("null point goal");
                 return TryResolveToTemp(unitBase);
             }
             
@@ -71,27 +72,25 @@ namespace _Game.Scripts.GameManager
         private bool TryResolveToTemp(UnitBase unitBase)
         {
             var sharpener = sharpenerController.TryGetTempSharpener();
-            if (sharpener == null)
+            if (!sharpener)
                 return false;
             var pointGoal = sharpener.TryGetPointGoal();
-            if (pointGoal == null)
+            if (!pointGoal)
             {
-                Debug.Log("null point goal");
                 return false;
             }
 
             ResolveDone(sharpener.id, pointGoal, unitBase);
+            GameManager.Instance.currentLevelManager.unitController.AddUnitToTemp(unitBase.unitId);
             return true;
         }
 
         private void ResolveDone(int sharpenerID, PointGoal pointGoal, UnitBase unitBase)
         {
-            pointGoal.SetUnit(unitBase);
+            pointGoal.SetUnit(unitBase.unitId);
             
             unitBase.SetPointGoal(pointGoal);
             unitBase.SetIDSharpener(sharpenerID);
-            
-            Debug.Log("point goal set for unit: " + unitBase.name);
         }
 
         public UnitPositionConfig GetUnitPositionConfig(int unitId)
@@ -104,9 +103,9 @@ namespace _Game.Scripts.GameManager
             sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
         }
 
-        public void ClearThatSharpener(int id)
+        public void CheckToNextWave()
         {
-            var result = sharpenerController.ClearThatSharpener(id);
+            var result = sharpenerController.IsDoneThatWave();
             if (result)
             {
                 SpawnNextWave();

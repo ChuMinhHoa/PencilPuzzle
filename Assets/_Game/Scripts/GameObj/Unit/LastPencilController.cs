@@ -1,12 +1,20 @@
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.Manager;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
 {
+    public enum PencilState
+    {
+        Idle,
+        Moving
+    }
+
     public class LastPencilController : MonoBehaviour
     {
         public SharpenerColorType colorType;
@@ -14,6 +22,12 @@ namespace _Game.Scripts.GameObj.Unit
         public MeshRenderer tipRenderer;
         public Transform pencilBody;
         public float tipLength = 1f;
+        public PencilState currentState;
+        [Title("Animation")]
+        public float speed = 2f;
+        public float magnitude = 2f;
+
+        public AnimationCurve curveComplete;
         [Button]
         public void InitData(SharpenerColorType color, UnitLengthType lengthType)
         {
@@ -41,6 +55,9 @@ namespace _Game.Scripts.GameObj.Unit
 
         [BoxGroup("Anim hit")]
         public Vector3 vectorScaleHit;
+
+        private MotionHandle _moveCompleteHandle;
+
         [BoxGroup("Anim hit")]
         [Button]
         public async UniTask AnimHit()
@@ -49,6 +66,48 @@ namespace _Game.Scripts.GameObj.Unit
                 .Bind(x=>pencilBody.localScale = x).AddTo(this);
             await LMotion.Create(vectorScaleHit, Vector3.one, 0.15f)
                 .Bind(x=>pencilBody.localScale = x).AddTo(this);
+        }
+
+        public void AnimOnComplete(PointGoal pointGoal, int sharpenerID)
+        {
+            if (_moveCompleteHandle.IsPlaying())
+                _moveCompleteHandle.TryCancel();
+            var progress = 0f;
+            var duration = curveComplete.keys[^1].time;
+            transform.SetParent(pointGoal.pointGoal);
+            currentState = PencilState.Moving;
+            _moveCompleteHandle = LMotion.Create(transform.localPosition, Vector3.zero, duration)
+                .WithOnComplete(() =>
+                {
+                    transform.SetParent(pointGoal.pointGoal);
+                    _ = AnimHit();
+                    _ = pointGoal.OnHit();
+                    currentState = PencilState.Idle;
+                    GameManager.Instance.currentLevelManager.SharpenerEndAnimAndCheck(sharpenerID);
+                    GameManager.Instance.CheckCanTouch();
+                })
+                .Bind(x =>
+                {
+                    progress = Mathf.Clamp(progress, 0f, duration);
+                    var position = x;
+                    position.y += curveComplete.Evaluate(progress) * magnitude;
+
+                    transform.localPosition = position;
+
+                    progress += Time.deltaTime;
+                })
+                .AddTo(this);
+            var currentEuler = transform.eulerAngles.x;
+            LMotion.Create(currentEuler, 270f, 0.25f)
+                .Bind(x =>
+                {
+                    transform.eulerAngles = new float3(x, 0f, 0f);
+                })
+                .AddTo(this);
+
+            LMotion.Create(transform.localScale, Vector3.one*0.7f, 0.25f)
+                .Bind(x => transform.localScale = x)
+                .AddTo(this);
         }
     }
 }

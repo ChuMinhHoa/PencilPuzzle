@@ -82,7 +82,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Model
+  m_Name: Sharpener
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
@@ -105,7 +105,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ClaimGoal
+  m_Name: Hit
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:

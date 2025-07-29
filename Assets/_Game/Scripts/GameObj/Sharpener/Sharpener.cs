@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using _Game.Scripts.GameManager;
+using _Game.Scripts.Manager;
 using _Game.Scripts.GlobalConfig;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
-using SplineMesh;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Sharpener
@@ -36,11 +35,10 @@ namespace _Game.Scripts.GameObj.Sharpener
         private MotionHandle _moveHandle;
 
         public Animator anim;
-        //public ExampleContortAlong contortAlong;
 
         public List<PointGoal> pointGoals = new();
 
-        public PointGoal TryGetPointGoal()
+        public virtual PointGoal TryGetPointGoal()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
@@ -53,16 +51,14 @@ namespace _Game.Scripts.GameObj.Sharpener
             return null;
         }
 
-        private void ClearSharpener()
+        public virtual void ClearSharpener()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
                 pointGoals[i].ClearPointGoal();
             }
 
-            LevelManager.Instance.sharpenerController.RemoveSharpener(this);
-            //contortAlong.gameObject.SetActive(true);
-            //contortAlong.Play();
+            GameManager.Instance.currentLevelManager.sharpenerController.RemoveSharpener(this);
         }
 
         public bool IsSameColor(SharpenerColorType colorType)
@@ -83,7 +79,8 @@ namespace _Game.Scripts.GameObj.Sharpener
             TryCancelMove();
             _moveHandle = LMotion.Create(transform.position, trsTarget.position, .5f)
                 .WithOnComplete(() => { onFinished?.Invoke(); })
-                .Bind(x => transform.position = x);
+                .Bind(x => transform.position = x)
+                .AddTo(this);
         }
 
         public void TryCancelMove()
@@ -98,19 +95,17 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                if (pointGoals[i].IsFree())
+                if (!pointGoals[i].IsMoveDone())
                     return;
             }
-
             PlayAnimRoll();
             await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeSharpenerRoll);
             ClearSharpener();
-            LevelManager.Instance.ClearThatSharpener(id);
+            GameManager.Instance.currentLevelManager.CheckToNextWave();
         }
 
-        public async UniTask AnimDone()
+        public virtual async UniTask AnimDone()
         {
-            Debug.Log("Anim Move Done");
             PlayAnimGoal();
             await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeAnimGoal);
             await CheckClear();
@@ -118,9 +113,19 @@ namespace _Game.Scripts.GameObj.Sharpener
 
         #region Animation
 
-            private void PlayAnimGoal()=>anim.Play(MyCache.animClaimGoal);
-            private void PlayAnimRoll()=>anim.Play(MyCache.animRoll);
+        public void PlayAnimGoal() => anim.Play(MyCache.AnimHit);
+        private void PlayAnimRoll() => anim.Play(MyCache.AnimRoll);
+        private void PlayAnimIdle() => anim.Play(MyCache.AnimIdle);
 
         #endregion
+
+        public void ResetSharpener()
+        {
+            PlayAnimIdle();
+            for (var i = 0; i < pointGoals.Count; i++)
+            {
+                pointGoals[i].ClearPointGoal();
+            }
+        }
     }
 }

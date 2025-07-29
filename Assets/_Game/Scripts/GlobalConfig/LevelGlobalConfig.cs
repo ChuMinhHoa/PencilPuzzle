@@ -15,5 +15,10 @@ namespace _Game.Scripts.GlobalConfig
         {
             return levelConfigs.Find(x => x.level == level);
         }
+
+        public int GetMaxLevel()
+        {
+            return levelConfigs.Count;
+        }
     }
 }

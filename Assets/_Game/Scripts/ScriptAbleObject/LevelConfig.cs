@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
+using _Game.Scripts.Manager;
 using SplineMesh;
 using Unity.Mathematics;
 using UnityEditor;
@@ -14,7 +15,7 @@ namespace _Game.Scripts.ScriptAbleObject
         public int level;
         public List<UnitPositionConfig> unitPositionConfig;
         public List<WaveConfig> waveConfig;
-        public GameObject levelPrefab;
+        public LevelManager levelPrefab;
         
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {
@@ -25,7 +26,8 @@ namespace _Game.Scripts.ScriptAbleObject
             int unitId,
             UnitLengthType unitLength,
             SharpenerColorType colorType,
-            List<SplineNode> splineNodes
+            List<SplineNode> splineNodes,
+            List<SplineNode> wayOutNodes
             )
         {
             for (var i = 0; i < unitPositionConfig.Count; i++)
@@ -35,7 +37,8 @@ namespace _Game.Scripts.ScriptAbleObject
                     unitPositionConfig[i].SaveData(
                         colorType, 
                         unitLength, 
-                        splineNodes
+                        splineNodes,
+                        wayOutNodes
                     );
                     return;
                 }
@@ -46,7 +49,8 @@ namespace _Game.Scripts.ScriptAbleObject
             newUnitConfig.SaveData(
                 colorType, 
                 unitLength, 
-                splineNodes
+                splineNodes,
+                wayOutNodes
             );
             unitPositionConfig.Add(newUnitConfig);
 #if UNITY_EDITOR
@@ -70,19 +74,27 @@ namespace _Game.Scripts.ScriptAbleObject
         public SharpenerColorType unitColor;
         public UnitLengthType unitLength;
         public List<float3> pathMesh = new();
+        public List<float3> wayOut = new();
 
         public void SaveData(SharpenerColorType colorType,
             UnitLengthType lengthType,
-            List<SplineNode> splineNodes)
+            List<SplineNode> splineNodes,
+            List<SplineNode> wayOutNodes)
         {
             unitColor = colorType;
             unitLength = lengthType;
 
             pathMesh.Clear();
+            wayOut.Clear();
             
             for (var i = 0; i < splineNodes.Count; i++)
             {
                 pathMesh.Add(splineNodes[i].Position);
+            }
+            
+            for (var i = 0; i < wayOutNodes.Count; i++)
+            {
+                wayOut.Add(wayOutNodes[i].Position);
             }
         }
     }

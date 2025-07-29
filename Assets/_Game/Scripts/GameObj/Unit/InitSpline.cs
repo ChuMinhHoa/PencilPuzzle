@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
 {
-    public class InitSpline : MonoBehaviour
+    [System.Serializable]
+    public static class InitSpline
     {
-        public void SetUpSpline(Spline spline, List<float3> pathPosition)
+        public static void SetUpSpline(Spline spline, List<float3> pathPosition)
         {
             for (var i = 0; i < pathPosition.Count; i++)
             {

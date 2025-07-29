@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using _Game.Scripts.GameManager;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.Manager;
 using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using LitMotion;
@@ -11,7 +9,6 @@ using Sirenix.OdinInspector;
 using SplineMesh;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Game.Scripts.GameObj.Unit
 {
@@ -27,7 +24,7 @@ namespace _Game.Scripts.GameObj.Unit
     {
         [Title("Unit define")] 
         public int unitId;
-        [FormerlySerializedAs("sharpener")] [FormerlySerializedAs("goalId")] public int sharpenerID;
+        public int sharpenerID;
         public UnitLengthType unitLength;
         public SharpenerColorType colorType;
 
@@ -42,13 +39,13 @@ namespace _Game.Scripts.GameObj.Unit
         [SerializeField] private Transform trsHead;
         [SerializeField] private Transform trsLastPencil;
         [SerializeField] private Transform trsCheckPoint;
+        [SerializeField] private Transform lastPencilParents;
         private PointGoal _pointGoal;
 
         [Title("Spline")] 
         [SerializeField] private Spline spline;
         [SerializeField] private SplineMeshTiling splineMeshTiling;
-        public SplineOutController splineOut;
-        public InitSpline initSpline;
+        [SerializeField] private SplineOutController splineOut;
 
         public List<NodeController> nodes = new();
 
@@ -62,20 +59,27 @@ namespace _Game.Scripts.GameObj.Unit
         public float distanceCheck = 10f;
         public LastPencilController lastPencil;
         
+        
+        [Title("Collider")]
+        public List<Collider> myColliders = new();
+        
         #region Init Data
 
         [Button]
         public void InitDataEditor()
         {
             lastPencil.InitData(colorType, unitLength);
-            _unitPositionConfig = LevelManager.Instance.GetUnitPositionConfig(unitId);
+            _unitPositionConfig = GameManager.Instance.currentLevelManager.GetUnitPositionConfig(unitId);
 
             colorType = _unitPositionConfig.unitColor;
             unitLength = _unitPositionConfig.unitLength;
 
             _unitConfig = UnitGlobalConfig.Instance.GetUnitConfig(unitLength);
+            var unitHeadScale = UnitGlobalConfig.Instance.unitHeadScale;
 
-            initSpline.SetUpSpline(spline, _unitPositionConfig.pathMesh);
+            InitSpline.SetUpSpline(spline, _unitPositionConfig.pathMesh);
+            InitSpline.SetUpSpline(splineOut.splineOut, _unitPositionConfig.wayOut);
+            
             var mat = UnitGlobalConfig.Instance.GetUnitMaterial(colorType);
             splineMeshTiling.material = mat;
             AlignPencil();
@@ -83,8 +87,10 @@ namespace _Game.Scripts.GameObj.Unit
             var headMat = UnitGlobalConfig.Instance.GetTipMaterial(colorType);
             headMeshRenderer.material = headMat;
             trsLastPencil.gameObject.SetActive(true);
-            //transform.position = _unitPositionConfig.position;
-            //transform.eulerAngles = _unitPositionConfig.eulerAngles;
+            trsHead.localScale = unitHeadScale;
+            
+            AlignHeaderEditor();
+            AlignHeaderEditor();
         }
 
         public virtual void InitData()
@@ -100,6 +106,7 @@ namespace _Game.Scripts.GameObj.Unit
 
             nodes[0].moveUpdateCallback = AlignHeaderEditor;
             trsLastPencil.gameObject.SetActive(false);
+            objSpline.SetActive(true);
             //nodes[^1].moveDoneCallback = ActionMoveDoneCallBack;
         }
 
@@ -110,7 +117,7 @@ namespace _Game.Scripts.GameObj.Unit
         /// Cố gắng di chuyển ra ngoài nếu không có va chạm
         /// </summary>
         [Button]
-        private void TryMOveOut()
+        public void TryMoveOut()
         {
             var hitTemp = CheckCanMove();
             if (hitTemp != null)  
@@ -155,7 +162,7 @@ namespace _Game.Scripts.GameObj.Unit
         [Button]
         private void MoveOut()
         {
-            if (LevelManager.Instance.TryResolveUnit(this))
+            if (GameManager.Instance.currentLevelManager.TryResolveUnit(this))
             {
                 for (var i = 0; i < nodes.Count; i++)
                 {
@@ -190,7 +197,7 @@ namespace _Game.Scripts.GameObj.Unit
         {
             if (nodeIndex == nodes.Count- 1)
             {
-                //AlignHeaderEditor();
+                GameManager.Instance.SetCanTouch(true);
             }
         }
         
@@ -250,7 +257,7 @@ namespace _Game.Scripts.GameObj.Unit
             return pathPoints;
         }
         /// <summary>
-        /// lấy điểm di chuển cuối nếu khoảng cách nhỏ hơn 1
+        /// lấy điểm di chuyển cuối nếu khoảng cách nhỏ hơn 1
         /// </summary>>
         private float3? GetPathPointNotMove(int nodeIndex)
         {
@@ -270,7 +277,7 @@ namespace _Game.Scripts.GameObj.Unit
             Vector3 lastPoint = hit;
             var dir = (lastPoint - nodes[0].currentPosition).normalized;
             var distanceBtNode = UnitGlobalConfig.Instance.distanceBtNode;
-            lastPoint -= dir * distanceBtNode * nodeIndex + dir * UnitGlobalConfig.Instance.sizeUnitHead - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
+            lastPoint -= dir * (distanceBtNode * nodeIndex) + dir * UnitGlobalConfig.Instance.sizeUnitHead - dir * 0.25f * (nodeIndex == 0 ? 0 : 1);
             
 
             return lastPoint;
@@ -310,7 +317,7 @@ namespace _Game.Scripts.GameObj.Unit
 
         #endregion
 
-        #region Animation
+        #region Complete animation
 
         private MotionHandle _moveCompleteHandle;
 
@@ -318,44 +325,16 @@ namespace _Game.Scripts.GameObj.Unit
         {
             //Debug.Log("Animation complete for unit: " + gameObject.name);
             //LMotion.Create(transform.position, )
-
             objSpline.SetActive(false);
             trsLastPencil.gameObject.SetActive(true);
-            if (_moveCompleteHandle.IsPlaying())
-                _moveCompleteHandle.TryCancel();
-            var progress = 0f;
-            var duration = curveComplete.keys[^1].time;
-            _moveCompleteHandle = LMotion.Create(trsLastPencil.position, _pointGoal.pointGoal.position, duration)
-                .WithOnComplete(() =>
-                {
-                    trsLastPencil.SetParent(_pointGoal.pointGoal);
-                    _ = lastPencil.AnimHit();
-                    _ = _pointGoal.OnHit();
-                    LevelManager.Instance.SharpenerEndAnimAndCheck(sharpenerID);
-                })
-                .Bind(x =>
-                {
-                    progress = Mathf.Clamp(progress, 0f, duration);
-                    var position = x;
-                    position.y += curveComplete.Evaluate(progress) * magnitude;
+            
+            lastPencil.AnimOnComplete(_pointGoal, sharpenerID);
+        }
 
-                    trsLastPencil.position = position;
-
-                    progress += Time.deltaTime;
-                })
-                .AddTo(this);
-            var currentEuler = trsLastPencil.eulerAngles.x;
-            LMotion.Create(currentEuler, 270f, 0.25f)
-                .Bind(x =>
-                {
-                    Debug.Log(x);
-                    trsLastPencil.eulerAngles = new float3(x, 0f, 0f);
-                })
-                .AddTo(this);
-
-            LMotion.Create(trsLastPencil.localScale, Vector3.one*0.7f, 0.25f)
-                .Bind(x => trsLastPencil.localScale = x)
-                .AddTo(this);
+        public void AnimForUnitTemp(PointGoal pointGoal, int sharpenerId)
+        {
+            Debug.Log("anim for unit temp: " + unitId);
+            lastPencil.AnimOnComplete(pointGoal, sharpenerId);
         }
 
         #endregion
@@ -367,7 +346,7 @@ namespace _Game.Scripts.GameObj.Unit
         {
             // Implement save logic here, e.g., saving unit state to a file or database
             Debug.Log($"Saving data for Unit ID: {unitId}, Length: {unitLength}, Color: {colorType}");
-            var levelConfig = LevelManager.Instance.currentLevelConfig;
+            var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
             if (levelConfig == null)
             {
                 Debug.LogError("Current level config is null. Cannot save unit data.");
@@ -378,9 +357,16 @@ namespace _Game.Scripts.GameObj.Unit
                 unitId,
                 unitLength,
                 colorType,
-                spline.nodes
+                spline.nodes,
+                splineOut.splineOut.nodes
             );
         }
+
+        #endregion
+
+        #region Collider
+
+        public bool IsHaveThatCollider(Collider colliderCheck) => myColliders.Contains(colliderCheck);
 
         #endregion
 
@@ -401,13 +387,20 @@ namespace _Game.Scripts.GameObj.Unit
             {
                 nodes[i].ClearPath();
             }
-
             objSpline.SetActive(true);
+            gameObject.SetActive(false);
+            lastPencil.transform.SetParent(lastPencilParents);
+            AlignPencil();
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck);
+        }
+
+        public bool CheckCanTouch()
+        {
+            return lastPencil.currentState == PencilState.Idle;
         }
     }
 }

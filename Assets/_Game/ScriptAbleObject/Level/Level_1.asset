@@ -48,6 +48,16 @@ MonoBehaviour:
     - x: -2.5
       y: 0
       z: 0
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 0.2
+      y: 0.4141076
+      z: 0
+    - x: 0.5
+      y: 2.5
+      z: 0
   - unitId: 1
     unitColor: 3
     unitLength: 2
@@ -67,6 +77,19 @@ MonoBehaviour:
     - x: -2
       y: 0
       z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2
+      y: 0.14
+      z: 0
+    - x: 2.5
+      y: 2
+      z: 0
   - unitId: 3
     unitColor: 3
     unitLength: 2
@@ -86,6 +109,19 @@ MonoBehaviour:
     - x: 0
       y: 0
       z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0000005
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 2
+      z: 0
   - unitId: 2
     unitColor: 1
     unitLength: 2
@@ -105,6 +141,19 @@ MonoBehaviour:
     - x: -1
       y: 0
       z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0000005
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 2
+      z: 0
   - unitId: 4
     unitColor: 1
     unitLength: 2
@@ -121,9 +170,22 @@ MonoBehaviour:
     - x: 1
       y: 0
       z: -2.5
-    - x: 1
+    - x: 0.9926208
       y: 0
       z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0000005
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 2
+      z: 0
   - unitId: 5
     unitColor: 3
     unitLength: 2
@@ -143,7 +205,22 @@ MonoBehaviour:
     - x: 2
       y: 0
       z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0000005
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 2
+      z: 0
   waveConfig:
   - waveId: 1
-    sharpenerColors: 0100000003000000
-  levelPrefab: {fileID: 0}
+    sharpenerColors: 01000000
+  - waveId: 2
+    sharpenerColors: 03000000
+  levelPrefab: {fileID: 5939608881291207935, guid: 742aa00bf57e7334189f48877112fed9, type: 3}

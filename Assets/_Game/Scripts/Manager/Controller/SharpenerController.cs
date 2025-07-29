@@ -1,17 +1,19 @@
+using System;
 using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.ScriptAbleObject;
 using UnityEngine;
 
-namespace _Game.Scripts.GameManager.Controller
+namespace _Game.Scripts.Manager.Controller
 {
     public class SharpenerController : MonoBehaviour
     {
         public List<Sharpener> currentSharpeners;
+        public List<Sharpener> currentSharpenersTemp;
         
         public List<Transform> trsMoveTo;
-        
-        public TPool<Sharpener> sharpenerPool;
+        public Transform sharpenersParent;
+        //public TPool<Sharpener> sharpenerPool;
 
         public Transform trsOut;
         
@@ -28,18 +30,12 @@ namespace _Game.Scripts.GameManager.Controller
         
         public Sharpener TryGetTempSharpener()
         {
-            for (var i = 0; i < currentSharpeners.Count; i++)
+            for (var i = 0; i < currentSharpenersTemp.Count; i++)
             {
-                if (currentSharpeners[i].IsSameColor(SharpenerColorType.ColorTemp))
-                    return currentSharpeners[i];
+                if (currentSharpenersTemp[i].IsSameColor(SharpenerColorType.ColorTemp))
+                    return currentSharpenersTemp[i];
             }
             return null;
-        }
-
-        public void AddSharpener()
-        {
-            var sharpener = sharpenerPool.Spawn();
-            currentSharpeners.Add(sharpener);
         }
 
         public void RemoveSharpener(Sharpener sharpener)
@@ -48,7 +44,7 @@ namespace _Game.Scripts.GameManager.Controller
             
             sharpener.AnimMove(trsOut, () =>
             {
-                sharpenerPool.Despawn(sharpener);
+                PoolingObject.Instance.DeSpawnSharpener(sharpener);
             });
          
         }
@@ -57,9 +53,10 @@ namespace _Game.Scripts.GameManager.Controller
         {
             for (var i = 0; i < waveConfig.sharpenerColors.Count; i++)
             {
-                var sharpenerTemp = sharpenerPool.Spawn();
+                var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
                 sharpenerTemp.InitData(waveConfig.sharpenerColors[i]);
-                sharpenerTemp.AnimMove(trsMoveTo[i]);
+                sharpenerTemp.AnimMove(trsMoveTo[i],
+                    () => GameManager.Instance.currentLevelManager.unitController.CheckUnitTemps(currentSharpeners));
                 currentSharpeners.Add(sharpenerTemp);
             }
         }
@@ -74,20 +71,34 @@ namespace _Game.Scripts.GameManager.Controller
                     return;
                 }
             }
-        }
 
-        public bool ClearThatSharpener(int id)
-        {
-            for (var i = 0; i < currentSharpeners.Count; i++)
+            for (var i = 0; i < currentSharpenersTemp.Count; i++)
             {
-                if (currentSharpeners[i].id == id)
+                if (currentSharpenersTemp[i].id == sharpenerID)
                 {
-                    currentSharpeners.RemoveAt(i);
-                    break;
+                    _ = currentSharpenersTemp[i].AnimDone();
+                    return;
                 }
             }
+        }
 
+        public bool IsDoneThatWave()
+        {
             return currentSharpeners.Count == 0;
+        }
+
+        public void ResetAllSharpeners()
+        {
+            for (var i = 0; i < currentSharpenersTemp.Count; i++)
+            {
+                currentSharpenersTemp[i].ResetSharpener();
+            }
+            for (var i = 0; i < currentSharpeners.Count; i++)
+            {
+                currentSharpeners[i].ResetSharpener();
+                PoolingObject.Instance.DeSpawnSharpener(currentSharpeners[i]);
+            }
+            currentSharpeners.Clear();
         }
     }
 }

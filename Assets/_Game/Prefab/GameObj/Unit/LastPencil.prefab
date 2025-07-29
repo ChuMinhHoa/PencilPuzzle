@@ -51,7 +51,42 @@ MonoBehaviour:
   tipRenderer: {fileID: 2517062635432484078}
   pencilBody: {fileID: 7624202710480618516}
   tipLength: 0.5
-  vectorScaleHit: {x: 0, y: 0, z: 0}
+  speed: 2
+  magnitude: 2
+  curveComplete:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 7.913059
+      outSlope: 7.913059
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.103505835
+    - serializedVersion: 3
+      time: 0.25
+      value: 1
+      inSlope: 0.024803476
+      outSlope: 0.024803476
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.19198656
+    - serializedVersion: 3
+      time: 0.5
+      value: 0
+      inSlope: -6.8076777
+      outSlope: -6.8076777
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.2504176
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  vectorScaleHit: {x: 1.15, y: 1.15, z: 0.8}
 --- !u!1001 &3832548440911249514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103,7 +138,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 810bec0e56ef17a40aa3a32f2fee4567, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 88df803acf969f540a9a1b0f281c643a, type: 2}
+      objectReference: {fileID: 2100000, guid: 92a49ccec73c2744a84c002f8bd0630f, type: 2}
     - target: {fileID: 919132149155446097, guid: 810bec0e56ef17a40aa3a32f2fee4567, type: 3}
       propertyPath: m_Name
       value: Tip
@@ -174,7 +209,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: ce256f0d9f9d10046965ed572b48cf34, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 6636bc9f6995c544b9961f9a689e39f8, type: 2}
+      objectReference: {fileID: 2100000, guid: 9a573ea4ae17d6040820cf34f4433537, type: 2}
     - target: {fileID: 919132149155446097, guid: ce256f0d9f9d10046965ed572b48cf34, type: 3}
       propertyPath: m_Name
       value: Barrel1
