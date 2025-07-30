@@ -1,0 +1,549 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f67e2d2e491de3e42835089d250d74d2, type: 3}
+  m_Name: Level_2
+  m_EditorClassIdentifier: 
+  level: 2
+  unitPositionConfig:
+  - unitId: 0
+    unitColor: 5
+    pathMesh:
+    - x: -0.5
+      y: 0
+      z: 0
+    - x: -0.5
+      y: 0
+      z: -0.5
+    - x: -0.5
+      y: 0
+      z: -1
+    - x: -0.5
+      y: 0
+      z: -1.5
+    - x: -0.5
+      y: 0
+      z: -2.0000167
+    - x: -0.5
+      y: 0
+      z: -2.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1.0000002
+      y: 0.17881548
+      z: 0
+    - x: 1.5
+      y: 2
+      z: 0
+  - unitId: 1
+    unitColor: 5
+    pathMesh:
+    - x: -1.5
+      y: 0
+      z: 0
+    - x: -1.5
+      y: 0
+      z: -0.5
+    - x: -1.5
+      y: 0
+      z: -1
+    - x: -1.5
+      y: 0
+      z: -1.5
+    - x: -1.5
+      y: 0
+      z: -2
+    - x: -1.5
+      y: 0
+      z: -2.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 3
+    unitColor: 2
+    pathMesh:
+    - x: 0.5
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 1.5
+      y: 0
+      z: 0
+    - x: 2
+      y: 0
+      z: 0
+    - x: 2.5
+      y: 0
+      z: 0
+    - x: 3
+      y: 0
+      z: 0
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1.0000002
+      y: 0.17881548
+      z: 0
+    - x: 1.5
+      y: 2
+      z: 0
+  - unitId: 4
+    unitColor: 1
+    pathMesh:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 0
+      y: 0
+      z: 0.5
+    - x: 0
+      y: 0
+      z: 1
+    - x: 0
+      y: 0
+      z: 2.5217814
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 2
+    unitColor: 5
+    pathMesh:
+    - x: -2.5
+      y: 0
+      z: 0
+    - x: -2.5
+      y: 0
+      z: -0.5
+    - x: -2.5
+      y: 0
+      z: -1
+    - x: -2.5
+      y: 0
+      z: -1.5
+    - x: -2.5
+      y: 0
+      z: -2
+    - x: -2.5
+      y: 0
+      z: -2.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1.0000002
+      y: 0.17881548
+      z: 0
+    - x: 1.5
+      y: 2
+      z: 0
+  - unitId: 5
+    unitColor: 2
+    pathMesh:
+    - x: 0.5
+      y: 0
+      z: -1
+    - x: 1
+      y: 0
+      z: -1
+    - x: 1.5
+      y: 0
+      z: -1
+    - x: 2
+      y: 0
+      z: -1
+    - x: 2.5
+      y: 0
+      z: -1
+    - x: 3
+      y: 0
+      z: -1
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1.0000002
+      y: 0.17881548
+      z: 0
+    - x: 1.5
+      y: 2
+      z: 0
+  - unitId: 6
+    unitColor: 2
+    pathMesh:
+    - x: 0.5
+      y: 0
+      z: -2
+    - x: 1
+      y: 0
+      z: -2
+    - x: 1.5
+      y: 0
+      z: -2
+    - x: 2
+      y: 0
+      z: -2
+    - x: 2.5
+      y: 0
+      z: -2
+    - x: 3
+      y: 0
+      z: -2
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1.0000002
+      y: 0.17881548
+      z: 0
+    - x: 1.5
+      y: 2
+      z: 0
+  - unitId: 7
+    unitColor: 4
+    pathMesh:
+    - x: 0.5
+      y: 0
+      z: -3
+    - x: 0.5
+      y: 0
+      z: -3.5
+    - x: 0.5
+      y: 0
+      z: -4
+    - x: 0.5
+      y: 0
+      z: -4.5
+    - x: 0.5
+      y: 0
+      z: -5
+    - x: 0.5
+      y: 0
+      z: -5.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 8
+    unitColor: 4
+    pathMesh:
+    - x: 1.5
+      y: 0
+      z: -3
+    - x: 1.5
+      y: 0
+      z: -3.5
+    - x: 1.5
+      y: 0
+      z: -4
+    - x: 1.5
+      y: 0
+      z: -4.5
+    - x: 1.5
+      y: 0
+      z: -5
+    - x: 1.5
+      y: 0
+      z: -5.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 9
+    unitColor: 4
+    pathMesh:
+    - x: 2.5
+      y: 0
+      z: -3
+    - x: 2.5
+      y: 0
+      z: -3.5
+    - x: 2.5
+      y: 0
+      z: -4
+    - x: 2.5
+      y: 0
+      z: -4.5
+    - x: 2.5
+      y: 0
+      z: -5
+    - x: 2.5
+      y: 0
+      z: -5.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 10
+    unitColor: 1
+    pathMesh:
+    - x: -0.5
+      y: 0
+      z: -3
+    - x: -1
+      y: 0
+      z: -3
+    - x: -1.5
+      y: 0
+      z: -3
+    - x: -2
+      y: 0
+      z: -3
+    - x: -2.5
+      y: 0
+      z: -3
+    - x: -3
+      y: 0
+      z: -3
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 11
+    unitColor: 1
+    pathMesh:
+    - x: -0.5
+      y: 0
+      z: -4
+    - x: -1
+      y: 0
+      z: -4
+    - x: -1.5
+      y: 0
+      z: -4
+    - x: -2
+      y: 0
+      z: -4
+    - x: -2.5
+      y: 0
+      z: -4
+    - x: -3
+      y: 0
+      z: -4
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 12
+    unitColor: 1
+    pathMesh:
+    - x: -0.5
+      y: 0
+      z: -5
+    - x: -1
+      y: 0
+      z: -5
+    - x: -1.5
+      y: 0
+      z: -5
+    - x: -2
+      y: 0
+      z: -5
+    - x: -2.5
+      y: 0
+      z: -5
+    - x: -3
+      y: 0
+      z: -5
+    wayOut:
+    - x: 0
+      y: 0
+      z: -6
+    - x: 1
+      y: 0
+      z: -6
+    - x: 2.0509012
+      y: 0.14210841
+      z: -6
+    - x: 2.5000005
+      y: 1.3605679
+      z: -6
+  - unitId: 13
+    unitColor: 1
+    pathMesh:
+    - x: -0.5
+      y: 0
+      z: -6
+    - x: -0.5
+      y: 0
+      z: -6.5
+    - x: -0.5
+      y: 0
+      z: -7
+    - x: -0.5
+      y: 0
+      z: -7.5
+    - x: -0.5
+      y: 0
+      z: -8
+    - x: -0.5
+      y: 0
+      z: -8.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 14
+    unitColor: 1
+    pathMesh:
+    - x: -1.5
+      y: 0
+      z: -6
+    - x: -1.5
+      y: 0
+      z: -6.5
+    - x: -1.5
+      y: 0
+      z: -7
+    - x: -1.5
+      y: 0
+      z: -7.5
+    - x: -1.5
+      y: 0
+      z: -8
+    - x: -1.5
+      y: 0
+      z: -8.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  - unitId: 15
+    unitColor: 1
+    pathMesh:
+    - x: -2.5
+      y: 0
+      z: -6
+    - x: -2.5
+      y: 0
+      z: -6.5
+    - x: -2.5
+      y: 0
+      z: -7
+    - x: -2.5
+      y: 0
+      z: -7.5
+    - x: -2.5
+      y: 0
+      z: -8
+    - x: -2.5
+      y: 0
+      z: -8.5
+    wayOut:
+    - x: 0
+      y: 0
+      z: 0
+    - x: 1
+      y: 0
+      z: 0
+    - x: 2.0509012
+      y: 0.14210841
+      z: 0
+    - x: 2.5000005
+      y: 1.3605679
+      z: 0
+  waveConfig:
+  - waveId: 0
+    sharpenerColors: 030000000400000001000000
+  levelPrefab: {fileID: 0}
+  levelPrefabReference:
+    m_AssetGUID: 09872876f00574e42a44876bb94e1baa
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0

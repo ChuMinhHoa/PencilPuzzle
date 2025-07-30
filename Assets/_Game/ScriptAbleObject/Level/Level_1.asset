@@ -224,3 +224,9 @@ MonoBehaviour:
   - waveId: 2
     sharpenerColors: 03000000
   levelPrefab: {fileID: 5939608881291207935, guid: 742aa00bf57e7334189f48877112fed9, type: 3}
+  levelPrefabReference:
+    m_AssetGUID: 742aa00bf57e7334189f48877112fed9
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1

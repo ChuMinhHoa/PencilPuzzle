@@ -12,12 +12,14 @@ using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
 {
-    public enum UnitLengthType
+
+    public enum UnitType
     {
-        None = 0,
-        L1 = 1,
-        L2 = 2,
-        L3 = 3
+        Normal,
+        Under,
+        Freeze,
+        Lock,
+        Key
     }
 
     public class UnitBase : MonoBehaviour
@@ -25,7 +27,6 @@ namespace _Game.Scripts.GameObj.Unit
         [Title("Unit define")] 
         public int unitId;
         public int sharpenerID;
-        public UnitLengthType unitLength;
         public SharpenerColorType colorType;
 
         private UnitConfig _unitConfig;
@@ -40,12 +41,14 @@ namespace _Game.Scripts.GameObj.Unit
         [SerializeField] private Transform trsLastPencil;
         [SerializeField] private Transform trsCheckPoint;
         [SerializeField] private Transform lastPencilParents;
+        [SerializeField] public Transform trsWayOut;
         private PointGoal _pointGoal;
 
         [Title("Spline")] 
-        [SerializeField] private Spline spline;
+        [SerializeField]
+        public Spline spline;
         [SerializeField] private SplineMeshTiling splineMeshTiling;
-        [SerializeField] private SplineOutController splineOut;
+        public SplineOutController splineOut;
 
         public List<NodeController> nodes = new();
 
@@ -68,13 +71,16 @@ namespace _Game.Scripts.GameObj.Unit
         [Button]
         public void InitDataEditor()
         {
-            lastPencil.InitData(colorType, unitLength);
+            lastPencil = PoolingObject.Instance.SpawnLastPencilController(lastPencilParents);
+            
+            trsLastPencil = lastPencil.transform;
+            trsLastPencil.SetParent(lastPencilParents);
+            
+            lastPencil.InitData(colorType);
             _unitPositionConfig = GameManager.Instance.currentLevelManager.GetUnitPositionConfig(unitId);
 
             colorType = _unitPositionConfig.unitColor;
-            unitLength = _unitPositionConfig.unitLength;
 
-            _unitConfig = UnitGlobalConfig.Instance.GetUnitConfig(unitLength);
             var unitHeadScale = UnitGlobalConfig.Instance.unitHeadScale;
 
             InitSpline.SetUpSpline(spline, _unitPositionConfig.pathMesh);
@@ -82,6 +88,7 @@ namespace _Game.Scripts.GameObj.Unit
             
             var mat = UnitGlobalConfig.Instance.GetUnitMaterial(colorType);
             splineMeshTiling.material = mat;
+            
             AlignPencil();
             nodes.Clear();
             var headMat = UnitGlobalConfig.Instance.GetTipMaterial(colorType);
@@ -117,7 +124,7 @@ namespace _Game.Scripts.GameObj.Unit
         /// Cố gắng di chuyển ra ngoài nếu không có va chạm
         /// </summary>
         [Button]
-        public void TryMoveOut()
+        public virtual void TryMoveOut()
         {
             var hitTemp = CheckCanMove();
             if (hitTemp != null)  
@@ -312,6 +319,7 @@ namespace _Game.Scripts.GameObj.Unit
             //positionPencil.y -= _unitConfig.size;
 
             trsLastPencil.transform.localPosition = positionPencil;
+            trsLastPencil.transform.parent = null;
             trsLastPencil.eulerAngles = new float3(90, 0, 0);
         }
 
@@ -341,26 +349,25 @@ namespace _Game.Scripts.GameObj.Unit
 
         #region Save Data
 
-        [Button]
-        private void SaveData()
-        {
-            // Implement save logic here, e.g., saving unit state to a file or database
-            Debug.Log($"Saving data for Unit ID: {unitId}, Length: {unitLength}, Color: {colorType}");
-            var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
-            if (levelConfig == null)
-            {
-                Debug.LogError("Current level config is null. Cannot save unit data.");
-                return;
-            }
-
-            levelConfig.SaveUnitData(
-                unitId,
-                unitLength,
-                colorType,
-                spline.nodes,
-                splineOut.splineOut.nodes
-            );
-        }
+        // [Button]
+        // public void SaveData()
+        // {
+        //     // Implement save logic here, e.g., saving unit state to a file or database
+        //     Debug.Log($"Saving data for Unit ID: {unitId}, Color: {colorType}");
+        //     var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
+        //     if (levelConfig == null)
+        //     {
+        //         Debug.LogError("Current level config is null. Cannot save unit data.");
+        //         return;
+        //     }
+        //
+        //     levelConfig.SaveUnitData(
+        //         unitId,
+        //         colorType,
+        //         spline.nodes,
+        //         splineOut.splineOut.nodes
+        //     );
+        // }
 
         #endregion
 
@@ -389,8 +396,8 @@ namespace _Game.Scripts.GameObj.Unit
             }
             objSpline.SetActive(true);
             gameObject.SetActive(false);
-            lastPencil.transform.SetParent(lastPencilParents);
-            AlignPencil();
+            trsLastPencil.parent = null;
+            PoolingObject.Instance.DeSpawnLastPencilController(lastPencil);
         }
 
         private void OnDrawGizmos()

@@ -1,9 +1,14 @@
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.ScriptAbleObject;
+using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using TW.Reactive.CustomComponent;
 using TW.Utility.DesignPattern;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace _Game.Scripts.Manager
 {
@@ -18,7 +23,7 @@ namespace _Game.Scripts.Manager
         {
             currentLevel.Value = 1;
 
-            SpawnLevel();
+            _ = SpawnLevel();
         }
 
         #region Touch Controll
@@ -54,14 +59,26 @@ namespace _Game.Scripts.Manager
         #endregion
 
         #region Level Control
-        private void SpawnLevel()
+        private async UniTask SpawnLevel()
         {
             Debug.Log("SpawnLevel");
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
-            currentLevelManager = Instantiate(levelConfig.levelPrefab, transform);
-            _ = currentLevelManager.InitData(levelConfig);
+            var handle = Addressables.LoadAssetAsync<GameObject>(levelConfig.levelPrefabReference);
+            handle.Completed += task =>
+            {
+                if (handle.Status == AsyncOperationStatus.Succeeded)
+                {
+                    currentLevelManager = Instantiate(task.Result).GetComponent<LevelManager>();
+                    Debug.Log(currentLevelManager);
+                    Debug.Log($"{levelConfig}");
+                    _ = currentLevelManager.InitData(levelConfig);
+                    //currentLevelManager = task.Result.GetComponent<LevelManager>();
+                }
+            };
+            await handle.ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());
+           
         }
-        
+
         public void ReplayLevel()
         {
             _ = currentLevelManager.ReplayLevel();
@@ -77,7 +94,7 @@ namespace _Game.Scripts.Manager
             if(currentLevelManager)
                 Destroy(currentLevelManager.gameObject);
             currentLevelManager = null;
-            SpawnLevel();
+            _ = SpawnLevel();
         }
 
         #endregion

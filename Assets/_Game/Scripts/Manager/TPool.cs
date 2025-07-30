@@ -13,7 +13,17 @@ namespace _Game.Scripts.Manager
         public Transform parentTrs;
         public List<T> Pool =new();
         public List<T> DisableT = new();
-        
+        public int amountSpawn = 10;
+
+        public void PreSpawn()
+        {
+            Spawn(amountSpawn);
+            for (var i = 0; i < Pool.Count; i++)
+            {
+                Pool[i].gameObject.SetActive(false);
+            }
+        }
+
         [BoxGroup("TPool")]
         [Button]
         public void Spawn(int countSpawn)

@@ -1,3 +1,4 @@
+using _Game.Scripts.FTool;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
@@ -5,6 +6,7 @@ using _Game.Scripts.Manager.Controller;
 using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace _Game.Scripts.Manager
@@ -46,7 +48,7 @@ namespace _Game.Scripts.Manager
                 GameManager.Instance.LevelComplete();
                 return;
             }
-            sharpenerController.SpawnSharpener(waveConfig);
+            sharpenerController.SpawnSharpener(waveConfig, currentWaveIndex);
           
             currentWaveIndex++;
         }
@@ -88,7 +90,6 @@ namespace _Game.Scripts.Manager
         private void ResolveDone(int sharpenerID, PointGoal pointGoal, UnitBase unitBase)
         {
             pointGoal.SetUnit(unitBase.unitId);
-            
             unitBase.SetPointGoal(pointGoal);
             unitBase.SetIDSharpener(sharpenerID);
         }
@@ -103,8 +104,10 @@ namespace _Game.Scripts.Manager
             sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
         }
 
-        public void CheckToNextWave()
+        public void CheckToNextWave(int waveIndex)
         {
+            if (waveIndex != currentWaveIndex - 1)
+                return;
             var result = sharpenerController.IsDoneThatWave();
             if (result)
             {

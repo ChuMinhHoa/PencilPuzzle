@@ -12,11 +12,11 @@ namespace _Game.Scripts.GameObj.Sharpener
             return UniTask.CompletedTask;
         }
 
-        public override void ClearSharpener()
+        public override void ResetPointGoal()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ClearPointGoal();
+                pointGoals[i].ResetPointGoal();
             }
         }
     }

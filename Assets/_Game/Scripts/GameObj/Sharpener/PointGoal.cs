@@ -3,6 +3,7 @@ using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.Manager;
 using Cysharp.Threading.Tasks;
 using LitMotion;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -19,21 +20,30 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             currentUnitId = unitId;
         }
-        
+
         public bool IsFree()
         {
             return currentUnitId == -1;
         }
 
-        public void ClearPointGoal()
+        public void ResetPointGoal()
         {
             currentUnitId = -1;
             _isMoveDone = false;
-            if (pointGoal.childCount > 0)
-                for (var i = pointGoal.childCount - 1; i >= 0; i--)
+        }
+
+
+        public void ClearLastPencilController()
+        {
+            if (pointGoal.transform.childCount > 0)
+            {
+                var lastPencilController = pointGoal.GetChild(0).GetComponent<LastPencilController>();
+                if (lastPencilController)
                 {
-                    Destroy(pointGoal.GetChild(i).gameObject);
+                    PoolingObject.Instance.DeSpawnLastPencilController(lastPencilController);
                 }
+            }
+           
         }
 
         public async UniTask OnHit()

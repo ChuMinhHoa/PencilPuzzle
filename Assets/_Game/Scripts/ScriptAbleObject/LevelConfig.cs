@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.Manager;
+using Sirenix.OdinInspector;
 using SplineMesh;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace _Game.Scripts.ScriptAbleObject
 {
@@ -16,7 +18,7 @@ namespace _Game.Scripts.ScriptAbleObject
         public List<UnitPositionConfig> unitPositionConfig;
         public List<WaveConfig> waveConfig;
         public LevelManager levelPrefab;
-        
+        public AssetReference levelPrefabReference;
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {
             return unitPositionConfig.Find(config => config.unitId == unitId);
@@ -24,10 +26,9 @@ namespace _Game.Scripts.ScriptAbleObject
 
         public void SaveUnitData(
             int unitId,
-            UnitLengthType unitLength,
             SharpenerColorType colorType,
-            List<SplineNode> splineNodes,
-            List<SplineNode> wayOutNodes
+            List<float3> splineNodes,
+            List<float3> wayOutNodes
             )
         {
             for (var i = 0; i < unitPositionConfig.Count; i++)
@@ -36,7 +37,6 @@ namespace _Game.Scripts.ScriptAbleObject
                 {
                     unitPositionConfig[i].SaveData(
                         colorType, 
-                        unitLength, 
                         splineNodes,
                         wayOutNodes
                     );
@@ -48,7 +48,6 @@ namespace _Game.Scripts.ScriptAbleObject
             newUnitConfig.unitId = unitId;
             newUnitConfig.SaveData(
                 colorType, 
-                unitLength, 
                 splineNodes,
                 wayOutNodes
             );
@@ -65,6 +64,22 @@ namespace _Game.Scripts.ScriptAbleObject
                 return null;
             return waveConfig[currentWaveIndex];
         }
+        [Button]
+        private void InitData()
+        {
+            unitPositionConfig.Clear();
+            waveConfig.Clear();
+            var path = $"Assets/_Game/Prefab/Level/Level_{level}.prefab";
+            levelPrefabReference = new AssetReference(AssetDatabase.AssetPathToGUID(path));
+        }
+
+        public void SaveData()
+        {
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssetIfDirty(this);
+#endif
+        }
     }
 
     [System.Serializable]
@@ -72,29 +87,25 @@ namespace _Game.Scripts.ScriptAbleObject
     {
         public int unitId;
         public SharpenerColorType unitColor;
-        public UnitLengthType unitLength;
         public List<float3> pathMesh = new();
         public List<float3> wayOut = new();
-
         public void SaveData(SharpenerColorType colorType,
-            UnitLengthType lengthType,
-            List<SplineNode> splineNodes,
-            List<SplineNode> wayOutNodes)
+            List<float3> splineNodes,
+            List<float3> wayOutNodes)
         {
             unitColor = colorType;
-            unitLength = lengthType;
 
             pathMesh.Clear();
             wayOut.Clear();
             
             for (var i = 0; i < splineNodes.Count; i++)
             {
-                pathMesh.Add(splineNodes[i].Position);
+                pathMesh.Add(splineNodes[i]);
             }
             
             for (var i = 0; i < wayOutNodes.Count; i++)
             {
-                wayOut.Add(wayOutNodes[i].Position);
+                wayOut.Add(wayOutNodes[i]);
             }
         }
     }

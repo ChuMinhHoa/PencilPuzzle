@@ -44,18 +44,20 @@ namespace _Game.Scripts.Manager.Controller
             
             sharpener.AnimMove(trsOut, () =>
             {
+                sharpener.ClearLastPencilController();
+                sharpener.ResetSharpener();
                 PoolingObject.Instance.DeSpawnSharpener(sharpener);
             });
          
         }
 
-        public void SpawnSharpener(WaveConfig waveConfig)
+        public void SpawnSharpener(WaveConfig waveConfig, int currentWaveIndex)
         {
             for (var i = 0; i < waveConfig.sharpenerColors.Count; i++)
             {
                 Debug.Log("Spawn Sharpener: " + waveConfig.sharpenerColors[i]);
                 var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
-                sharpenerTemp.InitData(waveConfig.sharpenerColors[i]);
+                sharpenerTemp.InitData(waveConfig.sharpenerColors[i], currentWaveIndex);
                 sharpenerTemp.AnimMove(trsMoveTo[i],
                     () => GameManager.Instance.currentLevelManager.unitController.CheckUnitTemps(currentSharpeners));
                 currentSharpeners.Add(sharpenerTemp);

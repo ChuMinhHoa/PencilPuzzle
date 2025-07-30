@@ -28,6 +28,9 @@ namespace _Game.Scripts.GameObj.Sharpener
     {
         public int id;
 
+        public int waveIndex;
+        [ShowInInspector] private bool _cleared; 
+
         public SharpenerColorType sharpenerColorType;
 
         public MeshRenderer sharpenerMesh;
@@ -51,13 +54,13 @@ namespace _Game.Scripts.GameObj.Sharpener
             return null;
         }
 
-        public virtual void ClearSharpener()
+        public virtual void ResetPointGoal()
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ClearPointGoal();
+                pointGoals[i].ResetPointGoal();
             }
-
+                
             GameManager.Instance.currentLevelManager.sharpenerController.RemoveSharpener(this);
         }
 
@@ -67,17 +70,19 @@ namespace _Game.Scripts.GameObj.Sharpener
         }
 
         [Button]
-        public void InitData(SharpenerColorType colorType)
+        public void InitData(SharpenerColorType colorType, int currentWaveIndex)
         {
             id = transform.GetSiblingIndex();
             sharpenerColorType = colorType;
             sharpenerMesh.material = UnitGlobalConfig.Instance.GetTipMaterial(sharpenerColorType);
+            waveIndex = currentWaveIndex;
+            ClearLastPencilController();
         }
 
         public void AnimMove(Transform trsTarget, Action onFinished = null)
         {
             TryCancelMove();
-            _moveHandle = LMotion.Create(transform.position, trsTarget.position, .5f)
+            _moveHandle = LMotion.Create(transform.position, trsTarget.position, UnitGlobalConfig.Instance.timeSharpenerMove)
                 .WithOnComplete(() => { onFinished?.Invoke(); })
                 .Bind(x => transform.position = x)
                 .AddTo(this);
@@ -93,15 +98,19 @@ namespace _Game.Scripts.GameObj.Sharpener
 
         private async UniTask CheckClear()
         {
+            if (_cleared)
+                return;
             for (var i = 0; i < pointGoals.Count; i++)
             {
                 if (!pointGoals[i].IsMoveDone())
                     return;
             }
+
+            _cleared = true;
             PlayAnimRoll();
             await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeSharpenerRoll);
-            ClearSharpener();
-            GameManager.Instance.currentLevelManager.CheckToNextWave();
+            ResetPointGoal();
+            GameManager.Instance.currentLevelManager.CheckToNextWave(waveIndex);
         }
 
         public virtual async UniTask AnimDone()
@@ -124,7 +133,17 @@ namespace _Game.Scripts.GameObj.Sharpener
             PlayAnimIdle();
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ClearPointGoal();
+                pointGoals[i].ResetPointGoal();
+            }
+
+            _cleared = false;
+        }
+        
+        public void ClearLastPencilController()
+        {
+            for (var i = 0; i < pointGoals.Count; i++)
+            {
+                pointGoals[i].ClearLastPencilController();
             }
         }
     }

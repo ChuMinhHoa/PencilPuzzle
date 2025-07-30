@@ -29,7 +29,7 @@ namespace _Game.Scripts.GameObj.Unit
 
         public AnimationCurve curveComplete;
         [Button]
-        public void InitData(SharpenerColorType color, UnitLengthType lengthType)
+        public void InitData(SharpenerColorType color)
         {
             colorType = color;
             var colorMat = UnitGlobalConfig.Instance.GetUnitMaterial(color);
@@ -44,14 +44,14 @@ namespace _Game.Scripts.GameObj.Unit
                 Debug.LogWarning($"Material for color {color} not found.");
             }
 
-            SetLength(lengthType);
+            //SetLength(lengthType);
         }
 
-        private void SetLength(UnitLengthType lengthType)
-        {
-            var length = ((float)lengthType-0.5f) / 1.5f;
-            pencilBody.localScale = new Vector3(1, 1, length);
-        }
+        // private void SetLength(UnitLengthType lengthType)
+        // {
+        //     var length = ((float)lengthType-0.5f) / 1.5f;
+        //     pencilBody.localScale = new Vector3(1, 1, length);
+        // }
 
         [BoxGroup("Anim hit")]
         public Vector3 vectorScaleHit;

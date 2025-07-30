@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
+using _Game.Scripts.GameObj.Unit;
 using TW.Utility.DesignPattern;
 using UnityEngine;
 
@@ -6,6 +8,14 @@ namespace _Game.Scripts.Manager
 {
     public class PoolingObject : Singleton<PoolingObject>
     {
+        protected override void Awake()
+        {
+            base.Awake();
+            hitEffectPool.PreSpawn();
+            sharpenerPool.PreSpawn();
+            lastPencilPool.PreSpawn();
+        }
+        
         #region HitEffect
 
         public TPool<Transform> hitEffectPool;
@@ -36,6 +46,22 @@ namespace _Game.Scripts.Manager
         public void DeSpawnSharpener(Sharpener sharpener)
         {
             sharpenerPool.Despawn(sharpener);
+        }
+
+        #endregion
+        
+        #region LastPencil
+        public TPool<LastPencilController> lastPencilPool;
+        public LastPencilController SpawnLastPencilController(Transform pointSpawn)
+        {
+            var pencilControllerTemp = lastPencilPool.Spawn();
+            pencilControllerTemp.transform.position = pointSpawn.position;
+            return pencilControllerTemp;
+        }
+
+        public void DeSpawnLastPencilController(LastPencilController pencilController)
+        {
+            lastPencilPool.Despawn(pencilController);
         }
 
         #endregion

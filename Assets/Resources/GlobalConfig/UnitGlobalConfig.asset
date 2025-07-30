@@ -18,7 +18,8 @@ MonoBehaviour:
   sizeUnitHead: 0.3
   distanceBtNode: 0.5
   timeAnimGoal: 0.25
-  timeSharpenerRoll: 1.25
+  timeSharpenerRoll: 1
+  timeSharpenerMove: 0.5
   vectorHeadScaleHit: {x: 1.5, y: 1.5, z: 1}
   unitHeadScale: {x: 1.25, y: 1.25, z: 1.1}
   unitConfigs:

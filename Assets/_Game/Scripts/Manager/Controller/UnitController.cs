@@ -92,5 +92,15 @@ namespace _Game.Scripts.Manager.Controller
 
             return true;
         }
+
+        public void AddUnit(UnitBase unit)
+        {
+            units.Add(unit);
+        }
+
+        public void RemoveUnit(UnitBase unit)
+        {
+            units.Remove(unit);
+        }
     }
 }
