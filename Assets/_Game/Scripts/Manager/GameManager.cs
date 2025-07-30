@@ -16,7 +16,7 @@ namespace _Game.Scripts.Manager
     {
         public LevelManager currentLevelManager;
         public bool isCanTouch = true;
-        private UnitBase currentUnit;
+        private PencilBase currentUnit;
         public ReactiveValue<int> currentLevel = new();
 
         private void Start()
@@ -35,7 +35,7 @@ namespace _Game.Scripts.Manager
                 var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    currentUnit = currentLevelManager.unitController.GetUnitByCollider(hit.collider);
+                    currentUnit = currentLevelManager.pencilController.GetUnitByCollider(hit.collider);
                     if (currentUnit)
                     {
                         currentUnit.TryMoveOut();
@@ -48,7 +48,7 @@ namespace _Game.Scripts.Manager
 
         public void CheckCanTouch()
         {
-            SetCanTouch(currentLevelManager.unitController.CheckCanTouch());
+            SetCanTouch(currentLevelManager.pencilController.CheckCanTouch());
         }
 
         public void SetCanTouch(bool canTouch)

@@ -21,14 +21,11 @@ MonoBehaviour:
   timeSharpenerRoll: 1
   timeSharpenerMove: 0.5
   vectorHeadScaleHit: {x: 1.5, y: 1.5, z: 1}
-  unitHeadScale: {x: 1.25, y: 1.25, z: 1.1}
+  unitHeadScale: {x: 1.3, y: 1.3, z: 1.1}
   unitConfigs:
-  - unitLength: 3
-    size: 1.5
-  - unitLength: 2
-    size: 1
-  - unitLength: 1
-    size: 0.5
+  - size: 1.5
+  - size: 1
+  - size: 0.5
   unitMaterial:
   - colorType: 0
     colorMat: {fileID: 0}

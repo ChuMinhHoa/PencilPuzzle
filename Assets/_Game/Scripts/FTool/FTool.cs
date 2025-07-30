@@ -6,6 +6,7 @@ using TW.Utility.DesignPattern;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.FTool
 {
@@ -31,13 +32,13 @@ namespace _Game.Scripts.FTool
         }
 
         [BoxGroup("Unit")] public LevelManager levelManager;
-        [BoxGroup("Unit")] public List<UnitBase> unitPrefab;
-        [BoxGroup("Unit")] public Transform unitParent;
-        [BoxGroup("Unit")] public UnitBase unitClone;
-        [BoxGroup("Unit")] public UnitBase currentUnit;
-        [BoxGroup("Unit")] public UnitType unitType;
+        [BoxGroup("Unit")] public List<PencilBase> pencilPrefab;
+        [BoxGroup("Unit")] public Transform pencilParents;
+        [BoxGroup("Unit")] public PencilBase pencilClone;
+        [BoxGroup("Unit")] public PencilBase currentPencilUnit;
+        [BoxGroup("Unit")] public PencilType pencilType;
         [BoxGroup("Unit")]
-        [ShowIf("@this.currentUnit != null")]
+        [ShowIf("@this.currentPencilUnit != null")]
         public List<float3> currentPathMesh;
         [BoxGroup("Unit")]
         [Button("Create Unit", 50)]
@@ -48,17 +49,17 @@ namespace _Game.Scripts.FTool
                 Debug.Log("Level Manager is not assigned.");
                 return;
             }
-            var newUnit =  PrefabUtility.InstantiatePrefab(unitPrefab[(int)unitType], unitParent) as UnitBase;
+            var newUnit =  PrefabUtility.InstantiatePrefab(pencilPrefab[(int)pencilType], pencilParents) as PencilBase;
             if (newUnit == null)
             {
                 Debug.Log("New Unit is null.");
                 return;
             }
-            levelManager.unitController.units.Add(newUnit);
+            levelManager.pencilController.pencils.Add(newUnit);
             
-            newUnit.unitId = levelManager.unitController.units.Count;
+            newUnit.unitId = levelManager.pencilController.pencils.Count;
             newUnit.name = "UnitBase_" + (newUnit.unitId -1);
-            currentUnit = newUnit;
+            currentPencilUnit = newUnit;
             
         }
 
@@ -66,15 +67,15 @@ namespace _Game.Scripts.FTool
         [Button("Clone Unit", 50)]
         private void CloneUnit()
         {
-            currentUnit.unitId = unitClone.unitId;
-            currentUnit.InitDataEditor();
-            currentUnit.unitId = levelManager.unitController.units.Count;
+            currentPencilUnit.unitId = pencilClone.unitId;
+            currentPencilUnit.InitData();
+            currentPencilUnit.unitId = levelManager.pencilController.pencils.Count;
         }
         [BoxGroup("Unit")]
         [Button("Edit Path Unit", 50)]
         private void EditPathUnit()
         {
-            currentPathMesh = levelManager.GetUnitPositionConfig(currentUnit.unitId).pathMesh;
+            currentPathMesh = levelManager.GetUnitPositionConfig(currentPencilUnit.unitId).pathMesh;
         }
         [BoxGroup("Unit")]
         [Button("Apply Path Unit", 50)]
@@ -87,37 +88,26 @@ namespace _Game.Scripts.FTool
         [Button("Preset Way Out", 50)]
         private void PresetWayOut()
         {
-            currentUnit.trsWayOut.position = currentUnit.splineOut.splineOut.nodes[0].Position;
+            currentPencilUnit.trsWayOut.position = currentPencilUnit.splineController.splineOut.splineOut.nodes[0].Position;
         }
         
         [BoxGroup("Unit")]
         [Button("Save Path", 50)]
         private void SavePath()
         {
-            Debug.Log($"Saving data for Unit ID: {currentUnit.unitId}, Color: {currentUnit.colorType}");
+            Debug.Log($"Saving data for Unit ID: {currentPencilUnit.unitId}, Color: {currentPencilUnit.colorType}");
             var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
             if (levelConfig == null)
             {
                 Debug.LogError("Current level config is null. Cannot save unit data.");
                 return;
             }
-            var pMesh = new List<float3>();
-            var pOut = new List<float3>();
-            for (var i = 0; i < currentUnit.spline.nodes.Count; i++)
-            {
-                var point = currentUnit.transform.TransformPoint(currentUnit.spline.nodes[i].Position);
-                pMesh.Add(point);
-            }
-            
-            for (var i = 0; i < currentUnit.splineOut.splineOut.nodes.Count; i++)
-            {
-                var point = currentUnit.splineOut.splineOut.nodes[i].Position;
-                pOut.Add(point);
-            }
-            
+
+            var pMesh = GetPathPointFollowCurrentPencilTransform();
+            var pOut = GetPathPointOut();
             levelConfig.SaveUnitData(
-                currentUnit.unitId,
-                currentUnit.colorType,
+                currentPencilUnit.unitId,
+                currentPencilUnit.colorType,
                 pMesh,
                 pOut
             );
@@ -126,33 +116,64 @@ namespace _Game.Scripts.FTool
         [BoxGroup("Unit")]
         [Button("Save Unit", 50)]
         private void SaveUnit()
-        {Debug.Log($"Saving data for Unit ID: {currentUnit.unitId}, Color: {currentUnit.colorType}");
+        {Debug.Log($"Saving data for Unit ID: {currentPencilUnit.unitId}, Color: {currentPencilUnit.colorType}");
             var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
             if (levelConfig == null)
             {
                 Debug.LogError("Current level config is null. Cannot save unit data.");
                 return;
             }
-            var pMesh = new List<float3>();
-            var pOut = new List<float3>();
-            for (var i = 0; i < currentUnit.spline.nodes.Count; i++)
-            {
-                var point = currentUnit.spline.nodes[i].Position;
-                pMesh.Add(point);
-            }
-            
-            for (var i = 0; i < currentUnit.splineOut.splineOut.nodes.Count; i++)
-            {
-                var point = currentUnit.splineOut.splineOut.nodes[i].Position;
-                pOut.Add(point);
-            }
+
+            var pMesh = GetPathPoint();
+            var pOut = GetPathPointOut();
+          
             
             levelConfig.SaveUnitData(
-                currentUnit.unitId,
-                currentUnit.colorType,
+                currentPencilUnit.unitId,
+                currentPencilUnit.colorType,
                 pMesh,
                 pOut
             );
         }
+
+        #region path point
+
+        private List<float3> GetPathPoint()
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < currentPencilUnit.splineController.spline.nodes.Count; i++)
+            {
+                var point = currentPencilUnit.splineController.spline.nodes[i].Position;
+                path.Add(point);
+            }
+
+            return path;
+        }
+        
+        private List<float3> GetPathPointFollowCurrentPencilTransform()
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < currentPencilUnit.splineController.spline.nodes.Count; i++)
+            {
+                var point = currentPencilUnit.transform.TransformPoint(currentPencilUnit.splineController.spline.nodes[i].Position);
+                path.Add(point);
+            }
+
+            return path;
+        }
+
+        private List<float3> GetPathPointOut()
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < currentPencilUnit.splineController.splineOut.splineOut.nodes.Count; i++)
+            {
+                var point = currentPencilUnit.splineController.splineOut.splineOut.nodes[i].Position;
+                path.Add(point);
+            }
+            return path;
+        }
+
+        #endregion
+        
     }
 }

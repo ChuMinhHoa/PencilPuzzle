@@ -18,9 +18,9 @@ namespace _Game.Scripts.Manager
         public void PreSpawn()
         {
             Spawn(amountSpawn);
-            for (var i = 0; i < Pool.Count; i++)
+            for (var i = Pool.Count-1; i>=0; i--)
             {
-                Pool[i].gameObject.SetActive(false);
+                Despawn(Pool[i]);
             }
         }
 

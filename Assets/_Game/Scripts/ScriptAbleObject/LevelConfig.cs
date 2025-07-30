@@ -17,7 +17,6 @@ namespace _Game.Scripts.ScriptAbleObject
         public int level;
         public List<UnitPositionConfig> unitPositionConfig;
         public List<WaveConfig> waveConfig;
-        public LevelManager levelPrefab;
         public AssetReference levelPrefabReference;
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {

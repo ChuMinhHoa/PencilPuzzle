@@ -59,7 +59,7 @@ namespace _Game.Scripts.Manager.Controller
                 var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
                 sharpenerTemp.InitData(waveConfig.sharpenerColors[i], currentWaveIndex);
                 sharpenerTemp.AnimMove(trsMoveTo[i],
-                    () => GameManager.Instance.currentLevelManager.unitController.CheckUnitTemps(currentSharpeners));
+                    () => GameManager.Instance.currentLevelManager.pencilController.CheckUnitTemps(currentSharpeners));
                 currentSharpeners.Add(sharpenerTemp);
             }
         }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
 {
-    public class UnitUnderOther : UnitBase
+    public class PencilUnderOther : PencilBase
     {
         [Title("====Unit Under Other==")]
         public List<int> unitIdLockThat;

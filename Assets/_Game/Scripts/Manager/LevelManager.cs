@@ -8,6 +8,7 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Manager
 {
@@ -15,7 +16,7 @@ namespace _Game.Scripts.Manager
     {
         public int level;
         public SharpenerController sharpenerController;
-        public UnitController unitController;
+        [FormerlySerializedAs("unitController")] public PencilController pencilController;
         public LevelConfig currentLevelConfig;
         public int currentWaveIndex;
 
@@ -23,8 +24,8 @@ namespace _Game.Scripts.Manager
         public async UniTask ReplayLevel()
         {
             currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
-            unitController.ResetAllUnits();
-            await unitController.InitData();
+            pencilController.ResetAllUnits();
+            await pencilController.InitData();
             sharpenerController.ResetAllSharpeners();
             currentWaveIndex = 0;
             SpawnNextWave();
@@ -34,7 +35,7 @@ namespace _Game.Scripts.Manager
         public async UniTask InitData(LevelConfig levelConfig)
         {
             currentLevelConfig = levelConfig;
-            await unitController.InitData();
+            await pencilController.InitData();
             currentWaveIndex = 0;
             SpawnNextWave();
         }
@@ -53,25 +54,25 @@ namespace _Game.Scripts.Manager
             currentWaveIndex++;
         }
 
-        public bool TryResolveUnit(UnitBase unitBase)
+        public bool TryResolveUnit(PencilBase pencilBase)
         {
-            var sharpener = sharpenerController.TryGetSharpener(unitBase.colorType);
+            var sharpener = sharpenerController.TryGetSharpener(pencilBase.colorType);
             if (!sharpener)
             {
-                return TryResolveToTemp(unitBase);
+                return TryResolveToTemp(pencilBase);
             }
 
             var pointGoal = sharpener.TryGetPointGoal();
             if (!pointGoal)
             {
-                return TryResolveToTemp(unitBase);
+                return TryResolveToTemp(pencilBase);
             }
             
-            ResolveDone(sharpener.id, pointGoal, unitBase);
+            ResolveDone(sharpener.id, pointGoal, pencilBase);
             return true;
         }
 
-        private bool TryResolveToTemp(UnitBase unitBase)
+        private bool TryResolveToTemp(PencilBase pencilBase)
         {
             var sharpener = sharpenerController.TryGetTempSharpener();
             if (!sharpener)
@@ -82,16 +83,16 @@ namespace _Game.Scripts.Manager
                 return false;
             }
 
-            ResolveDone(sharpener.id, pointGoal, unitBase);
-            GameManager.Instance.currentLevelManager.unitController.AddUnitToTemp(unitBase.unitId);
+            ResolveDone(sharpener.id, pointGoal, pencilBase);
+            GameManager.Instance.currentLevelManager.pencilController.AddUnitToTemp(pencilBase.unitId);
             return true;
         }
 
-        private void ResolveDone(int sharpenerID, PointGoal pointGoal, UnitBase unitBase)
+        private void ResolveDone(int sharpenerID, PointGoal pointGoal, PencilBase pencilBase)
         {
-            pointGoal.SetUnit(unitBase.unitId);
-            unitBase.SetPointGoal(pointGoal);
-            unitBase.SetIDSharpener(sharpenerID);
+            pointGoal.SetUnit(pencilBase.unitId);
+            pencilBase.SetPointGoal(pointGoal);
+            pencilBase.SetIDSharpener(sharpenerID);
         }
 
         public UnitPositionConfig GetUnitPositionConfig(int unitId)
