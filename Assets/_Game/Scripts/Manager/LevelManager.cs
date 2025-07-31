@@ -145,6 +145,6 @@ namespace _Game.Scripts.Manager
             pencilController.SaveConfig(currentLevelConfig);
         }
 
-        public void ResolveUnit(int unitId) => pencilController.ResolveUnit(unitId);
+        public void ResolveUnit(int unitId) => pencilController.AddPropertyCondition(ConditionType.UnderHidden, unitId);
     }
 }

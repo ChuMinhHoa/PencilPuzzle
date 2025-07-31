@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4186100736370799228}
-  - component: {fileID: 2984929978142815083}
-  - component: {fileID: 3966401232380257709}
-  - component: {fileID: 7561970430838581372}
+  - component: {fileID: 5268275072803945029}
+  - component: {fileID: 8119272836203933565}
+  - component: {fileID: 6894686687847419633}
+  - component: {fileID: 1055696407055290616}
   m_Layer: 0
-  m_Name: PencilBase
+  m_Name: PencilHidden
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,7 +38,7 @@ Transform:
   - {fileID: 134221245916066866}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2984929978142815083
+--- !u!114 &5268275072803945029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,7 +55,7 @@ MonoBehaviour:
     unitColor: 0
     pathMesh: []
     wayOut: []
-  unitConditionController: {fileID: 7561970430838581372}
+  unitConditionController: {fileID: 6894686687847419633}
   unitId: 0
   sharpenerID: 0
   colorType: 0
@@ -66,12 +67,12 @@ MonoBehaviour:
   headMeshRenderer: {fileID: 4118866518637210311}
   distanceCheck: 10
   lastPencil: {fileID: 0}
-  splineController: {fileID: 3966401232380257709}
+  splineController: {fileID: 8119272836203933565}
   myColliders:
   - {fileID: 2642593033787042733}
   - {fileID: 979092463032135409}
-  speed: 20
---- !u!114 &3966401232380257709
+  speed: 10
+--- !u!114 &8119272836203933565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -88,7 +89,7 @@ MonoBehaviour:
   splineOut: {fileID: 2615808527274960970}
   nodes: []
   splineMeshTiling: {fileID: 7621731579206075032}
---- !u!114 &7561970430838581372
+--- !u!114 &6894686687847419633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -100,7 +101,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce66630004d01c34e82e867f9e44beb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  conditionFaces: []
+  conditionFaces:
+  - {fileID: 1055696407055290616}
+--- !u!114 &1055696407055290616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215188800684027658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55bab6b2de00b454dadd301570d5a02c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conditionType: 1
+  unitUnlockHidden: -1
 --- !u!1 &338856019168256365
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,12 +178,12 @@ MonoBehaviour:
     scale: {x: 1, y: 1}
     roll: 0
   - position: {x: 0, y: 0, z: 1}
-    direction: {x: 0, y: 0, z: 1.1516336}
+    direction: {x: 0, y: 0, z: 1.0773294}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
-  - position: {x: 0, y: 0, z: 2.5217814}
-    direction: {x: 0, y: 0, z: 2.635915}
+  - position: {x: 0, y: 0, z: 1.5310583}
+    direction: {x: 0, y: 0, z: 1.5708877}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
@@ -195,7 +211,7 @@ MonoBehaviour:
       roll: 0
     n2:
       position: {x: 0, y: 0, z: 1}
-      direction: {x: 0, y: 0, z: 1.1516336}
+      direction: {x: 0, y: 0, z: 1.0773294}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
@@ -204,20 +220,20 @@ MonoBehaviour:
         m_Calls: []
   - n1:
       position: {x: 0, y: 0, z: 1}
-      direction: {x: 0, y: 0, z: 1.1516336}
+      direction: {x: 0, y: 0, z: 1.0773294}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     n2:
-      position: {x: 0, y: 0, z: 2.5217814}
-      direction: {x: 0, y: 0, z: 2.635915}
+      position: {x: 0, y: 0, z: 1.5310583}
+      direction: {x: 0, y: 0, z: 1.5708877}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     Changed:
       m_PersistentCalls:
         m_Calls: []
-  Length: 2.5217814
+  Length: 1.5310583
   isLoop: 0
   CurveChanged:
     m_PersistentCalls:
@@ -374,17 +390,17 @@ MonoBehaviour:
     scale: {x: 1, y: 1}
     roll: 0
   - position: {x: 1, y: 0, z: 0}
-    direction: {x: 1.1541861, y: 0.010377704, z: 0}
+    direction: {x: 1.1503782, y: 0.010631592, z: 0}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
-  - position: {x: 2.0509012, y: 0.14210841, z: 0}
-    direction: {x: 2.1889162, y: 0.2528143, z: 0}
+  - position: {x: 2.0000005, y: 0.14210841, z: 0}
+    direction: {x: 2.1377432, y: 0.24929383, z: 0}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
   - position: {x: 2.5000005, y: 1.3605679, z: 0}
-    direction: {x: 2.5336828, y: 1.4519523, z: 0}
+    direction: {x: 2.5375004, y: 1.4519523, z: 0}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
@@ -397,7 +413,7 @@ MonoBehaviour:
       roll: 0
     n2:
       position: {x: 1, y: 0, z: 0}
-      direction: {x: 1.1541861, y: 0.010377704, z: 0}
+      direction: {x: 1.1503782, y: 0.010631592, z: 0}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
@@ -406,13 +422,13 @@ MonoBehaviour:
         m_Calls: []
   - n1:
       position: {x: 1, y: 0, z: 0}
-      direction: {x: 1.1541861, y: 0.010377704, z: 0}
+      direction: {x: 1.1503782, y: 0.010631592, z: 0}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     n2:
-      position: {x: 2.0509012, y: 0.14210841, z: 0}
-      direction: {x: 2.1889162, y: 0.2528143, z: 0}
+      position: {x: 2.0000005, y: 0.14210841, z: 0}
+      direction: {x: 2.1377432, y: 0.24929383, z: 0}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
@@ -420,21 +436,21 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - n1:
-      position: {x: 2.0509012, y: 0.14210841, z: 0}
-      direction: {x: 2.1889162, y: 0.2528143, z: 0}
+      position: {x: 2.0000005, y: 0.14210841, z: 0}
+      direction: {x: 2.1377432, y: 0.24929383, z: 0}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     n2:
       position: {x: 2.5000005, y: 1.3605679, z: 0}
-      direction: {x: 2.5336828, y: 1.4519523, z: 0}
+      direction: {x: 2.5375004, y: 1.4519523, z: 0}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     Changed:
       m_PersistentCalls:
         m_Calls: []
-  Length: 3.3716455
+  Length: 3.3387113
   isLoop: 0
   CurveChanged:
     m_PersistentCalls:

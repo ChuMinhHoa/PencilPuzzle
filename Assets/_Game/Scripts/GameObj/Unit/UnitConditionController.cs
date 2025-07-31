@@ -2,31 +2,41 @@ using System.Collections.Generic;
 using _Game.Scripts.GameObj.Interface;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.GameObj.Unit
 {
+    public enum ConditionType
+    {
+        None = 0,
+        UnderHidden = 1
+    }
+    
     public class UnitConditionController : MonoBehaviour
     {
-        public List<ConditionFace> ConditionFaces = new();
+        public List<ConditionFace> conditionFaces = new();
 
         [Button]
         public bool IsConditionSatisfied()
         {
-            for (var i = 0; i < ConditionFaces.Count; i++)
+            for (var i = 0; i < conditionFaces.Count; i++)
             {
-                if (!ConditionFaces[i].IsConditionSatisfied())
+                if (!conditionFaces[i].IsConditionSatisfied())
                     return false;
             }
 
             return true;
         }
-
-        [Button]
-        private void AddLock()
+        
+        public void AddPropertyCondition(ConditionType conditionType, params object[] args)
         {
-            for (int i = 0; i < ConditionFaces.Count; i++)
+            for (var i = 0; i < conditionFaces.Count; i++)
             {
-                  ConditionFaces[i].AddPropertyCondition(new ConditionFaceArg{targetId = 1, data = new object[]{0,1,1,1}});
+                if (conditionFaces[i].conditionType == conditionType)
+                {
+                    conditionFaces[i].AddPropertyCondition(args);
+                    return;
+                }
             }
         }
     }

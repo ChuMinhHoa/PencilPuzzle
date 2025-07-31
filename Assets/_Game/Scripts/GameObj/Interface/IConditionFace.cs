@@ -11,22 +11,20 @@ namespace _Game.Scripts.GameObj.Interface
         public bool IsConditionSatisfied();
     }
 
-    public class ConditionFace : MonoBehaviour, IConditionFace
+    public abstract class ConditionFace : MonoBehaviour, IConditionFace
     {
-        public virtual bool IsConditionSatisfied()
+        public ConditionType conditionType;
+
+        public abstract bool IsConditionSatisfied();
+
+        public void AddPropertyCondition(params object[] args)
         {
-            return true;
+            AddProperty(args);
         }
 
-        public virtual void AddPropertyCondition(ConditionFaceArg args)
-        {
-        }
-    }
-    
-    public class ConditionFaceArg : EventArgs
-    {
-        public int targetId;
-        public object[] data;
+        protected abstract void AddProperty(Memory<object> args);
+
+
     }
 
 }

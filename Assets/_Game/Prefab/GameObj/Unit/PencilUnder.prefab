@@ -9,8 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4186100736370799228}
-  - component: {fileID: -5469896882801319099}
+  - component: {fileID: 5268275072803945029}
   - component: {fileID: 8119272836203933565}
+  - component: {fileID: 6894686687847419633}
+  - component: {fileID: 1727168532970905340}
   m_Layer: 0
   m_Name: PencilUnder
   m_TagString: Untagged
@@ -36,7 +38,7 @@ Transform:
   - {fileID: 134221245916066866}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5469896882801319099
+--- !u!114 &5268275072803945029
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,7 +47,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 215188800684027658}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5917e980a801da5409e818ffe80a362f, type: 3}
+  m_Script: {fileID: 11500000, guid: 0945fcfc7fe117345a3dba24fc7eec8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   data:
@@ -53,6 +55,7 @@ MonoBehaviour:
     unitColor: 0
     pathMesh: []
     wayOut: []
+  unitConditionController: {fileID: 6894686687847419633}
   unitId: 0
   sharpenerID: 0
   colorType: 0
@@ -66,10 +69,9 @@ MonoBehaviour:
   lastPencil: {fileID: 0}
   splineController: {fileID: 8119272836203933565}
   myColliders:
-  - {fileID: 979092463032135409}
   - {fileID: 2642593033787042733}
-  speed: 15
-  unitIdLockThat: 
+  - {fileID: 979092463032135409}
+  speed: 10
 --- !u!114 &8119272836203933565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,6 +89,35 @@ MonoBehaviour:
   splineOut: {fileID: 2615808527274960970}
   nodes: []
   splineMeshTiling: {fileID: 7621731579206075032}
+--- !u!114 &6894686687847419633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215188800684027658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce66630004d01c34e82e867f9e44beb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conditionFaces:
+  - {fileID: 1727168532970905340}
+--- !u!114 &1727168532970905340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215188800684027658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 386698ce277d8d74994a1c1333d028b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  conditionType: 1
+  unitIdLockThat: 
+  unitIdResolve: 
 --- !u!1 &338856019168256365
 GameObject:
   m_ObjectHideFlags: 0
