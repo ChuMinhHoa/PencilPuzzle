@@ -17,7 +17,9 @@ namespace _Game.Scripts.GameObj.Unit
         [SerializeField] private SplineMeshTiling splineMeshTiling;
         private Action alignHeader;
         private Action animComplete;
-        public void InitPathPointController(Action alignHeaderCallBack, Action animCompleteCallBack, float speed)
+        private Action callResolveUnit;
+
+        public void InitPathPointController(Action alignHeaderCallBack, Action animCompleteCallBack, Action callResolveUnitCallBack, float speed)
         {
             for (var i = 0; i < spline.nodes.Count; i++)
             {
@@ -28,10 +30,12 @@ namespace _Game.Scripts.GameObj.Unit
             nodes[0].moveUpdateCallback = alignHeaderCallBack;
             alignHeader = alignHeaderCallBack;
             animComplete = animCompleteCallBack;
+            callResolveUnit = callResolveUnitCallBack;
         }
 
         #region Get Path Point
-/// <summary>
+
+        /// <summary>
         /// Lấy các điểm di chuyển nếu không bị va chạm
         /// </summary>
         private List<float3> GetPathPoints(int nodeIndex)
@@ -42,38 +46,52 @@ namespace _Game.Scripts.GameObj.Unit
 
             return pathPoints;
         }
-        
+
         /// <summary>
         /// Lấy các điểm di chuyển đến điểm va chạm
         /// Nếu khoảng cách nhỏ hơn độ dài của spline thì cần phải xóa đi các điểm di chuyển
         /// </summary>
-        public List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false, float distanceToHit = 0f)
+        public List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false,
+            float distanceToHit = 0f)
         {
             var pathPoints = GetPathPointToOtherPoint(nodeIndex);
             pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
-            Debug.Log("distance hits: "+distanceToHit);
-            if (getByHit && distanceToHit < spline.nodes.Count/2)
+            if (getByHit && distanceToHit < spline.nodes.Count / 2)
             {
-                var countRemaining = (int)distanceToHit > 1? (int)distanceToHit : 1;
+                var countRemaining = (int)distanceToHit > 0.5f ? (int)(distanceToHit * 2) : 1;
+                float3? lastPointRemove = null;
                 for (var i = pathPoints.Count - 1; i >= 0; i--)
                 {
-                    if (pathPoints.Count > countRemaining/*(nodeIndex == nodes.Count - 1?countRemaining+1:countRemaining)*/)
+                    if (pathPoints.Count > countRemaining)
+                    {
+                        if (i != pathPoints.Count - 1)
+                            lastPointRemove = pathPoints[i];
                         pathPoints.RemoveAt(i);
+                    }
                     else
                         break;
                 }
 
-                if (countRemaining == 1 && distanceToHit < 1)
+                if (lastPointRemove != null)
                 {
-                    var lastPoint = GetPathPointNotMove(nodeIndex);
-                    if (pathPoints.Count > 0)
-                        pathPoints[^1] = lastPoint ?? pathPoints[^1];
+                    var lastPoint = GetLastPoint(lastPointRemove.Value, pathPoints[^1]);
+                    pathPoints.Add(lastPoint);
                 }
+                // if (countRemaining == 1 && distanceToHit < 1)
+                // {
+                //     var lastPoint = GetPathPointNotMove(nodeIndex);
+                //     if (pathPoints.Count > 0)
+                //         pathPoints[^1] = lastPoint ?? pathPoints[^1];
+                // }
+                // else
+                // {
+                //    
+                // }
             }
 
             return pathPoints;
         }
-        
+
         /// <summary>
         /// Lấy các điểm di chuyển đến các điểm còn lại
         /// </summary>
@@ -88,7 +106,7 @@ namespace _Game.Scripts.GameObj.Unit
 
             return pathPoints;
         }
-        
+
         /// <summary>
         /// Lấy điểm cuối cùng để dừng lại
         /// </summary>
@@ -97,12 +115,14 @@ namespace _Game.Scripts.GameObj.Unit
             Vector3 lastPoint = hit;
             var dir = (lastPoint - nodes[0].currentPosition).normalized;
             var distanceBtNode = UnitGlobalConfig.Instance.distanceBtNode;
-            lastPoint -= dir * (distanceBtNode * nodeIndex) + dir * UnitGlobalConfig.Instance.sizeUnitHead /*- dir * (0.05f * (nodeIndex == 0 ? 0 : 1))*/;
-            
+            lastPoint -=
+                dir * (distanceBtNode * nodeIndex) +
+                dir * UnitGlobalConfig.Instance.sizeUnitHead /*- dir * (0.05f * (nodeIndex == 0 ? 0 : 1))*/;
+
 
             return lastPoint;
         }
-        
+
         /// <summary>
         /// lấy điểm di chuyển cuối nếu khoảng cách nhỏ hơn 1
         /// </summary>>
@@ -115,10 +135,17 @@ namespace _Game.Scripts.GameObj.Unit
             var lastPoint = nodes[nodeIndex].currentPosition + dir * UnitGlobalConfig.Instance.distanceMoveToNearHit;
             return lastPoint;
         }
+
+        private float3 GetLastPoint(Vector3 lastPointRemove, Vector3 lasPoint)
+        {
+            var dir = lasPoint - lastPointRemove;
+            dir = dir.normalized;
+            var vectorReturn = lasPoint - (dir * 0.15f);
+            return vectorReturn;
+        }
+
         #endregion
         
-        
-
         public void SetUpSpline(List<float3> dataPathMesh) => InitSpline.SetUpSpline(spline, dataPathMesh);
 
         public void SetUpSplineOut(List<float3> dataWayOut) => InitSpline.SetUpSpline(splineOut.splineOut, dataWayOut);
@@ -134,6 +161,12 @@ namespace _Game.Scripts.GameObj.Unit
         public Vector3 GetSplineTransformPoint(Vector3 position) => spline.transform.TransformPoint(position);
 
         public void SetObjSpline(bool active) => objSpline.SetActive(active);
+
+        public void SetLastPointMoveOutY()
+        {
+            var length = spline.nodes.Count * 0.5f;
+            splineOut.SetLastPointMoveOutY(length);
+        }
 
         public void MoveOutFail(float3 hit, Action scaleHeadHit)
         {
@@ -162,6 +195,7 @@ namespace _Game.Scripts.GameObj.Unit
             if (nodeIndex == nodes.Count- 1)
             {
                 animComplete();
+                callResolveUnit();
             }
         }
         
@@ -193,5 +227,7 @@ namespace _Game.Scripts.GameObj.Unit
             }
             objSpline.SetActive(true);
         }
+
+        public float GetSplineLength() => spline.nodes.Count/2f;
     }
 }

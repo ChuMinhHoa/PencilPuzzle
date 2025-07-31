@@ -38,8 +38,8 @@ namespace _Game.Scripts.Manager
                     currentUnit = currentLevelManager.pencilController.GetUnitByCollider(hit.collider);
                     if (currentUnit)
                     {
-                        currentUnit.TryMoveOut();
                         SetCanTouch(false);
+                        currentUnit.TryMoveOut();
                         currentUnit = null;
                     }
                 }
@@ -59,6 +59,7 @@ namespace _Game.Scripts.Manager
         #endregion
 
         #region Level Control
+        [Button]
         private async UniTask SpawnLevel()
         {
             Debug.Log("SpawnLevel");
@@ -84,6 +85,7 @@ namespace _Game.Scripts.Manager
             _ = currentLevelManager.ReplayLevel();
         }
 
+        [Button]
         public void LevelComplete()
         {
             currentLevel.Value++;

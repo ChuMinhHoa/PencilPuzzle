@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.GameObj;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.ScriptAbleObject;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.Manager.Controller
 {
@@ -11,8 +13,10 @@ namespace _Game.Scripts.Manager.Controller
         public List<Sharpener> currentSharpeners;
         public List<Sharpener> currentSharpenersTemp;
         
-        public List<Transform> trsMoveTo;
+        //public List<Transform> trsMoveTo;
+        public List<PointHaveObj<Sharpener>> pointHaveSharpeners;
         public Transform sharpenersParent;
+        //public int currentPointSharpenerIndex = 0;
         //public TPool<Sharpener> sharpenerPool;
 
         public Transform trsOut;
@@ -21,7 +25,7 @@ namespace _Game.Scripts.Manager.Controller
         {
             for (var i = 0; i < currentSharpeners.Count; i++)
             {
-                if (currentSharpeners[i].IsSameColor(colorType))
+                if (currentSharpeners[i].CheckSharpenerCanMoveTo(colorType))
                     return currentSharpeners[i];
             }
 
@@ -32,7 +36,7 @@ namespace _Game.Scripts.Manager.Controller
         {
             for (var i = 0; i < currentSharpenersTemp.Count; i++)
             {
-                if (currentSharpenersTemp[i].IsSameColor(SharpenerColorType.ColorTemp))
+                if (currentSharpenersTemp[i].CheckSharpenerCanMoveTo(SharpenerColorType.ColorTemp))
                     return currentSharpenersTemp[i];
             }
             return null;
@@ -51,17 +55,44 @@ namespace _Game.Scripts.Manager.Controller
          
         }
 
-        public void SpawnSharpener(WaveConfig waveConfig, int currentWaveIndex)
+        public void SpawnSharpener(SharpenerColorType colorType, int currentWaveIndex)
         {
-            for (var i = 0; i < waveConfig.sharpenerColors.Count; i++)
+            var pointMoveTo = GetPointMoveTo();
+            if (pointMoveTo == null)
             {
-                Debug.Log("Spawn Sharpener: " + waveConfig.sharpenerColors[i]);
-                var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
-                sharpenerTemp.InitData(waveConfig.sharpenerColors[i], currentWaveIndex);
-                sharpenerTemp.AnimMove(trsMoveTo[i],
-                    () => GameManager.Instance.currentLevelManager.pencilController.CheckUnitTemps(currentSharpeners));
-                currentSharpeners.Add(sharpenerTemp);
+                Debug.Log("No point to move sharpener to!");
+                return;
             }
+            Debug.Log("Spawn Sharpener: " + colorType);
+            var sharpenerTemp =  PoolingObject.Instance.SpawnSharpener(sharpenersParent);
+            sharpenerTemp.InitData(colorType);
+            sharpenerTemp.AnimMove(pointMoveTo.trsPoint,
+                () => GameManager.Instance.currentLevelManager.pencilController.CheckUnitTemps(currentSharpeners));
+            pointMoveTo.SetObjOnPoint(sharpenerTemp);
+            currentSharpeners.Add(sharpenerTemp);
+        }
+        
+        public void ClearSharpenerPoint(Sharpener sharpener)
+        {
+            Debug.Log(sharpener.id +" "+ sharpener.sharpenerColorType);
+            for (var i = 0; i < pointHaveSharpeners.Count; i++)
+            {
+                if (pointHaveSharpeners[i].objOnPoint == sharpener)
+                {
+                    pointHaveSharpeners[i].objOnPoint = null;
+                    return;
+                }
+            }
+        }
+
+        private PointHaveObj<Sharpener> GetPointMoveTo()
+        {
+            for (var i = 0; i < pointHaveSharpeners.Count; i++)
+            {
+                if(pointHaveSharpeners[i].isFree) return pointHaveSharpeners[i];
+            }
+
+            return null;
         }
 
         public void SharpenerEndAnimAndCheck(int sharpenerID)
@@ -83,11 +114,6 @@ namespace _Game.Scripts.Manager.Controller
                     return;
                 }
             }
-        }
-
-        public bool IsDoneThatWave()
-        {
-            return currentSharpeners.Count == 0;
         }
 
         public void ResetAllSharpeners()

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f67e2d2e491de3e42835089d250d74d2, type: 3}
-  m_Name: Level_2
+  m_Name: Level_3
   m_EditorClassIdentifier: 
-  level: 2
+  level: 3
   unitPositionConfig:
   - unitId: 0
     unitColor: 5
@@ -113,33 +113,36 @@ MonoBehaviour:
   - unitId: 3
     unitColor: 2
     pathMesh:
-    - x: 0.5
+    - x: 1.55
+      y: 0
+      z: 0.01
+    - x: 1.55
+      y: 0
+      z: -0.49
+    - x: 1.55
+      y: 0
+      z: -0.99
+    - x: 1.55
+      y: 0
+      z: -1.5210583
+    - x: 1.55
+      y: 0
+      z: -1.99
+    - x: 1.55
+      y: 0
+      z: -2.49
+    wayOut:
+    - x: 0
       y: 0
       z: 0
     - x: 1
       y: 0
       z: 0
-    - x: 1.5
-      y: 0
+    - x: 2.0000005
+      y: 0.14210841
       z: 0
-    - x: 1.5
-      y: 0
-      z: 0.5
-    - x: 1.5
-      y: 0
-      z: 1
-    - x: 1.5
-      y: 0
-      z: 1.5
-    wayOut:
-    - x: 0
-      y: 0
-      z: 0
-    - x: 1.0000002
-      y: 0.17881548
-      z: 0
-    - x: 1.5
-      y: 2
+    - x: 2.5000005
+      y: 3
       z: 0
   - unitId: 4
     unitColor: 2
@@ -151,7 +154,7 @@ MonoBehaviour:
       y: 0
       z: -1
     - x: 1.5
-      y: 0
+      y: 0.5
       z: -1
     - x: 2
       y: 0
@@ -182,7 +185,7 @@ MonoBehaviour:
       y: 0
       z: -2
     - x: 1.5
-      y: 0
+      y: 0.5
       z: -2
     - x: 2
       y: 0
@@ -509,44 +512,10 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
-  - unitId: 15
-    unitColor: 1
-    pathMesh:
-    - x: -2.5
-      y: 0
-      z: -6
-    - x: -2.5
-      y: 0
-      z: -6.5
-    - x: -2.5
-      y: 0
-      z: -7
-    - x: -2.5
-      y: 0
-      z: -7.5
-    - x: -2.5
-      y: 0
-      z: -8
-    - x: -2.5
-      y: 0
-      z: -8.5
-    wayOut:
-    - x: 0
-      y: 0
-      z: 0
-    - x: 1
-      y: 0
-      z: 0
-    - x: 2.0509012
-      y: 0.14210841
-      z: 0
-    - x: 2.5000005
-      y: 1.3605679
-      z: 0
-  sharpenerColors: 0400000003000000010000000200000005000000
-  startSharpenerCount: 3
+  sharpenerColors: 
+  startSharpenerCount: 0
   levelPrefabReference:
-    m_AssetGUID: 09872876f00574e42a44876bb94e1baa
+    m_AssetGUID: 5310b02f7248efc45863659900aa4308
     m_SubObjectName: 
     m_SubObjectType: 
     m_SubObjectGUID: 

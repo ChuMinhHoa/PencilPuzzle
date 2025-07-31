@@ -1,4 +1,5 @@
 using _Game.Scripts.GlobalConfig;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Interface

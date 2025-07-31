@@ -84,14 +84,14 @@ namespace _Game.Scripts.GameObj.Unit
                         {
                             MoveToNextPoint();
                         }
-                        else
+                        if (_pointIndex == pointMoves.Count)
                         {
                             if (!isHit && currentState == NodeControllerState.MoveOut)
                             {
                                 splineNode.Up = Vector3.forward;
-                            // Reset to the first point if needed
                             }
                             _moveDoneCallback?.Invoke(splineIndex);
+                            _moveDoneCallback = null;
                             _pointIndex = 0;
                             
                         }

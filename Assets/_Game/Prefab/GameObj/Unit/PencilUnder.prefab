@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4186100736370799228}
   - component: {fileID: -5469896882801319099}
+  - component: {fileID: 8119272836203933565}
   m_Layer: 0
-  m_Name: UnitUnder
+  m_Name: PencilUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,61 +48,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5917e980a801da5409e818ffe80a362f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data:
+    unitId: 0
+    unitColor: 0
+    pathMesh: []
+    wayOut: []
   unitId: 0
   sharpenerID: 0
   colorType: 0
-  objSpline: {fileID: 338856019168256365}
-  headMeshRenderer: {fileID: 4118866518637210311}
   trsHead: {fileID: 2981958659401126312}
   trsLastPencil: {fileID: 0}
   trsCheckPoint: {fileID: 4377499100730276001}
   lastPencilParents: {fileID: 134221245916066866}
   trsWayOut: {fileID: 3409202404125426285}
-  spline: {fileID: 9032276189140421657}
-  splineMeshTiling: {fileID: 7621731579206075032}
-  splineOut: {fileID: 2615808527274960970}
-  nodes: []
-  speed: 15
-  magnitude: 10
-  curveComplete:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1.9160457
-      outSlope: 1.9160457
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.070116855
-    - serializedVersion: 3
-      time: 0.25
-      value: 0.5
-      inSlope: -0.0067087053
-      outSlope: -0.0067087053
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33909237
-    - serializedVersion: 3
-      time: 0.5
-      value: 0
-      inSlope: -1.9559582
-      outSlope: -1.9559582
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.060100317
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
+  headMeshRenderer: {fileID: 4118866518637210311}
   distanceCheck: 10
   lastPencil: {fileID: 0}
+  splineController: {fileID: 8119272836203933565}
   myColliders:
   - {fileID: 979092463032135409}
   - {fileID: 2642593033787042733}
+  speed: 15
   unitIdLockThat: 
+--- !u!114 &8119272836203933565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 215188800684027658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a874d7e96c5a41440994725068ec39f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objSpline: {fileID: 338856019168256365}
+  spline: {fileID: 9032276189140421657}
+  splineOut: {fileID: 2615808527274960970}
+  nodes: []
+  splineMeshTiling: {fileID: 7621731579206075032}
 --- !u!1 &338856019168256365
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,12 +148,12 @@ MonoBehaviour:
     scale: {x: 1, y: 1}
     roll: 0
   - position: {x: 0, y: 0, z: 1}
-    direction: {x: 0, y: 0, z: 1.1516336}
+    direction: {x: 0, y: 0, z: 1.0773294}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
-  - position: {x: 0, y: 0, z: 2.5217814}
-    direction: {x: 0, y: 0, z: 2.635915}
+  - position: {x: 0, y: 0, z: 1.5310583}
+    direction: {x: 0, y: 0, z: 1.5708877}
     up: {x: 0, y: 1, z: 0}
     scale: {x: 1, y: 1}
     roll: 0
@@ -196,7 +181,7 @@ MonoBehaviour:
       roll: 0
     n2:
       position: {x: 0, y: 0, z: 1}
-      direction: {x: 0, y: 0, z: 1.1516336}
+      direction: {x: 0, y: 0, z: 1.0773294}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
@@ -205,20 +190,20 @@ MonoBehaviour:
         m_Calls: []
   - n1:
       position: {x: 0, y: 0, z: 1}
-      direction: {x: 0, y: 0, z: 1.1516336}
+      direction: {x: 0, y: 0, z: 1.0773294}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     n2:
-      position: {x: 0, y: 0, z: 2.5217814}
-      direction: {x: 0, y: 0, z: 2.635915}
+      position: {x: 0, y: 0, z: 1.5310583}
+      direction: {x: 0, y: 0, z: 1.5708877}
       up: {x: 0, y: 1, z: 0}
       scale: {x: 1, y: 1}
       roll: 0
     Changed:
       m_PersistentCalls:
         m_Calls: []
-  Length: 2.5217814
+  Length: 1.5310583
   isLoop: 0
   CurveChanged:
     m_PersistentCalls:

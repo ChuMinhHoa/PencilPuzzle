@@ -7,14 +7,24 @@ using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
-using TW.Utility.CustomType;
 using Unity.Mathematics;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Unit
 {
+    public enum PencilType
+    {
+        Normal = 0,
+        Under,
+        Lock,
+        Key,
+        Hide
+    }
+
     public class PencilBase : BotBase<UnitPositionConfig>
     {
+        public UnitConditionController unitConditionController;
+        
         [Title("Unit define")] 
         public int unitId;
         public int sharpenerID;
@@ -44,7 +54,6 @@ namespace _Game.Scripts.GameObj.Unit
         [Range(5, 50)]
         public float speed = 10f;
         
-        
         public void SetPointGoal(PointGoal pointGoalChange) => pointGoal = pointGoalChange;
         public void SetIDSharpener(int id) => sharpenerID = id;
         
@@ -53,10 +62,13 @@ namespace _Game.Scripts.GameObj.Unit
         {
             var dataLoad = GameManager.Instance.currentLevelManager.GetUnitPositionConfig(unitId);
             LoadData(dataLoad);
-            splineController.InitPathPointController(AlignHeader, AnimOnComplete, speed);
+            splineController.InitPathPointController(AlignHeader, AnimOnComplete, ResolveUnit, speed);
             trsLastPencil.gameObject.SetActive(false);
             splineController.SetObjSpline(true); 
+            
         }
+
+        private void ResolveUnit() => GameManager.Instance.currentLevelManager.ResolveUnit(unitId);
 
         #region Obj Data
 
@@ -76,6 +88,8 @@ namespace _Game.Scripts.GameObj.Unit
 
             splineController.SetUpSpline(data.pathMesh);
             splineController.SetUpSplineOut(data.wayOut);
+            splineController.SetLastPointMoveOutY();
+            lastPencil.SetLength(splineController.GetSplineLength());
             var mat = UnitGlobalConfig.Instance.GetUnitMaterial(colorType);
             splineController.SetUpSplineMat(mat);
             splineController.ClearNodes();
@@ -145,7 +159,7 @@ namespace _Game.Scripts.GameObj.Unit
         
         #region Complete animation
 
-        private MotionHandle moveCompleteHandle;
+        private MotionHandle _moveCompleteHandle;
 
         private void AnimOnComplete()
         {
@@ -156,7 +170,6 @@ namespace _Game.Scripts.GameObj.Unit
 
         public void AnimForUnitTemp(PointGoal pointGoalTemp, int sharpenerId)
         {
-            Debug.Log("anim for unit temp: " + unitId);
             lastPencil.AnimOnComplete(pointGoalTemp, sharpenerId);
         }
 
@@ -176,6 +189,8 @@ namespace _Game.Scripts.GameObj.Unit
         [Button]
         public virtual void TryMoveOut()
         {
+            if (!unitConditionController.IsConditionSatisfied())
+                return;
             var hitTemp = CheckCanMove();
             if (hitTemp != null)  
             {
@@ -202,6 +217,10 @@ namespace _Game.Scripts.GameObj.Unit
         {
             if (GameManager.Instance.currentLevelManager.TryResolveUnit(this))
                 splineController.MoveOut();
+            else
+            {
+                GameManager.Instance.CheckCanTouch();
+            }
         }
 
         #endregion
@@ -234,9 +253,6 @@ namespace _Game.Scripts.GameObj.Unit
             Gizmos.DrawLine(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck);
         }
         
-        public bool CheckCanTouch()
-        {
-            return lastPencil.currentState == PencilState.Idle;
-        }
+        public bool CheckCanTouch() => lastPencil.currentState == PencilState.Idle;
     }
 }

@@ -116,7 +116,8 @@ namespace _Game.Scripts.FTool
         [BoxGroup("Unit")]
         [Button("Save Unit", 50)]
         private void SaveUnit()
-        {Debug.Log($"Saving data for Unit ID: {currentPencilUnit.unitId}, Color: {currentPencilUnit.colorType}");
+        {
+            Debug.Log($"Saving data for Unit ID: {currentPencilUnit.unitId}, Color: {currentPencilUnit.colorType}");
             var levelConfig = GameManager.Instance.currentLevelManager.currentLevelConfig;
             if (levelConfig == null)
             {

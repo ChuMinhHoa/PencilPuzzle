@@ -9,35 +9,26 @@ using UnityEngine.Serialization;
 
 namespace _Game.Scripts.GameObj.Sharpener
 {
-    public class PointGoal : MonoBehaviour
+    [System.Serializable]
+    public class PointGoal : PointHaveObj<int>
     {
-        public int currentUnitId = -1;
         private bool _isMoveDone;
-        [field: SerializeField] public Transform pointGoal { get; set; }
-        [field: SerializeField] public Transform pointSpawnHit { get; set; }
+        public Transform pointSpawnHit;
 
-        public void SetUnit(int unitId)
+        public override void ResetObjOnPoint()
         {
-            currentUnitId = unitId;
-        }
-
-        public bool IsFree()
-        {
-            return currentUnitId == -1;
-        }
-
-        public void ResetPointGoal()
-        {
-            currentUnitId = -1;
+            objOnPoint = -1;
             _isMoveDone = false;
         }
+
+        public override bool isFree => objOnPoint == -1;
 
 
         public void ClearLastPencilController()
         {
-            if (pointGoal.transform.childCount > 0)
+            if (trsPoint.transform.childCount > 0)
             {
-                var lastPencilController = pointGoal.GetChild(0).GetComponent<LastPencilController>();
+                var lastPencilController = trsPoint.GetChild(0).GetComponent<LastPencilController>();
                 if (lastPencilController)
                 {
                     PoolingObject.Instance.DeSpawnLastPencilController(lastPencilController);

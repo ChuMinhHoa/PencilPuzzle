@@ -47,5 +47,12 @@ namespace _Game.Scripts.GameObj.Unit
             var newLasDir = newParents.InverseTransformPoint(worldLastPoint);
             return newLasDir;
         }
+
+        public void SetLastPointMoveOutY(float length)
+        {
+            var lastPoint = splineOut.nodes[^1].Position;
+            lastPoint.y = length;
+            splineOut.nodes[^1].Position = lastPoint;
+        }
     }
 }

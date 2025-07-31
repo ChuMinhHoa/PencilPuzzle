@@ -16,8 +16,10 @@ namespace _Game.Scripts.ScriptAbleObject
     {
         public int level;
         public List<UnitPositionConfig> unitPositionConfig;
-        public List<WaveConfig> waveConfig;
+        public List<SharpenerColorType> sharpenerColors;
+        public int startSharpenerCount;
         public AssetReference levelPrefabReference;
+        
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {
             return unitPositionConfig.Find(config => config.unitId == unitId);
@@ -39,6 +41,11 @@ namespace _Game.Scripts.ScriptAbleObject
                         splineNodes,
                         wayOutNodes
                     );
+                    
+#if UNITY_EDITOR
+                    EditorUtility.SetDirty(this);
+                    AssetDatabase.SaveAssetIfDirty(this);
+#endif
                     return;
                 }
             }
@@ -55,29 +62,33 @@ namespace _Game.Scripts.ScriptAbleObject
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
 #endif
-        }
-
-        public WaveConfig GetWaveConfig(int currentWaveIndex)
-        {
-            if (currentWaveIndex >= waveConfig.Count)
-                return null;
-            return waveConfig[currentWaveIndex];
-        }
+        }  
+        
+#if UNITY_EDITOR
         [Button]
-        private void InitData()
+        public void InitData(int levelChange)
         {
+            level = levelChange;
             unitPositionConfig.Clear();
-            waveConfig.Clear();
-            var path = $"Assets/_Game/Prefab/Level/Level_{level}.prefab";
+            var path = $"Assets/_Game/Prefab/Level/Level_{levelChange}.prefab";
             levelPrefabReference = new AssetReference(AssetDatabase.AssetPathToGUID(path));
         }
-
+#endif
         public void SaveData()
         {
 #if UNITY_EDITOR
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssetIfDirty(this);
 #endif
+        }
+
+        public SharpenerColorType GetColorNext(int currentWaveIndex)
+        {
+            if (currentWaveIndex < 0 || currentWaveIndex >= sharpenerColors.Count)
+            {
+                return SharpenerColorType.None;
+            }
+            return sharpenerColors[currentWaveIndex];
         }
     }
 
@@ -107,12 +118,5 @@ namespace _Game.Scripts.ScriptAbleObject
                 wayOut.Add(wayOutNodes[i]);
             }
         }
-    }
-    
-    [System.Serializable]
-    public class WaveConfig
-    {
-        public int waveId;
-        public List<SharpenerColorType> sharpenerColors;
     }
 }

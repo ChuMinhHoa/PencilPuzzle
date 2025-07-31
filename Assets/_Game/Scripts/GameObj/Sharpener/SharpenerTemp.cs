@@ -16,7 +16,7 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ResetPointGoal();
+                pointGoals[i].ResetObjOnPoint();
             }
         }
     }

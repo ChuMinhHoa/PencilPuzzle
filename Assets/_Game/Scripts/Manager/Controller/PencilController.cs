@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
+using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -58,8 +61,8 @@ namespace _Game.Scripts.Manager.Controller
                 if (unitBase.colorType == sharpener.sharpenerColorType)
                 {
                     var pointGoal = sharpener.TryGetPointGoal();
-                    if(!pointGoal) continue;
-                    pointGoal.SetUnit(unitBase.unitId);
+                    if(pointGoal == null) continue;
+                    pointGoal.SetObjOnPoint(unitBase.unitId);
                     unitBase.AnimForUnitTemp(pointGoal, sharpener.id);
                     pencilTemps.RemoveAt(i);
                 }
@@ -102,6 +105,74 @@ namespace _Game.Scripts.Manager.Controller
         public void RemoveUnit(PencilBase unit)
         {
             pencils.Remove(unit);
+        }
+
+        public void SaveConfig(LevelConfig currentLevelConfig)
+        {
+            for (var i = 0; i < pencils.Count; i++)
+            {
+                Debug.Log($"Saving data for Unit ID: {pencils[i].unitId}, Color: {pencils[i].colorType}");
+
+                var pMesh = GetPathPoint(pencils[i]);
+                var pOut = GetPathPointOut(pencils[i]);
+            
+                currentLevelConfig.SaveUnitData(
+                    pencils[i].unitId,
+                    pencils[i].colorType,
+                    pMesh,
+                    pOut
+                );
+            }
+        }
+        
+        #region path point
+
+        private List<float3> GetPathPoint(PencilBase pencilBase)
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < pencilBase.splineController.spline.nodes.Count; i++)
+            {
+                var point = pencilBase.splineController.spline.nodes[i].Position;
+                path.Add(point);
+            }
+
+            return path;
+        }
+        
+        private List<float3> GetPathPointFollowCurrentPencilTransform(PencilBase pencilBase)
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < pencilBase.splineController.spline.nodes.Count; i++)
+            {
+                var point = pencilBase.transform.TransformPoint(pencilBase.splineController.spline.nodes[i].Position);
+                path.Add(point);
+            }
+
+            return path;
+        }
+
+        private List<float3> GetPathPointOut(PencilBase pencilBase)
+        {
+            var path = new List<float3>();
+            for (var i = 0; i < pencilBase.splineController.splineOut.splineOut.nodes.Count; i++)
+            {
+                var point = pencilBase.splineController.splineOut.splineOut.nodes[i].Position;
+                path.Add(point);
+            }
+            return path;
+        }
+
+        #endregion
+
+        public void ResolveUnit(int unitId)
+        {
+            for (var i = 0; i < pencils.Count; i++)
+            {
+                if (pencils[i] is PencilUnderOther)
+                {
+                    (pencils[i]as PencilUnderOther)?.UnitResolve(unitId);
+                }   
+            }
         }
     }
 }

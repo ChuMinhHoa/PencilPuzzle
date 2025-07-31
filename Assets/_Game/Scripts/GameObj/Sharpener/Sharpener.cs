@@ -28,7 +28,7 @@ namespace _Game.Scripts.GameObj.Sharpener
     {
         public int id;
 
-        public int waveIndex;
+        //public int waveIndex;
         [ShowInInspector] private bool _cleared; 
 
         public SharpenerColorType sharpenerColorType;
@@ -45,7 +45,7 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                if (pointGoals[i].IsFree())
+                if (pointGoals[i].isFree)
                 {
                     return pointGoals[i];
                 }
@@ -58,24 +58,37 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ResetPointGoal();
+                pointGoals[i].ResetObjOnPoint();
             }
                 
             GameManager.Instance.currentLevelManager.sharpenerController.RemoveSharpener(this);
         }
 
-        public bool IsSameColor(SharpenerColorType colorType)
+        public bool CheckSharpenerCanMoveTo(SharpenerColorType colorType)
         {
-            return sharpenerColorType == colorType;
+            return sharpenerColorType == colorType && IsHaveAtLeastOneFreePointGoal();
+        }
+
+        private bool IsHaveAtLeastOneFreePointGoal()
+        {
+            for (var i = 0; i < pointGoals.Count; i++)
+            {
+                if (pointGoals[i].isFree)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         [Button]
-        public void InitData(SharpenerColorType colorType, int currentWaveIndex)
+        public void InitData(SharpenerColorType colorType)
         {
             id = transform.GetSiblingIndex();
             sharpenerColorType = colorType;
             sharpenerMesh.material = UnitGlobalConfig.Instance.GetTipMaterial(sharpenerColorType);
-            waveIndex = currentWaveIndex;
+            //waveIndex = currentWaveIndex;
             ClearLastPencilController();
         }
 
@@ -110,7 +123,8 @@ namespace _Game.Scripts.GameObj.Sharpener
             PlayAnimRoll();
             await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeSharpenerRoll);
             ResetPointGoal();
-            GameManager.Instance.currentLevelManager.CheckToNextWave(waveIndex);
+            GameManager.Instance.currentLevelManager.ClearSharpenerPoint(this);
+            GameManager.Instance.currentLevelManager.SpawnNextWave();
         }
 
         public virtual async UniTask AnimDone()
@@ -133,7 +147,7 @@ namespace _Game.Scripts.GameObj.Sharpener
             PlayAnimIdle();
             for (var i = 0; i < pointGoals.Count; i++)
             {
-                pointGoals[i].ResetPointGoal();
+                pointGoals[i].ResetObjOnPoint();
             }
 
             _cleared = false;

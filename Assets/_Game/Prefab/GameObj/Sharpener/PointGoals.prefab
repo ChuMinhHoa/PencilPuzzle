@@ -71,7 +71,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5957909815597978382}
-  - component: {fileID: 8976531159542232460}
   m_Layer: 0
   m_Name: PointGoals
   m_TagString: Untagged
@@ -96,18 +95,3 @@ Transform:
   - {fileID: 6745417087615684856}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8976531159542232460
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7720176982608089289}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab9068827b902394f80b397ac426c4e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentUnit: {fileID: 0}
-  <pointGoal>k__BackingField: {fileID: 7661661299913525040}
-  <pointSpawnHit>k__BackingField: {fileID: 6745417087615684856}

@@ -47,16 +47,18 @@ namespace _Game.Scripts.GameObj.Unit
             //SetLength(lengthType);
         }
 
-        // private void SetLength(UnitLengthType lengthType)
-        // {
-        //     var length = ((float)lengthType-0.5f) / 1.5f;
-        //     pencilBody.localScale = new Vector3(1, 1, length);
-        // }
+        public void SetLength(float lengthType)
+        {
+            var localScale = pencilBody.localScale;
+            var length = (lengthType - 0.5f) / 1.5f;
+            pencilBody.localScale = new Vector3(localScale.x, localScale.y, length);
+        }
 
         [BoxGroup("Anim hit")]
         public Vector3 vectorScaleHit;
 
         private MotionHandle _moveCompleteHandle;
+        private MotionHandle scaleBodyHandle;
 
         [BoxGroup("Anim hit")]
         [Button]
@@ -74,12 +76,12 @@ namespace _Game.Scripts.GameObj.Unit
                 _moveCompleteHandle.TryCancel();
             var progress = 0f;
             var duration = curveComplete.keys[^1].time;
-            transform.SetParent(pointGoal.pointGoal);
+            transform.SetParent(pointGoal.trsPoint);
             currentState = PencilState.Moving;
             _moveCompleteHandle = LMotion.Create(transform.localPosition, Vector3.zero, duration)
                 .WithOnComplete(() =>
                 {
-                    transform.SetParent(pointGoal.pointGoal);
+                    transform.SetParent(pointGoal.trsPoint);
                     _ = AnimHit();
                     _ = pointGoal.OnHit();
                     currentState = PencilState.Idle;
@@ -97,6 +99,13 @@ namespace _Game.Scripts.GameObj.Unit
                     progress += Time.deltaTime;
                 })
                 .AddTo(this);
+            if (scaleBodyHandle.IsPlaying())
+                scaleBodyHandle.TryCancel();
+            var currentScale = pencilBody.localScale;
+            scaleBodyHandle = LMotion.Create(currentScale, Vector3.one, 0.15f)
+                .Bind(x => pencilBody.localScale = x)
+                .AddTo(this);
+            
             var currentEuler = transform.eulerAngles.x;
             LMotion.Create(currentEuler, 270f, 0.25f)
                 .Bind(x =>

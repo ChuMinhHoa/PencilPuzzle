@@ -1,3 +1,4 @@
+using System;
 using _Game.Scripts.FTool;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
@@ -14,12 +15,21 @@ namespace _Game.Scripts.Manager
 {
     public class LevelManager : MonoBehaviour
     {
-        public int level;
+        public int level = -1;
         public SharpenerController sharpenerController;
-        [FormerlySerializedAs("unitController")] public PencilController pencilController;
+
+        [FormerlySerializedAs("unitController")]
+        public PencilController pencilController;
+
         public LevelConfig currentLevelConfig;
         public int currentWaveIndex;
 
+        public UnitPositionConfig GetUnitPositionConfig(int unitId) => currentLevelConfig.GetLevelUnitPositionConfig(unitId);
+
+        public void SharpenerEndAnimAndCheck(int sharpenerID) => sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
+
+        public void ClearSharpenerPoint(Sharpener sharpener) => sharpenerController.ClearSharpenerPoint(sharpener);
+        
         [Button]
         public async UniTask ReplayLevel()
         {
@@ -37,23 +47,42 @@ namespace _Game.Scripts.Manager
             currentLevelConfig = levelConfig;
             await pencilController.InitData();
             currentWaveIndex = 0;
-            SpawnNextWave();
+            SpawnFirstWave();
+        }
+
+        private void SpawnFirstWave()
+        {
+            for (var i = 0; i < currentLevelConfig.startSharpenerCount; i++)
+            {
+                var colorType = currentLevelConfig.GetColorNext(currentWaveIndex);
+                sharpenerController.SpawnSharpener(colorType, currentWaveIndex);
+                
+                currentWaveIndex++;
+            }
         }
 
         [Button]
-        private void SpawnNextWave()
+        public void SpawnNextWave()
         {
-            var waveConfig = currentLevelConfig.GetWaveConfig(currentWaveIndex);
-            if (waveConfig == null)
+            Debug.Log("Get color!");
+            var colorType = currentLevelConfig.GetColorNext(currentWaveIndex);
+            if (colorType == SharpenerColorType.None && sharpenerController.currentSharpeners.Count == 0)
             {
                 GameManager.Instance.LevelComplete();
                 return;
             }
-            sharpenerController.SpawnSharpener(waveConfig, currentWaveIndex);
+            if (colorType == SharpenerColorType.None)
+            {
+                Debug.Log("No more colors to spawn, but sharpeners still exist.");
+                return;
+            }
+            Debug.Log("Spawn color: " + colorType);
+            sharpenerController.SpawnSharpener(colorType, currentWaveIndex);
           
             currentWaveIndex++;
         }
 
+        #region Resolve Unit
         public bool TryResolveUnit(PencilBase pencilBase)
         {
             var sharpener = sharpenerController.TryGetSharpener(pencilBase.colorType);
@@ -63,7 +92,7 @@ namespace _Game.Scripts.Manager
             }
 
             var pointGoal = sharpener.TryGetPointGoal();
-            if (!pointGoal)
+            if (pointGoal == null)
             {
                 return TryResolveToTemp(pencilBase);
             }
@@ -78,7 +107,7 @@ namespace _Game.Scripts.Manager
             if (!sharpener)
                 return false;
             var pointGoal = sharpener.TryGetPointGoal();
-            if (!pointGoal)
+            if (pointGoal == null)
             {
                 return false;
             }
@@ -90,30 +119,32 @@ namespace _Game.Scripts.Manager
 
         private void ResolveDone(int sharpenerID, PointGoal pointGoal, PencilBase pencilBase)
         {
-            pointGoal.SetUnit(pencilBase.unitId);
+            pointGoal.SetObjOnPoint(pencilBase.unitId);
             pencilBase.SetPointGoal(pointGoal);
             pencilBase.SetIDSharpener(sharpenerID);
         }
+        #endregion
 
-        public UnitPositionConfig GetUnitPositionConfig(int unitId)
+        [Button(50)]
+        private void SaveLevelData()
         {
-            return currentLevelConfig.GetLevelUnitPositionConfig(unitId);
-        }
-
-        public void SharpenerEndAnimAndCheck(int sharpenerID)
-        {
-            sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
-        }
-
-        public void CheckToNextWave(int waveIndex)
-        {
-            if (waveIndex != currentWaveIndex - 1)
-                return;
-            var result = sharpenerController.IsDoneThatWave();
-            if (result)
+            if (currentLevelConfig == null)
             {
-                SpawnNextWave();
+                Debug.Log($"Current level config is null, find or create config: Level_{level}");
+                var path = "Assets/_Game/ScriptAbleObject/Level/Level_" + level + ".asset";
+                var config = AssetDatabase.LoadAssetAtPath<LevelConfig>(path);
+                if (config == null)
+                {
+                    AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<LevelConfig>(), path);
+                    config = AssetDatabase.LoadAssetAtPath<LevelConfig>(path);
+                }
+                currentLevelConfig = config;
+                currentLevelConfig.InitData(level);
             }
+
+            pencilController.SaveConfig(currentLevelConfig);
         }
+
+        public void ResolveUnit(int unitId) => pencilController.ResolveUnit(unitId);
     }
 }
