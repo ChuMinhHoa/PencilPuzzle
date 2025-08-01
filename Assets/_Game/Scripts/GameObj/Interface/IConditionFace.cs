@@ -6,17 +6,13 @@ using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Interface
 {
-    public interface IConditionFace
-    {
-        public bool IsConditionSatisfied();
-    }
-
-    public abstract class ConditionFace : MonoBehaviour, IConditionFace
+    public abstract class ConditionFace : MonoBehaviour
     {
         public ConditionType conditionType;
 
         public abstract bool IsConditionSatisfied();
-
+        public abstract void ResetCondition();
+        
         public void AddPropertyCondition(params object[] args)
         {
             AddProperty(args);

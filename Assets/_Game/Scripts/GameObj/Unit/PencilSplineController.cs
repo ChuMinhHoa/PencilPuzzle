@@ -14,7 +14,7 @@ namespace _Game.Scripts.GameObj.Unit
         public Spline spline;
         public SplineOutController splineOut;
         public List<NodeController> nodes = new();
-        [SerializeField] private SplineMeshTiling splineMeshTiling;
+        public SplineMeshTiling splineMeshTiling;
         private Action alignHeader;
         private Action animComplete;
         private Action callResolveUnit;
@@ -51,12 +51,12 @@ namespace _Game.Scripts.GameObj.Unit
         /// Lấy các điểm di chuyển đến điểm va chạm
         /// Nếu khoảng cách nhỏ hơn độ dài của spline thì cần phải xóa đi các điểm di chuyển
         /// </summary>
-        public List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false,
+        private List<float3> GetPathPointToHit(int nodeIndex, float3 hit, bool getByHit = false,
             float distanceToHit = 0f)
         {
             var pathPoints = GetPathPointToOtherPoint(nodeIndex);
             pathPoints.Add(GetLastPointToHit(nodeIndex, hit));
-            if (getByHit && distanceToHit < spline.nodes.Count / 2)
+            if (getByHit && distanceToHit < spline.nodes.Count / 2f)
             {
                 var countRemaining = (int)distanceToHit > 0.5f ? (int)(distanceToHit * 2) : 1;
                 float3? lastPointRemove = null;
@@ -123,18 +123,18 @@ namespace _Game.Scripts.GameObj.Unit
             return lastPoint;
         }
 
-        /// <summary>
-        /// lấy điểm di chuyển cuối nếu khoảng cách nhỏ hơn 1
-        /// </summary>>
-        private float3? GetPathPointNotMove(int nodeIndex)
-        {
-            if (nodeIndex == 0) return null;
-            var previousPosition = nodes[nodeIndex - 1].currentPosition;
-            var dir = previousPosition - nodes[nodeIndex].currentPosition;
-            dir.Normalize();
-            var lastPoint = nodes[nodeIndex].currentPosition + dir * UnitGlobalConfig.Instance.distanceMoveToNearHit;
-            return lastPoint;
-        }
+        // /// <summary>
+        // /// lấy điểm di chuyển cuối nếu khoảng cách nhỏ hơn 1
+        // /// </summary>>
+        // private float3? GetPathPointNotMove(int nodeIndex)
+        // {
+        //     if (nodeIndex == 0) return null;
+        //     var previousPosition = nodes[nodeIndex - 1].currentPosition;
+        //     var dir = previousPosition - nodes[nodeIndex].currentPosition;
+        //     dir.Normalize();
+        //     var lastPoint = nodes[nodeIndex].currentPosition + dir * UnitGlobalConfig.Instance.distanceMoveToNearHit;
+        //     return lastPoint;
+        // }
 
         private float3 GetLastPoint(Vector3 lastPointRemove, Vector3 lasPoint)
         {
@@ -161,6 +161,8 @@ namespace _Game.Scripts.GameObj.Unit
         public Vector3 GetSplineTransformPoint(Vector3 position) => spline.transform.TransformPoint(position);
 
         public void SetObjSpline(bool active) => objSpline.SetActive(active);
+        
+        public float GetSplineLength() => spline.nodes.Count/2f;
 
         public void SetLastPointMoveOutY()
         {
@@ -228,6 +230,6 @@ namespace _Game.Scripts.GameObj.Unit
             objSpline.SetActive(true);
         }
 
-        public float GetSplineLength() => spline.nodes.Count/2f;
+
     }
 }

@@ -21,6 +21,7 @@ namespace _Game.Scripts.GameObj.Unit
         public MeshRenderer pencilRenderer;
         public MeshRenderer tipRenderer;
         public Transform pencilBody;
+        public Transform pencilTip;
         public float tipLength = 1f;
         public PencilState currentState;
         [Title("Animation")]
@@ -28,6 +29,7 @@ namespace _Game.Scripts.GameObj.Unit
         public float magnitude = 2f;
 
         public AnimationCurve curveComplete;
+        
         [Button]
         public void InitData(SharpenerColorType color)
         {
@@ -44,6 +46,8 @@ namespace _Game.Scripts.GameObj.Unit
                 Debug.LogWarning($"Material for color {color} not found.");
             }
 
+            pencilTip.localScale = Vector3.one * 1.2f;
+            transform.localScale = MyCache.vectorScaleDefault;
             //SetLength(lengthType);
         }
 
@@ -103,7 +107,11 @@ namespace _Game.Scripts.GameObj.Unit
                 scaleBodyHandle.TryCancel();
             var currentScale = pencilBody.localScale;
             scaleBodyHandle = LMotion.Create(currentScale, Vector3.one, 0.15f)
-                .Bind(x => pencilBody.localScale = x)
+                .Bind(x =>
+                {
+                    pencilBody.localScale = x;
+                    pencilTip.localScale = x;
+                })
                 .AddTo(this);
             
             var currentEuler = transform.eulerAngles.x;

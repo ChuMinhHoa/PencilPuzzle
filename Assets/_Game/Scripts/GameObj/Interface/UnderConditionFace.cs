@@ -14,6 +14,12 @@ namespace _Game.Scripts.GameObj.Interface
             return unitIdLockThat.Count == unitIdResolve.Count;
         }
 
+        public override void ResetCondition()
+        {
+            unitIdResolve.Clear();
+        }
+
+
         protected override void AddProperty(Memory<object> args)
         {
             var unitId = (int)args.Span[0];

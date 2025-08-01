@@ -15,8 +15,8 @@ namespace _Game.Scripts.ScriptAbleObject
     public class LevelConfig : ScriptableObject
     {
         public int level;
-        public List<UnitPositionConfig> unitPositionConfig;
-        public List<SharpenerColorType> sharpenerColors;
+        public List<UnitPositionConfig> unitPositionConfig = new();
+        public List<SharpenerColorType> sharpenerColors = new();
         public int startSharpenerCount;
         public AssetReference levelPrefabReference;
         

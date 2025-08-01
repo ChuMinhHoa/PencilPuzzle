@@ -22,6 +22,7 @@ namespace _Game.Scripts.GameObj.Sharpener
         White = 8,
         Black = 9,
         ColorTemp = 10, 
+        Hidden = 11
     }
 
     public class Sharpener : MonoBehaviour

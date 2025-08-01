@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using _Game.Scripts.GameObj.Sharpener;
-using _Game.Scripts.GameObj.Unit;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using UnityEditor;
@@ -14,7 +13,6 @@ namespace _Game.Scripts.GlobalConfig
     public class UnitGlobalConfig : GlobalConfig<UnitGlobalConfig>
     {
         public float unitScaleHit = 1.5f;
-        public float distanceMoveToNearHit = 0.15f;
         public float unitScaleHitDuration = 0.2f;
         public float sizeUnitHead = 0.3f;
         public float distanceBtNode = 0.5f;
@@ -23,9 +21,9 @@ namespace _Game.Scripts.GlobalConfig
         public float timeSharpenerMove = 0.5f;
         public Vector3 vectorHeadScaleHit;
         public Vector3 unitHeadScale;
-        public List<UnitConfig> unitConfigs = new();
         public List<SharpenerColor> unitMaterial = new();
         public List<SharpenerColor> tipMaterial = new();
+        public Material defaultMaterial;
         
         public Material GetUnitMaterial(SharpenerColorType colorType)
         {
@@ -68,12 +66,6 @@ namespace _Game.Scripts.GlobalConfig
             }
         }
 #endif
-    }
-
-    [System.Serializable]
-    public class UnitConfig
-    {
-        public float size;
     }
     
     [System.Serializable]

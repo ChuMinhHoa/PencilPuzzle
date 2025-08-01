@@ -60,7 +60,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "e1c95d438b92b65dd12d6b5e3549f4984b1fc610"
+      "hash": "6368c0e895bcaf71f9a65fc1c635c5de3ecb69c5"
     },
     "com.tw.utility": {
       "version": "https://github.com/thinhwar123/TW-CustomPackage.git?path=Packages/TW.Utility",
@@ -69,7 +69,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.2.1"
       },
-      "hash": "e1c95d438b92b65dd12d6b5e3549f4984b1fc610"
+      "hash": "6368c0e895bcaf71f9a65fc1c635c5de3ecb69c5"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

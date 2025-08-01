@@ -93,16 +93,17 @@ namespace _Game.Scripts.GameObj.Unit
                             _moveDoneCallback?.Invoke(splineIndex);
                             _moveDoneCallback = null;
                             _pointIndex = 0;
-                            
                         }
 
                         if (_pointIndex == pointMoves.Count - 1)
                         {
-                            if (isHit && splineIndex == 0 && currentState == NodeControllerState.MoveOutHit)
+                            if (isHit && currentState == NodeControllerState.MoveOutHit && splineIndex <= 1)
                             {
-                                _callBackScaleHit?.Invoke();
-                                _ = ScaleHandle();
-                            }  
+                                if (splineIndex == 0)
+                                    _callBackScaleHit?.Invoke();
+
+                                _ = ScaleHandle(splineIndex == 0);
+                            }
                         }
                         _onMoveUpdateCallback?.Invoke();
                          
@@ -117,9 +118,9 @@ namespace _Game.Scripts.GameObj.Unit
         }
 
         [Button]
-        private async UniTask ScaleHandle()
+        private async UniTask ScaleHandle(bool callMoveBack)
         {
-            var vectorScaleHit = Vector2.one * UnitGlobalConfig.Instance.unitScaleHit;
+            var vectorScaleHit = Vector2.one * UnitGlobalConfig.Instance.unitScaleHit - Vector2.one * (0.1f * splineIndex);
             var duration = UnitGlobalConfig.Instance.unitScaleHitDuration;
             await LMotion.Create(splineNode.Scale, vectorScaleHit, duration/2)
                 .Bind(x =>splineNode.Scale = x)
@@ -127,7 +128,7 @@ namespace _Game.Scripts.GameObj.Unit
             await LMotion.Create(vectorScaleHit, Vector2.one, duration/2)
                 .Bind(x => splineNode.Scale = x)
                 .AddTo(objTokenCancelMove);
-            _callBackMoveBack?.Invoke();
+            if(callMoveBack) _callBackMoveBack?.Invoke();
         }
         
         public void ReversePath()
@@ -144,16 +145,6 @@ namespace _Game.Scripts.GameObj.Unit
             pointMoves.Clear();
         }
 
-        public void TryCancelMove()
-        {
-            if (_moveHandle.IsPlaying())
-            {
-                _moveHandle.TryCancel();
-                _pointIndex = 0; // Reset index to start from the first point
-                currentPosition = splineNode.Position;
-            }
-        }
-
         public void SetUpMoveOut(Action<int> actionMoveDoneCallBack, List<float3> pathPoints)
         {
             ChangeState(NodeControllerState.MoveOut);
@@ -165,17 +156,17 @@ namespace _Game.Scripts.GameObj.Unit
         public void SetUpMoveOutFail(Action actionMoveDoneCallBack, List<float3> pathPoints, Action callBackScale)
         {
             ChangeState(NodeControllerState.MoveOutHit);
-            //_moveDoneCallback = actionMoveDoneCallBack;
             _callBackMoveBack = actionMoveDoneCallBack;
             SetPathPoints(pathPoints);
             isHit = true;
             _callBackScaleHit = callBackScale;
         }
-        
+
         public void SetUpMoveBack(Action<int> moveDoneCallback)
         {
             ChangeState(NodeControllerState.MoveBack);
             _moveDoneCallback = moveDoneCallback;
+
             ReversePath();
             isHit = false;
         }

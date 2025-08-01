@@ -9,6 +9,7 @@ using LitMotion;
 using Sirenix.OdinInspector;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Game.Scripts.GameObj.Unit
 {
@@ -54,6 +55,8 @@ namespace _Game.Scripts.GameObj.Unit
         [Range(5, 50)]
         public float speed = 10f;
         
+        public LayerMask layerMask;
+        
         public void SetPointGoal(PointGoal pointGoalChange) => pointGoal = pointGoalChange;
         public void SetIDSharpener(int id) => sharpenerID = id;
         
@@ -64,8 +67,8 @@ namespace _Game.Scripts.GameObj.Unit
             LoadData(dataLoad);
             splineController.InitPathPointController(AlignHeader, AnimOnComplete, ResolveUnit, speed);
             trsLastPencil.gameObject.SetActive(false);
-            splineController.SetObjSpline(true); 
-            
+            splineController.SetObjSpline(true);
+            //unitConditionController.InitCondition(ConditionType.UnderHidden, splineController.splineMeshTiling.material, headMeshRenderer.material);
         }
 
         private void ResolveUnit() => GameManager.Instance.currentLevelManager.ResolveUnit(unitId);
@@ -126,6 +129,7 @@ namespace _Game.Scripts.GameObj.Unit
             splineController.Reset();
             trsLastPencil.parent = null;
             PoolingObject.Instance.DeSpawnLastPencilController(lastPencil);
+            unitConditionController.ResetCondition();
             gameObject.SetActive(false);
         }
 
@@ -190,7 +194,10 @@ namespace _Game.Scripts.GameObj.Unit
         public virtual void TryMoveOut()
         {
             if (!unitConditionController.IsConditionSatisfied())
+            {
+                GameManager.Instance.CheckCanTouch();
                 return;
+            }
             var hitTemp = CheckCanMove();
             if (hitTemp != null)  
             {
@@ -237,11 +244,10 @@ namespace _Game.Scripts.GameObj.Unit
                 .Bind(x => trsHead.localScale = x)
                 .AddTo(this);
         }
-       
-        
+
         private float3? CheckCanMove()
         {
-            if (Physics.Linecast(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, out var hit))
+            if (Physics.Linecast(trsCheckPoint.position, trsCheckPoint.position - trsCheckPoint.forward * distanceCheck, out var hit, layerMask))
             {
                 return transform.TransformPoint(hit.point);
             }

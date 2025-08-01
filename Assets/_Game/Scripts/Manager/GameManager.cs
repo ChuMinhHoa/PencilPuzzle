@@ -1,13 +1,11 @@
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
-using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using TW.Reactive.CustomComponent;
 using TW.Utility.DesignPattern;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace _Game.Scripts.Manager
@@ -18,7 +16,7 @@ namespace _Game.Scripts.Manager
         public bool isCanTouch = true;
         private PencilBase currentUnit;
         public ReactiveValue<int> currentLevel = new();
-
+        public Camera mainCamera;
         private void Start()
         {
             currentLevel.Value = 1;
@@ -32,7 +30,7 @@ namespace _Game.Scripts.Manager
         {
             if (Input.GetMouseButtonDown(0) && isCanTouch && !currentUnit)
             {
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     currentUnit = currentLevelManager.pencilController.GetUnitByCollider(hit.collider);

@@ -15,7 +15,15 @@ namespace _Game.Scripts.GameObj.Unit
     public class UnitConditionController : MonoBehaviour
     {
         public List<ConditionFace> conditionFaces = new();
-
+        
+        public void ResetCondition()
+        {
+            for (var i = 0; i < conditionFaces.Count; i++)
+            {
+                conditionFaces[i].ResetCondition();
+            }
+        }
+        
         [Button]
         public bool IsConditionSatisfied()
         {
