@@ -1,6 +1,7 @@
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
 using Cysharp.Threading.Tasks;
+using R3;
 using Sirenix.OdinInspector;
 using TW.Reactive.CustomComponent;
 using TW.Utility.DesignPattern;
@@ -19,9 +20,23 @@ namespace _Game.Scripts.Manager
         public Camera mainCamera;
         private void Start()
         {
-            currentLevel.Value = 1;
+#if !UNITY_EDITOR
+            Application.targetFrameRate = 60;
+#endif
+            currentLevel = PlayerDataSave.Instance.PlayerLevel;
+            if (currentLevel.Value  == 0)
+            {
+                currentLevel.Value = 1;
+                InGameDataManager.Instance.SaveData();
+            }
 
+            currentLevel.ReactiveProperty.Subscribe(ChangeLevel).AddTo(this);
             _ = SpawnLevel();
+        }
+
+        private void ChangeLevel(int levelChange)
+        {
+            InGameDataManager.Instance.SaveData();
         }
 
         #region Touch Controll
@@ -57,10 +72,11 @@ namespace _Game.Scripts.Manager
         #endregion
 
         #region Level Control
+        
+        
         [Button]
         private async UniTask SpawnLevel()
         {
-            Debug.Log("SpawnLevel");
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
             var handle = Addressables.LoadAssetAsync<GameObject>(levelConfig.levelPrefabReference);
             handle.Completed += task =>
@@ -68,10 +84,7 @@ namespace _Game.Scripts.Manager
                 if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
                     currentLevelManager = Instantiate(task.Result).GetComponent<LevelManager>();
-                    Debug.Log(currentLevelManager);
-                    Debug.Log($"{levelConfig}");
                     _ = currentLevelManager.InitData(levelConfig);
-                    //currentLevelManager = task.Result.GetComponent<LevelManager>();
                 }
             };
             await handle.ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());

@@ -15,8 +15,8 @@ namespace _Game.Scripts.UI.Core
 
         private void ShowPanel()
         {
-            var option = new ViewOptions(nameof(ModalSetting));
-            ModalContainer.Find(ContainerKey.Modals).Push(option);
+            // var option = new ViewOptions(nameof(ModalSetting));
+            // ModalContainer.Find(ContainerKey.Modals).Push(option);
         }
     }
 }
