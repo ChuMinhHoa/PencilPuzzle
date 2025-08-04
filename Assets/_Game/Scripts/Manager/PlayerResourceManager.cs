@@ -88,5 +88,23 @@ namespace _Game.Scripts.Manager
 
             Debug.LogWarning($"Resource not found: {type}");
         }
+
+        public ReactiveValue<BigNumber> GetGameResource(ResourceType type)
+        {
+            for (var i = 0; i < gameResources.Count; i++)
+            {
+                if (gameResources[i].type == type)
+                {
+                    return gameResources[i].amount;
+                }
+            }
+            var newGameResource = new GameResource
+            {
+                type = type,
+                Value = new BigNumber(0)
+            };
+            gameResources.Add(newGameResource);
+            return newGameResource.amount;
+        }
     }
 }

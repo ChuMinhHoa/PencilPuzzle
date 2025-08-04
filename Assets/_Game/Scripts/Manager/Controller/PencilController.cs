@@ -15,7 +15,7 @@ namespace _Game.Scripts.Manager.Controller
     {
         public List<PencilBase> pencils = new();
         public List<int> pencilTemps = new();
-        public async UniTask InitData()
+        public async UniTask InitData(Action<float> onProgress = null)
         {
             pencilTemps.Clear();
             for (var i = 0; i < pencils.Count; i++)
@@ -23,6 +23,7 @@ namespace _Game.Scripts.Manager.Controller
                 pencils[i].gameObject.SetActive(true);
                 pencils[i].InitData();
                 await UniTask.WaitForEndOfFrame();
+                onProgress?.Invoke((i + 1) / (float)pencils.Count);
             }
         }
 

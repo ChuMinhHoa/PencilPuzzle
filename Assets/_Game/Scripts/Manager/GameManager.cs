@@ -1,9 +1,13 @@
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.UI.Core;
+using Core.UI.Activities;
 using Cysharp.Threading.Tasks;
 using R3;
 using Sirenix.OdinInspector;
 using TW.Reactive.CustomComponent;
+using TW.UGUI.Core.Activities;
+using TW.UGUI.Core.Views;
 using TW.Utility.DesignPattern;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -18,6 +22,7 @@ namespace _Game.Scripts.Manager
         private PencilBase currentUnit;
         public ReactiveValue<int> currentLevel = new();
         public Camera mainCamera;
+        public GameObject objLoadingFake;
         private void Start()
         {
 #if !UNITY_EDITOR
@@ -77,6 +82,7 @@ namespace _Game.Scripts.Manager
         [Button]
         private async UniTask SpawnLevel()
         {
+            await ShowLoadingPanel();
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
             var handle = Addressables.LoadAssetAsync<GameObject>(levelConfig.levelPrefabReference);
             handle.Completed += task =>
@@ -89,6 +95,13 @@ namespace _Game.Scripts.Manager
             };
             await handle.ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());
            
+        }
+
+        private async UniTask ShowLoadingPanel()
+        {
+            var option = new ViewOptions(nameof(ActivityLoading));
+            await ActivityContainer.Find(ContainerKey.Activities).ShowAsync(option, true);
+            objLoadingFake.SetActive(false);
         }
 
         public void ReplayLevel()

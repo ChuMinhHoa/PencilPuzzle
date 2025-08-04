@@ -5,6 +5,7 @@ using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.Manager.Controller;
 using _Game.Scripts.ScriptAbleObject;
+using Core.UI.Activities;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -24,18 +25,20 @@ namespace _Game.Scripts.Manager
         public LevelConfig currentLevelConfig;
         public int currentWaveIndex;
 
-        public UnitPositionConfig GetUnitPositionConfig(int unitId) => currentLevelConfig.GetLevelUnitPositionConfig(unitId);
+        public UnitPositionConfig GetUnitPositionConfig(int unitId) =>
+            currentLevelConfig.GetLevelUnitPositionConfig(unitId);
 
-        public void SharpenerEndAnimAndCheck(int sharpenerID) => sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
+        public void SharpenerEndAnimAndCheck(int sharpenerID) =>
+            sharpenerController.SharpenerEndAnimAndCheck(sharpenerID);
 
         public void ClearSharpenerPoint(Sharpener sharpener) => sharpenerController.ClearSharpenerPoint(sharpener);
-        
+
         [Button]
         public async UniTask ReplayLevel()
         {
             currentLevelConfig = LevelGlobalConfig.Instance.GetLevelConfig(level);
             pencilController.ResetAllUnits();
-            await pencilController.InitData();
+            await pencilController.InitData(CallBackLoadingScreen);
             sharpenerController.ResetAllSharpeners();
             currentWaveIndex = 0;
             SpawnNextWave();
@@ -45,9 +48,14 @@ namespace _Game.Scripts.Manager
         public async UniTask InitData(LevelConfig levelConfig)
         {
             currentLevelConfig = levelConfig;
-            await pencilController.InitData();
+            await pencilController.InitData(CallBackLoadingScreen);
             currentWaveIndex = 0;
             SpawnFirstWave();
+        }
+
+        private void CallBackLoadingScreen(float progress)
+        {
+            ActivityLoadingContext.Events.changeProgress?.Invoke(progress);
         }
 
         private void SpawnFirstWave()

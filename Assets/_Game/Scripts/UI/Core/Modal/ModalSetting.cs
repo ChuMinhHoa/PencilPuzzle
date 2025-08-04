@@ -54,6 +54,7 @@ namespace _Game.Scripts.UI.Modal
             [field: Title(nameof(UIView))]
             [field: SerializeField]
             public CanvasGroup MainView { get; private set; }
+            //public CanvasGroup MainView { get; private set; }
 
             public UniTask Initialize(Memory<object> args)
             {
