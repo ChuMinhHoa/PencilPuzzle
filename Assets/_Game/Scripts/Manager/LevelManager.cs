@@ -5,9 +5,11 @@ using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.Manager.Controller;
 using _Game.Scripts.ScriptAbleObject;
+using BaseGame.Scripts.UI.Activities;
 using Core.UI.Activities;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using TW.Reactive.CustomComponent;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,6 +18,7 @@ namespace _Game.Scripts.Manager
 {
     public class LevelManager : MonoBehaviour
     {
+        public ReactiveValue<bool> isPause = new();
         public int level = -1;
         public SharpenerController sharpenerController;
 
@@ -154,5 +157,15 @@ namespace _Game.Scripts.Manager
         }
 
         public void ResolveUnit(int unitId) => pencilController.AddPropertyCondition(ConditionType.UnderHidden, unitId);
+
+        public void ClearLevel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPause(bool active)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

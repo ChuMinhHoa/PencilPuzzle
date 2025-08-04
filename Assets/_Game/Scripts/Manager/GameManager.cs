@@ -17,6 +17,7 @@ namespace _Game.Scripts.Manager
 {
     public class GameManager : Singleton<GameManager>
     {
+        public bool _inGame;
         public LevelManager currentLevelManager;
         public bool isCanTouch = true;
         private PencilBase currentUnit;
@@ -36,7 +37,7 @@ namespace _Game.Scripts.Manager
             }
 
             currentLevel.ReactiveProperty.Subscribe(ChangeLevel).AddTo(this);
-            _ = SpawnLevel();
+            _ = LoadCurrentLevel();
         }
 
         private void ChangeLevel(int levelChange)
@@ -80,7 +81,7 @@ namespace _Game.Scripts.Manager
         
         
         [Button]
-        private async UniTask SpawnLevel()
+        public async UniTask LoadCurrentLevel()
         {
             await ShowLoadingPanel();
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
@@ -120,10 +121,14 @@ namespace _Game.Scripts.Manager
             if(currentLevelManager)
                 Destroy(currentLevelManager.gameObject);
             currentLevelManager = null;
-            _ = SpawnLevel();
+            _ = LoadCurrentLevel();
         }
 
         #endregion
-        
+
+        public void SetPause(bool active)
+        {
+            currentLevelManager?.SetPause(active);
+        }
     }
 }
