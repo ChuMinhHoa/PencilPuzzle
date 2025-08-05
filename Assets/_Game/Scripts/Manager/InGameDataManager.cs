@@ -1,4 +1,5 @@
 using _Game.Scripts.Manager;
+using BaseGame.Scripts.Data;
 using CodeStage.AntiCheat.Storage;
 using CoreData;
 using MemoryPack;

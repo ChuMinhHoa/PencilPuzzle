@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2223795951006552174}
   - component: {fileID: 5111214575868672549}
-  - component: {fileID: 8168127254150777889}
+  - component: {fileID: 525337912903716426}
   m_Layer: 0
   m_Name: ActivityLoading
   m_TagString: Untagged
@@ -126,7 +126,7 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &8168127254150777889
+--- !u!114 &525337912903716426
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3562962726575319432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 499c83b1104c3ec48a2140a93be475f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f40e23c33cc49e98ba9622ddcf56bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   <UsePrefabNameAsIdentifier>k__BackingField: 1
@@ -150,13 +150,10 @@ MonoBehaviour:
       _animationBehaviour: {fileID: 0}
       _animationObject: {fileID: 0}
   <UIPresenter>k__BackingField:
-    <Model>k__BackingField:
-      <SampleValue>k__BackingField:
-        value: 0
     <View>k__BackingField:
       <MainView>k__BackingField: {fileID: 5111214575868672549}
-      <loadingBar>k__BackingField: {fileID: 6982019522278072353}
-      <txtLoading>k__BackingField: {fileID: 2603648893326806100}
+      <Slider>k__BackingField: {fileID: 6982019522278072353}
+      <TxtLoading>k__BackingField: {fileID: 2603648893326806100}
 --- !u!1 &3688065544154476048
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.Manager.Controller;
+using _Game.Scripts.Manager.Etc;
 using _Game.Scripts.ScriptAbleObject;
 using BaseGame.Scripts.UI.Activities;
 using Core.UI.Activities;
@@ -19,6 +20,7 @@ namespace _Game.Scripts.Manager
     public class LevelManager : MonoBehaviour
     {
         public ReactiveValue<bool> isPause = new();
+        public bool isGamePlay;
         public int level = -1;
         public SharpenerController sharpenerController;
 
@@ -27,7 +29,10 @@ namespace _Game.Scripts.Manager
 
         public LevelConfig currentLevelConfig;
         public int currentWaveIndex;
-
+        public float currentLevelDuration;
+        
+        public UnitConditionController unitConditionController;
+        
         public UnitPositionConfig GetUnitPositionConfig(int unitId) =>
             currentLevelConfig.GetLevelUnitPositionConfig(unitId);
 
@@ -45,20 +50,34 @@ namespace _Game.Scripts.Manager
             sharpenerController.ResetAllSharpeners();
             currentWaveIndex = 0;
             SpawnNextWave();
+            unitConditionController?.ResetCondition();
         }
 
         [Button]
         public async UniTask InitData(LevelConfig levelConfig)
         {
             currentLevelConfig = levelConfig;
+            currentLevelDuration = levelConfig.timeDuration;
             await pencilController.InitData(CallBackLoadingScreen);
             currentWaveIndex = 0;
             SpawnFirstWave();
+            unitConditionController?.InitConditions();
+        }
+        
+        public void SetOnGamePlay() => isGamePlay = true;
+
+        private void Update()
+        {
+            if (!isPause.Value && isGamePlay && currentLevelDuration > 0)
+            {
+                currentLevelDuration -= Time.deltaTime;
+                GameGlobalEvent.OnTimeInGameChange?.Invoke(currentLevelDuration, 0, 0);
+            }
         }
 
         private void CallBackLoadingScreen(float progress)
         {
-            ActivityLoadingContext.Events.changeProgress?.Invoke(progress);
+            //ActivityLoadingContext.Events.changeProgress?.Invoke(progress);
         }
 
         private void SpawnFirstWave()
@@ -154,13 +173,6 @@ namespace _Game.Scripts.Manager
             }
 
             pencilController.SaveConfig(currentLevelConfig);
-        }
-
-        public void ResolveUnit(int unitId) => pencilController.AddPropertyCondition(ConditionType.UnderHidden, unitId);
-
-        public void ClearLevel()
-        {
-            throw new NotImplementedException();
         }
 
         public void SetPause(bool active)

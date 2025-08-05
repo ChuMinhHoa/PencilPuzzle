@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts.Manager;
 using _Game.Scripts.Manager.Etc;
+using _Game.Scripts.UI.Core;
 using BaseGame.Scripts.UI.Modals;
 using Core.UI;
 using Core.UI.Modals;
@@ -45,12 +47,12 @@ namespace Core.UI.Other
                 return;
             }
             Icon.sprite = NormalIcon;
-            if(GameManager.Instance.InGame && CurrencyType == CurrencyType.Life)
+            if(GameManager.Instance._inGame && CurrencyType == CurrencyType.Life)
             {
                 RealValue = false;
             }
             Amount = RealValue ? value : value + 1;
-            TextAmount.SetTextFormat("{0}", Amount);
+            TextAmount.SetText($"{Amount:0}");
         }
         
         void OnInfinityLifeTimeChange(float value)

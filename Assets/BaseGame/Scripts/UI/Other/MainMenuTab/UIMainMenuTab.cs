@@ -179,6 +179,7 @@ public class UIMainMenuTab : ACachedMonoBehaviour, IScreenLifecycleEventSimple
 
     private void OpenTab(UITab tab)
     {
+        Debug.Log(tab.name);
         if (CurrentTabUI == tab) return;
         SwipeState = SwipeStateType.Disable;
         LastTabUI = CurrentTabUI;

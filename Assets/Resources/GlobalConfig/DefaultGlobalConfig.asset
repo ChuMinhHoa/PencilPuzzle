@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57b527221707a54f9beefc71af56b85, type: 3}
+  m_Name: DefaultGlobalConfig
+  m_EditorClassIdentifier: 
+  <LinkSheet>k__BackingField: 10ZG79clS5t8ssjf9a8wQ5C3ztktkR2fWd5mX_-Yv6Oc
+  <PlayGameAtStart>k__BackingField: 1
+  <ShowModalStartGame>k__BackingField: 0
+  <ShowModalOfferBooster>k__BackingField: 0
+  <ActiveDailyReward>k__BackingField: 0
+  <WinGameReward>k__BackingField: 10
+  <RaceUnlock>k__BackingField: 10
+  <DefaultLife>k__BackingField: 5
+  <DefaultBackToMenuLevel>k__BackingField: 5
+  <DefaultShowWinRewardAds>k__BackingField: 5
+  <DefaultActiveQuest>k__BackingField: 10
+  <DefaultDailyGift>k__BackingField: 15
+  <DefaultDailyReward>k__BackingField: 15
+  <DefaultFillHeartTime>k__BackingField: 5
+  <DefaultFullHeartCoin>k__BackingField: 800
+  <ReviveCoin>k__BackingField: 900
+  <ReviveTime>k__BackingField: 45
+  <ReviveValue>k__BackingField:
+    reviveTime: 30
+    deadCountRemain: 1000
+  <BoosterAmountOnPurchase>k__BackingField: 1
+  <DefaultTimeFillHeart>k__BackingField: 10
+  <AdminId>k__BackingField: []
+  <LevelRemoteConfig>k__BackingField:
+    levelUpdateConfigs: []
+  <LevelUnlockFreezeClock>k__BackingField: 0
+  <FreezeClockCost>k__BackingField: 0
+  <LevelUnlockPropeller>k__BackingField: 0
+  <PropellerCost>k__BackingField: 0
+  <LevelUnlockMagnet>k__BackingField: 0
+  <MagnetCost>k__BackingField: 0

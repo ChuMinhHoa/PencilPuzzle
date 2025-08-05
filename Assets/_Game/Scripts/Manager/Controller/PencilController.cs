@@ -164,13 +164,5 @@ namespace _Game.Scripts.Manager.Controller
         }
 
         #endregion
-
-        public void AddPropertyCondition(ConditionType conditionType, params object[] args)
-        {
-            for (var i = 0; i < pencils.Count; i++)
-            {
-                pencils[i].unitConditionController.AddPropertyCondition(conditionType, args);
-            }
-        }
     }
 }

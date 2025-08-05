@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Game.Scripts.Manager;
 using _Game.Scripts.UI.Core;
-using Core.UI.Activities;
+using Core.UI;
 using Core.UI.Screens;
 using CoreData;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Manager;
-using TW.UGUI.MVPPattern;
-using UnityEngine;
 using R3;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -16,9 +15,11 @@ using TW.UGUI.Core.Activities;
 using TW.UGUI.Core.Modals;
 using TW.UGUI.Core.Screens;
 using TW.UGUI.Core.Views;
+using TW.UGUI.MVPPattern;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.UI.Modals
+namespace BaseGame.Scripts.UI.Modals
 {
     public class ModalWin : Modal
     {
@@ -95,7 +96,7 @@ namespace Core.UI.Modals
                 StarGroups[1].RunAnim().Forget();
                 StarGroups[2].RunAnim().Forget();
                 await UniTask.Delay(350);
-                if (GameManager.Instance.Level.Value > DefaultGlobalConfig.Instance.DefaultBackToMenuLevel)
+                if (GameManager.Instance.currentLevel.Value > DefaultGlobalConfig.Instance.DefaultBackToMenuLevel)
                 {
                     await LMotion.Create(0f, 1f, 0.2f).WithEase(Ease.OutBack).Bind(x => ButtonClaimWithAds.transform.localScale = x * Vector3.one).AddTo(MainView);
                     await UniTask.Delay(1000, cancellationToken: MainView.GetCancellationTokenOnDestroy());
@@ -127,12 +128,15 @@ namespace Core.UI.Modals
             {
                 View.MainView.interactable = false;
                 await UIAnimationBase.ButtonBasic(View.ButtonClaimWithAds.transform);
-                InGameAdsController.EventShowAdsReward?.Invoke("AdsRw_GetWinReward", OnClaimWithAdsSuccess, OnClaimWithAdsFail);
+                //InGameAdsController.EventShowAdsReward?.Invoke("AdsRw_GetWinReward", OnClaimWithAdsSuccess, OnClaimWithAdsFail);
+                #if Unity_Editor
+                OnClaimWithAdsSuccess();
+                #endif
                 
             }
             void OnClaimWithAdsSuccess()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.WinGameReward * 2);
+                //InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.WinGameReward * 2);
                 OnClaimWithAdsSuccessAsync().Forget();
             }
             
@@ -150,13 +154,14 @@ namespace Core.UI.Modals
             {
                 InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.WinGameReward * 2);
                 await UIAnimationBase.ButtonBasic(View.ButtonClaim.transform);
-                InGameAdsController.EventShowAdsInter?.Invoke("AdsInter_WinLevel", null);
+                //InGameAdsController.EventShowAdsInter?.Invoke("AdsInter_WinLevel", null);
+                Debug.LogError("AdsInter_WinLevel");
                 await DoneGetReward();
             }
 
             async UniTask DoneGetReward()
             {
-                if (GameManager.Instance.Level.Value <= DefaultGlobalConfig.Instance.DefaultBackToMenuLevel)
+                if (GameManager.Instance.currentLevel.Value <= DefaultGlobalConfig.Instance.DefaultBackToMenuLevel)
                 {
                     await LoadNextLevel();
                 }
@@ -176,7 +181,8 @@ namespace Core.UI.Modals
                         ScreenOptions screenOptions = new ScreenOptions(nameof(ScreenMainMenu), stack: false);
                         await ScreenContainer.Find(ContainerKey.Screens).PushAsync(screenOptions);
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(true);
-                        LevelManager.Instance.ClearLevel();
+                        GameManager.Instance.ClearLevel();
+                        //LevelManager.Instance.ClearLevel();
                     }),
                     null
                 });
@@ -191,9 +197,10 @@ namespace Core.UI.Modals
                     (Func<UniTask>)(async () =>
                     {
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(true);
-                        LevelManager.Instance.ClearLevel();
-                        await LevelManager.Instance.LoadLevel();
-                        ScreenInGameContext.Events.OnReloadCurrentLevel?.Invoke();
+                        GameManager.Instance.ClearLevel();
+                        //LevelManager.Instance.ClearLevel();
+                        await GameManager.Instance.LoadCurrentLevel();
+                      
                     }),
                     null
                 });

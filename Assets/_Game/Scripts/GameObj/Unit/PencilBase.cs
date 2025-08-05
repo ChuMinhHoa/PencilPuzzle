@@ -3,6 +3,7 @@ using _Game.Scripts.GameObj.Interface;
 using _Game.Scripts.GameObj.Sharpener;
 using _Game.Scripts.GlobalConfig;
 using _Game.Scripts.Manager;
+using _Game.Scripts.Manager.Etc;
 using _Game.Scripts.ScriptAbleObject;
 using Cysharp.Threading.Tasks;
 using LitMotion;
@@ -68,10 +69,11 @@ namespace _Game.Scripts.GameObj.Unit
             splineController.InitPathPointController(AlignHeader, AnimOnComplete, ResolveUnit, speed);
             trsLastPencil.gameObject.SetActive(false);
             splineController.SetObjSpline(true);
+            unitConditionController.InitConditions();
             //unitConditionController.InitCondition(ConditionType.UnderHidden, splineController.splineMeshTiling.material, headMeshRenderer.material);
         }
 
-        private void ResolveUnit() => GameManager.Instance.currentLevelManager.ResolveUnit(unitId);
+        private void ResolveUnit() => GameGlobalEvent.OnPencilResolve?.Invoke(this);
 
         #region Obj Data
 

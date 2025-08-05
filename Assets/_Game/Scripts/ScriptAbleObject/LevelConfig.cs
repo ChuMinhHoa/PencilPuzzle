@@ -19,7 +19,9 @@ namespace _Game.Scripts.ScriptAbleObject
         public List<SharpenerColorType> sharpenerColors = new();
         public int startSharpenerCount;
         public AssetReference levelPrefabReference;
-        
+        public float timeDuration = 60f;
+        public Vector3 cameraPosition;
+        public float cameraSize = 5f;
         public UnitPositionConfig GetLevelUnitPositionConfig(int unitId)
         {
             return unitPositionConfig.Find(config => config.unitId == unitId);

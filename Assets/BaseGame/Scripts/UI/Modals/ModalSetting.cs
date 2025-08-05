@@ -1,16 +1,15 @@
 using System;
-using _Game.Scripts.Manager;
 using BaseGame.Scripts.UI.Other.MainMenuTab;
 using Cysharp.Threading.Tasks;
 using LitMotion;
-using TW.UGUI.MVPPattern;
-using UnityEngine;
 using R3;
 using Sirenix.OdinInspector;
 using TW.UGUI.Core.Modals;
+using TW.UGUI.MVPPattern;
+using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.UI.Modals
+namespace BaseGame.Scripts.UI.Modals
 {
     public class ModalSetting : Modal, IUITabLifecycleEvent
     {

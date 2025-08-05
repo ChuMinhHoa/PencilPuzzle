@@ -12,15 +12,7 @@ namespace _Game.Scripts.GameObj.Interface
 
         public abstract bool IsConditionSatisfied();
         public abstract void ResetCondition();
-        
-        public void AddPropertyCondition(params object[] args)
-        {
-            AddProperty(args);
-        }
-
-        protected abstract void AddProperty(Memory<object> args);
-
-
+        public abstract void InitCondition();
     }
 
 }

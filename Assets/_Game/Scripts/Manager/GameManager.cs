@@ -1,16 +1,23 @@
+using System;
 using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.ScriptAbleObject;
 using _Game.Scripts.UI.Core;
+using BaseGame.Scripts.UI.Modals;
 using Core.UI.Activities;
+using Core.UI.Modals;
+using Core.UI.Screens;
 using Cysharp.Threading.Tasks;
 using R3;
 using Sirenix.OdinInspector;
 using TW.Reactive.CustomComponent;
 using TW.UGUI.Core.Activities;
+using TW.UGUI.Core.Modals;
 using TW.UGUI.Core.Views;
 using TW.Utility.DesignPattern;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace _Game.Scripts.Manager
@@ -24,20 +31,22 @@ namespace _Game.Scripts.Manager
         public ReactiveValue<int> currentLevel = new();
         public Camera mainCamera;
         public GameObject objLoadingFake;
+        public LayerMask layerMask;
+
         private void Start()
         {
 #if !UNITY_EDITOR
             Application.targetFrameRate = 60;
 #endif
-            currentLevel = PlayerDataSave.Instance.PlayerLevel;
-            if (currentLevel.Value  == 0)
+            //currentLevel = .Instance.PlayerLevel;
+            if (currentLevel.Value == 0)
             {
                 currentLevel.Value = 1;
                 InGameDataManager.Instance.SaveData();
             }
 
             currentLevel.ReactiveProperty.Subscribe(ChangeLevel).AddTo(this);
-            _ = LoadCurrentLevel();
+            //_ = LoadCurrentLevel();
         }
 
         private void ChangeLevel(int levelChange)
@@ -49,11 +58,15 @@ namespace _Game.Scripts.Manager
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0) && isCanTouch && !currentUnit)
+            if (Input.GetMouseButtonDown(0) && isCanTouch && !currentUnit &&
+                !EventSystem.current.IsPointerOverGameObject())
             {
+                if(!currentLevelManager) return;
+                
                 var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                if (Physics.Raycast(ray, out RaycastHit hit, layerMask))
                 {
+                    if (!currentLevelManager.isGamePlay) currentLevelManager.SetOnGamePlay();
                     currentUnit = currentLevelManager.pencilController.GetUnitByCollider(hit.collider);
                     if (currentUnit)
                     {
@@ -63,6 +76,24 @@ namespace _Game.Scripts.Manager
                     }
                 }
             }
+
+// #if PLATFORM_ANDROID || PLATFORM_IOS
+//             if (Input.touchCount > 0 && isCanTouch && !currentUnit && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+//             {
+//                 var ray = mainCamera.ScreenPointToRay(Input.GetTouch(0).position);
+//                 if (Physics.Raycast(ray, out RaycastHit hit, layerMask))
+//                 {
+//                     currentUnit = currentLevelManager.pencilController.GetUnitByCollider(hit.collider);
+//                     if (currentUnit)
+//                     {
+//                         SetCanTouch(false);
+//                         currentUnit.TryMoveOut();
+//                         currentUnit = null;
+//                     }
+//                 }
+//             }
+// #endif
+
         }
 
         public void CheckCanTouch()
@@ -78,12 +109,12 @@ namespace _Game.Scripts.Manager
         #endregion
 
         #region Level Control
-        
-        
+
+
         [Button]
         public async UniTask LoadCurrentLevel()
         {
-            await ShowLoadingPanel();
+            //await ShowLoadingPanel();
             var levelConfig = LevelGlobalConfig.Instance.GetLevelConfig(currentLevel.Value);
             var handle = Addressables.LoadAssetAsync<GameObject>(levelConfig.levelPrefabReference);
             handle.Completed += task =>
@@ -92,22 +123,23 @@ namespace _Game.Scripts.Manager
                 {
                     currentLevelManager = Instantiate(task.Result).GetComponent<LevelManager>();
                     _ = currentLevelManager.InitData(levelConfig);
+                    InitCamera(levelConfig);
                 }
             };
             await handle.ToUniTask(cancellationToken: this.GetCancellationTokenOnDestroy());
-           
+            ScreenInGameContext.Events.OnReloadCurrentLevel?.Invoke();
         }
 
         private async UniTask ShowLoadingPanel()
         {
             var option = new ViewOptions(nameof(ActivityLoading));
-            await ActivityContainer.Find(ContainerKey.Activities).ShowAsync(option, true);
+            await ActivityContainer.Find(ContainerKey.Activities).ShowAsync(option, true, null, null);
             objLoadingFake.SetActive(false);
         }
 
-        public void ReplayLevel()
+        public async UniTask ReplayLevel()
         {
-            _ = currentLevelManager.ReplayLevel();
+            await currentLevelManager.ReplayLevel();
         }
 
         [Button]
@@ -118,10 +150,23 @@ namespace _Game.Scripts.Manager
             {
                 currentLevel.Value = 1;
             }
-            if(currentLevelManager)
+
+            if (currentLevelManager)
                 Destroy(currentLevelManager.gameObject);
             currentLevelManager = null;
-            _ = LoadCurrentLevel();
+            _ = ShowModalWin();
+        }
+
+        private async UniTask ShowModalWin()
+        {
+            var viewOptions = new ViewOptions(nameof(ModalWin));
+            await ModalContainer.Find(ContainerKey.Modals).PushAsync(viewOptions);
+        }
+
+        private void InitCamera(LevelConfig levelConfig)
+        {
+            mainCamera.orthographicSize = levelConfig.cameraSize;
+            mainCamera.transform.position = levelConfig.cameraPosition;
         }
 
         #endregion
@@ -129,6 +174,11 @@ namespace _Game.Scripts.Manager
         public void SetPause(bool active)
         {
             currentLevelManager?.SetPause(active);
+        }
+
+        public void ClearLevel()
+        {
+            //currentLevelManager?.ClearLevel();
         }
     }
 }

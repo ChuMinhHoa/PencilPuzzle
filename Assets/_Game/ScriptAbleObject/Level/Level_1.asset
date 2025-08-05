@@ -220,3 +220,6 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 1
+  timeDuration: 60
+  cameraPosition: {x: 0, y: 10, z: -2.5}
+  cameraSize: 6

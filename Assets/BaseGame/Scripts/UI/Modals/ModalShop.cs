@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.Manager;
+using _Game.Scripts.UI.Core;
 using BaseGame.Scripts.UI.Other.MainMenuTab;
 using Cysharp.Threading.Tasks;
 using Manager;
@@ -72,7 +74,7 @@ namespace Core.UI.Modals
                 {
                     UIShopPacks[i].Init();
                 }
-                Debug.Log($"Ingame {GameManager.Instance.InGame}");
+                Debug.Log($"Ingame {GameManager.Instance._inGame}");
                 //CloseBtn.gameObject.SetActive(GameManager.Instance.InGame);
                 return UniTask.CompletedTask;
             }

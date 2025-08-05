@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.GameObj.Unit;
+using _Game.Scripts.Manager.Etc;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Interface
@@ -19,14 +21,24 @@ namespace _Game.Scripts.GameObj.Interface
             unitIdResolve.Clear();
         }
 
-
-        protected override void AddProperty(Memory<object> args)
+        public override void InitCondition()
         {
-            var unitId = (int)args.Span[0];
-            if (unitIdLockThat.Contains(unitId) && !unitIdResolve.Contains(unitId))
+            ResetCondition();
+            GameGlobalEvent.OnPencilResolve += ResolvePencil;
+        }
+
+        private void ResolvePencil(PencilBase pencilBase)
+        {
+            var unitId = pencilBase.unitId;
+            if (!unitIdResolve.Contains(unitId) && unitIdLockThat.Contains(unitId))
             {
                 unitIdResolve.Add(unitId);
             }
+        }
+
+        private void OnDisable()
+        {
+            GameGlobalEvent.OnPencilResolve -= ResolvePencil;
         }
     }
 }

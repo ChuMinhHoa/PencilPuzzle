@@ -1,0 +1,148 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b45c6f714c8d984d9506da0237c2fe6, type: 3}
+  m_Name: ShopGlobalConfig
+  m_EditorClassIdentifier: 
+  packageName: com.UnityTechnologies.UniversalMobile3DTemplate
+  shopPackages:
+  - packageName: 101
+    packageNameToUI: Mini Coins
+    packageTag: 
+    packageId: com.abi.skewer.coin1
+    priceType: 1
+    price: 1
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 80
+      <ExpireTime>k__BackingField: 
+  - packageName: 107
+    packageNameToUI: Small Coins
+    packageTag: 
+    packageId: com.abi.skewer.coin2
+    priceType: 0
+    price: 1.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 1000
+      <ExpireTime>k__BackingField: 
+  - packageName: 103
+    packageNameToUI: Medium Coins
+    packageTag: 
+    packageId: com.abi.skewer.coin3
+    priceType: 0
+    price: 7.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 5000
+      <ExpireTime>k__BackingField: 
+  - packageName: 104
+    packageNameToUI: Big Coins
+    packageTag: 
+    packageId: com.abi.skewer.coin4
+    priceType: 0
+    price: 15.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 10000
+      <ExpireTime>k__BackingField: 
+  - packageName: 105
+    packageNameToUI: Super Coins
+    packageTag: 
+    packageId: com.abi.skewer.coin5
+    priceType: 0
+    price: 30.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 25000
+      <ExpireTime>k__BackingField: 
+  - packageName: 106
+    packageNameToUI: Mega Coin
+    packageTag: 
+    packageId: com.abi.skewer.coin6
+    priceType: 0
+    price: 59.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 50000
+      <ExpireTime>k__BackingField: 
+  - packageName: 108
+    packageNameToUI: Ultra Coin
+    packageTag: 
+    packageId: com.abi.skewer.coin7
+    priceType: 0
+    price: 95.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 100000
+      <ExpireTime>k__BackingField: 
+  - packageName: 1
+    packageNameToUI: Remove Ads
+    packageTag: 
+    packageId: com.abi.skewer.removeads
+    priceType: 0
+    price: 5.99
+    GameResources:
+    - <Type>k__BackingField: 3
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 1
+      <ExpireTime>k__BackingField: 
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 500
+      <ExpireTime>k__BackingField: 
+  - packageName: 10
+    packageNameToUI: Remove Ads Sale
+    packageTag: 
+    packageId: com.abi.skewer.removeadssale
+    priceType: 0
+    price: 3.99
+    GameResources:
+    - <Type>k__BackingField: 3
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 1
+      <ExpireTime>k__BackingField: 
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 500
+      <ExpireTime>k__BackingField: 
+  - packageName: 2
+    packageNameToUI: Revive Pack
+    packageTag: 
+    packageId: com.abi.skewer.revivepack
+    priceType: 0
+    price: 4.99
+    GameResources:
+    - <Type>k__BackingField: 1
+      <SpecificType>k__BackingField: 1
+      <Value>k__BackingField:
+        value: 3000
+      <ExpireTime>k__BackingField: 
+  gameResourseDatas: []
+  noAdsIcon: {fileID: 21300000, guid: 4ac5a63598d404d5a982bba8869071a1, type: 3}

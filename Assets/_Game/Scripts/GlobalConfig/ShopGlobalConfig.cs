@@ -105,6 +105,10 @@ public enum PackageName
     greatbundle = 6,
     ultrabundle = 7,
     removeadssale = 10,
+    starterpack = 11,
+    limitedpack = 12,
+    superiorbundle = 13,
+    legendarybundle = 14,
     
     coin1 = 101,
     smallcoin = 102,
@@ -112,6 +116,8 @@ public enum PackageName
     coin4 = 104,
     coin5 = 105,
     coin6 = 106,
+    coin2 = 107,
+    coin7 = 108,
     
     battlepass = 200,
 }

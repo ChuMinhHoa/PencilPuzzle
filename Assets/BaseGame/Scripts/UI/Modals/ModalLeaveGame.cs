@@ -99,7 +99,7 @@ namespace Core.UI.Modals
                 {
                     (Func<UniTask>)(async () =>
                     {
-                        GameManager.Instance.currentLevelManager.ClearLevel();
+                        GameManager.Instance.ClearLevel();
                         ScreenOptions screenOptions = new ScreenOptions(nameof(ScreenMainMenu), false);
                         await ScreenContainer.Find(ContainerKey.Screens).PushAsync(screenOptions);
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(true);

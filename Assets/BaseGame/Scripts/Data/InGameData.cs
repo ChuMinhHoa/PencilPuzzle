@@ -1,8 +1,8 @@
 using System;
-using BaseGame.Scripts.Data;
+using CoreData;
 using UnityEngine;
 
-namespace CoreData
+namespace BaseGame.Scripts.Data
 {
     [Serializable]
     public class InGameData

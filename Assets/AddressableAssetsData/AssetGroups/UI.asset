@@ -15,18 +15,38 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: f314d7fb1de87304b9f176b1c58579a5
   m_SerializeEntries:
+  - m_GUID: 0a7c38c0f7843b74f894b2518208a505
+    m_Address: ActivityLoading
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0ca11ead2d601ac48ae6d1364d0b252c
+    m_Address: ModalWin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d3a6b080559b444fa617094c0f604fc
     m_Address: DefaultModalBackdrop
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b5e85d758875741479a713b415b3dd3b
-    m_Address: ActivityLoading
+  - m_GUID: 5472c17295c8ab9489fd38956a145342
+    m_Address: ScreenMainMenu
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cf75c78403f570742be7bcbeae1f8010
+  - m_GUID: 56257a32d8e78c94592148c3aa4134f6
+    m_Address: ScreenInGame
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f2544121bf4594458ad9dcb17d20aa1
     m_Address: ModalSetting
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72bcd805186a31c4fbcac5b6d930537f
+    m_Address: ModalPause
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

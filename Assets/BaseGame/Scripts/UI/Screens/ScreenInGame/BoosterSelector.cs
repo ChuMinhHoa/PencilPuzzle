@@ -37,13 +37,14 @@ public class BoosterSelector : MonoBehaviour
         BoosterAmount.Subscribe(UpdateBoosterAmount).AddTo(this);
         Button.AddListener(SelectBooster);
         boosterData = ItemGlobalConfig.Instance.GetBoosterData(BoosterType);
-        BoosterIcon.sprite = boosterData.Sprite;
+        Debug.LogError("Need booster icon");
+//        BoosterIcon.sprite = boosterData.Sprite;
         level = GameManager.Instance.currentLevel.Value;
         BoosterUnlockLvTxt.text = $"Lv.{boosterData.UnlockLevel}";
         BoosterPriceTxt.text = $"{boosterData.Price}<sprite=0>";
         SetState();
         isShowOnTutorial = false;
-        GameManager.Instance.currentLevelManager.isPause.ReactiveProperty.Subscribe(CheckPauseGame).AddTo(this));
+        GameManager.Instance.currentLevelManager.isPause.ReactiveProperty.Subscribe(CheckPauseGame).AddTo(this);
         GameManager.Instance.currentLevel.ReactiveProperty.Subscribe(OnChangeLevel).AddTo(this);
     }
 
@@ -187,13 +188,15 @@ public class BoosterSelector : MonoBehaviour
     public void SelectBooster()
     {
         //TutorialHand.SetActive(false);
-        if((GameManager.Instance.IsPauseGame.Value && !isShowOnTutorial) 
+        if((GameManager.Instance.currentLevelManager.isPause.Value && !isShowOnTutorial) 
            || LockedObj.activeSelf)
             return;
         if (BoosterAmount.Value > 0)
         {
-            if(CheckUseCondition())
-                BoosterManager.Instance.UseBooster(BoosterType);
+            if (CheckUseCondition())
+            {
+            }
+            //BoosterManager.Instance.UseBooster(BoosterType);
         }
         else
         {
@@ -201,7 +204,7 @@ public class BoosterSelector : MonoBehaviour
             {
                 ViewOptions options = new ViewOptions(nameof(ModalBooster));
                 ModalContainer.Find(ContainerKey.Modals).PushAsync(options, this);
-                GameManager.Instance.PauseGame(true);
+                GameManager.Instance.SetPause(true);
             }
             else
             {
@@ -209,11 +212,11 @@ public class BoosterSelector : MonoBehaviour
                 {
                     InGameDataManager.Instance.InGameData.ResourceData.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, boosterData.Price);
                     InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Booster, (int)boosterData.BoosterType, DefaultGlobalConfig.Instance.BoosterAmountOnPurchase);
-                    InGameAnalyticController.EventTrackResourceSpend?.Invoke(ResourceType.Currency, (CurrencyType.Money).ToString(), "ingame", "buy_booster", (int)boosterData.Price);
+                    //InGameAnalyticController.EventTrackResourceSpend?.Invoke(ResourceType.Currency, (CurrencyType.Money).ToString(), "ingame", "buy_booster", (int)boosterData.Price);
                 }
                 else
                 {
-                    GameManager.Instance.PauseGame(true);
+                    GameManager.Instance.SetPause(true);
                     ShopPackageDataConfig packData = ShopGlobalConfig.Instance.GetShopPackageDataConfig(PackageName.bigbundle);
                     ViewOptions options = new ViewOptions(nameof(ModalShop));
                     ModalContainer.Find(ContainerKey.Modals).PushAsync(options, packData);

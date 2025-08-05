@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts.GameObj.Unit;
 
 namespace _Game.Scripts.Manager.Etc
 {
@@ -13,5 +14,6 @@ namespace _Game.Scripts.Manager.Etc
         //public static Action<People, Hole, float> OnPeopleResolve {get; set;}
         public static Action<float, float, float> OnTimeInGameChange { get; set; }
         public static Action<float, float, float> OnFreezeTimeChange { get; set; }
+        public static Action<PencilBase> OnPencilResolve { get; set; }
     }
 }

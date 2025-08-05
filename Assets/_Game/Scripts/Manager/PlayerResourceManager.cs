@@ -105,6 +105,7 @@ namespace _Game.Scripts.Manager
             // };
             // gameResources.Add(newGameResource);
             // return newGameResource.amount;
+            return null;
         }
     }
 }

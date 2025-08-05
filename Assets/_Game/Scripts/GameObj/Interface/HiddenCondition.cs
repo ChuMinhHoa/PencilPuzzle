@@ -1,7 +1,10 @@
 using System;
 using _Game.Scripts.GameObj.Sharpener;
+using _Game.Scripts.GameObj.Unit;
 using _Game.Scripts.GlobalConfig;
+using _Game.Scripts.Manager.Etc;
 using Sirenix.OdinInspector;
+using SplineMesh;
 using TW.UGUI.Core.Modals;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,6 +15,7 @@ namespace _Game.Scripts.GameObj.Interface
     {
         public MeshRenderer tipMesh;
         public MeshRenderer bodyMesh;
+        public SplineMeshTiling bodySplineMesh;
         public int unitUnlockHidden = -1;
         public bool isResolved;
         
@@ -21,31 +25,41 @@ namespace _Game.Scripts.GameObj.Interface
         public Material bodyMatDefault;
         public Material bodyMatChange;
 
-        private void OnEnable()
-        {
-            ResetCondition();
-        }
-
         public override bool IsConditionSatisfied()
         {
             return isResolved;
         }
 
+        [Button]
         public override void ResetCondition()
         {
             isResolved = false;
-            bodyMesh.material = tipMatDefault;
-            tipMesh.material = bodyMatDefault;
+            bodyMesh.material = bodyMatDefault;
+            bodySplineMesh.material = bodyMatDefault;
+            tipMesh.material = tipMatDefault;
         }
 
-        protected override void AddProperty(Memory<object> args)
+        public override void InitCondition()
         {
-            if (args.Span[0] is int value && value == unitUnlockHidden)
+            ResetCondition();
+            GameGlobalEvent.OnPencilResolve += ResolvePencil;
+        }
+
+        private void ResolvePencil(PencilBase pencilBase)
+        {
+            if (pencilBase.unitId == unitUnlockHidden)
             {
                 isResolved = true;
-                bodyMesh.material = tipMatChange;
-                tipMesh.material = bodyMatChange;
+                bodyMesh.material = bodyMatChange;
+                bodySplineMesh.material = bodyMatChange;
+                tipMesh.material = tipMatChange;
             }
+        }
+
+        private void OnDisable()
+        {
+            Debug.Log("On Disable");
+            GameGlobalEvent.OnPencilResolve -= ResolvePencil;
         }
 
     }

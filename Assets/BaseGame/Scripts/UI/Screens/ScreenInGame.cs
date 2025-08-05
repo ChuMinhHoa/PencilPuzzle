@@ -13,6 +13,7 @@ using UnityEngine;
 using R3;
 using Sirenix.OdinInspector;
 using TMPro;
+using TW.Reactive.CustomComponent;
 using TW.UGUI.Core.Modals;
 using TW.UGUI.Core.Screens;
 using TW.UGUI.Core.Views;
@@ -119,8 +120,9 @@ namespace Core.UI.Screens
 
             public void LoadLevelInfo()
             {
-                View.TimeBar.InitTimeBar(LevelManager.Instance.LevelData.LevelDuration);
-                View.TextLevel.SetText(LevelManager.Instance.LevelConfig.level.ToString());
+                //Debug.LogError("init time bar");
+                View.TimeBar.InitTimeBar(GameManager.Instance.currentLevelManager.currentLevelConfig.timeDuration);
+                View.TextLevel.SetText(GameManager.Instance.currentLevel.Value.ToString());
 
             }
             private async UniTask OnClickButtonPause()

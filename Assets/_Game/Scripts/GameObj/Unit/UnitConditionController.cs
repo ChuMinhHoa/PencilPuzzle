@@ -9,13 +9,22 @@ namespace _Game.Scripts.GameObj.Unit
     public enum ConditionType
     {
         None = 0,
-        UnderHidden = 1
+        UnderHidden = 1,
+        Obstacle = 2,
     }
     
     public class UnitConditionController : MonoBehaviour
     {
         public List<ConditionFace> conditionFaces = new();
-        
+
+        public void InitConditions()
+        {
+            for (var i = 0; i < conditionFaces.Count; i++)
+            {
+                conditionFaces[i].InitCondition();
+            }
+        }
+
         public void ResetCondition()
         {
             for (var i = 0; i < conditionFaces.Count; i++)
@@ -34,18 +43,6 @@ namespace _Game.Scripts.GameObj.Unit
             }
 
             return true;
-        }
-        
-        public void AddPropertyCondition(ConditionType conditionType, params object[] args)
-        {
-            for (var i = 0; i < conditionFaces.Count; i++)
-            {
-                if (conditionFaces[i].conditionType == conditionType)
-                {
-                    conditionFaces[i].AddPropertyCondition(args);
-                    return;
-                }
-            }
         }
     }
 }

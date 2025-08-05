@@ -1,5 +1,6 @@
 ﻿using System;
 using _Game.Scripts.GameEnum;
+using _Game.Scripts.Manager;
 using BaseGame.Scripts.Data;
 using CoreData;
 using Manager;

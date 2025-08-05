@@ -71,7 +71,7 @@ MonoBehaviour:
   myColliders:
   - {fileID: 2642593033787042733}
   - {fileID: 979092463032135409}
-  speed: 20
+  speed: 30
   layerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -121,6 +121,7 @@ MonoBehaviour:
   conditionType: 1
   tipMesh: {fileID: 4118866518637210311}
   bodyMesh: {fileID: 5506681350455637031}
+  bodySplineMesh: {fileID: 7621731579206075032}
   unitUnlockHidden: -1
   isResolved: 0
   tipMatDefault: {fileID: 2100000, guid: 9216c075c48996345b2aa6ce68aeafe5, type: 2}

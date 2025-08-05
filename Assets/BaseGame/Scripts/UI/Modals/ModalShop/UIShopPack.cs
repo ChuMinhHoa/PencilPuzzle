@@ -92,7 +92,7 @@ public class UIShopPack : MonoBehaviour
         }
         SetPackPrice();
         SetPackageName();
-        int itemCount = 0;
+        //int itemCount = 0;
         for (int i = 0; i < UIItemInfos.Count; i++)
         {
             if (i < ShopPackageDataConfig.GameResources.Count )

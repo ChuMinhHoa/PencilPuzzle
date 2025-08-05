@@ -55,6 +55,7 @@ public class UIItemInfo : MonoBehaviour
 
                 break;
             case ResourceType.Special:
+                Debug.Log((SpecialResourceType)gameResource.SpecificType);
                 if (ImgItemIcon != null && InitIcon)
                     ImgItemIcon.sprite =
                         ItemGlobalConfig.Instance.GetItemSprite((SpecialResourceType)gameResource.SpecificType);
@@ -103,7 +104,7 @@ public class UIItemInfo : MonoBehaviour
     {
         transform.localScale = Vector3.zero;
         await UniTask.Delay((int)(delay * 1000), cancellationToken: this.GetCancellationTokenOnDestroy());
-        LMotion.Create(0f, 1f, 0.15f).WithEase(Ease.OutBack)
+        await LMotion.Create(0f, 1f, 0.15f).WithEase(Ease.OutBack)
             .Bind(x => transform.localScale = Vector3.one * x)
             .AddTo(this);
     }

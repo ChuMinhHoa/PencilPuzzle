@@ -1,5 +1,6 @@
-using _Game.Scripts.UI.Modal;
+using System;
 using Core.UI.Activities;
+using Core.UI.Screens;
 using Cysharp.Threading.Tasks;
 using TW.UGUI.Core.Activities;
 using TW.UGUI.Core.Modals;
@@ -15,6 +16,17 @@ namespace _Game.Scripts.UI.Core
         protected override void Start()
         {
             base.Start();
+            ViewOptions activityLoading = new ViewOptions(nameof(ActivityLoading));
+            Memory<object> args = new Memory<object>(new object[]
+            {
+                (Func<UniTask>)(async () =>
+                {
+                    ScreenOptions screenOptions = new ScreenOptions(nameof(ScreenMainMenu), stack: false);
+                    await ScreenContainer.Find(ContainerKey.Screens).PushAsync(screenOptions);
+                }),
+                null
+            });
+            ActivityContainer.Find(ContainerKey.Activities).ShowAsync(activityLoading, args);
         }
     }
 }

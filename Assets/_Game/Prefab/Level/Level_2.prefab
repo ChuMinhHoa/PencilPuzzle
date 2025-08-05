@@ -134,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 3297901373012945955}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 0, z: 8}
+  m_LocalPosition: {x: 2.5, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -217,11 +217,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9c7a2eff42630c4b832b7f2101715fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPause:
+    m_Value: 0
+  isGamePlay: 0
   level: 2
   sharpenerController: {fileID: 8686770598835009153}
   pencilController: {fileID: 4386214638285829641}
   currentLevelConfig: {fileID: 11400000, guid: 234c12c710627714abe32cfb718a84a6, type: 2}
   currentWaveIndex: 0
+  currentLevelDuration: 0
 --- !u!1 &4979864541640220766
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +251,7 @@ Transform:
   m_GameObject: {fileID: 4979864541640220766}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 0, z: 8}
+  m_LocalPosition: {x: -2.5, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -338,7 +342,7 @@ Transform:
   m_GameObject: {fileID: 6812974364845926560}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 8}
+  m_LocalPosition: {x: 0, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -404,7 +408,7 @@ Transform:
   m_GameObject: {fileID: 7923392462045909766}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 8}
+  m_LocalPosition: {x: 20, y: 0, z: 6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

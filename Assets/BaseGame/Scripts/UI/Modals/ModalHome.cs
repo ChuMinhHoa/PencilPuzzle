@@ -93,7 +93,7 @@ namespace Core.UI.Modals
             {
                 await Model.Initialize(args);
                 await View.Initialize(args);
-                //View.ButtonPlay.SetOnClickDestination(OnClickButtonPlay);
+                View.ButtonPlay.SetOnClickDestination(OnClickButtonPlay);
                 GameManager.Instance.currentLevel.ReactiveProperty.Subscribe(View.InitLevel).AddTo(View.MainView);
             }
 

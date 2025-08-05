@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts.Manager;
+using _Game.Scripts.UI.Core;
 using Core.UI.Activities;
 using Core.UI.Screens;
 using CoreData;
@@ -112,8 +114,9 @@ namespace Core.UI.Modals
             private async UniTask ContinueSuccess()
             {
                 await ModalContainer.Find(ContainerKey.Modals).PopAsync(false);
-                LevelManager.Instance.TryAddTime(DefaultGlobalConfig.Instance.ReviveValue.reviveTime);
-                LevelManager.Instance.SetPause(false);
+                //LevelManager.Instance.TryAddTime(DefaultGlobalConfig.Instance.ReviveValue.reviveTime);
+                Debug.LogError("add time game play");
+                GameManager.Instance.SetPause(false);
             }
             
             private async UniTask OnClickButtonClose()
@@ -126,7 +129,7 @@ namespace Core.UI.Modals
                         ScreenOptions screenOptions = new ScreenOptions(nameof(ScreenMainMenu), stack: false);
                         await ScreenContainer.Find(ContainerKey.Screens).PushAsync(screenOptions);
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(false);
-                        LevelManager.Instance.ClearLevel();
+                        GameManager.Instance.ClearLevel();
                     }),
                     null
                 });

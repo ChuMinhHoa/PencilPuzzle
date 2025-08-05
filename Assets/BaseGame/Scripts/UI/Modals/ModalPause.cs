@@ -92,20 +92,20 @@ namespace Core.UI.Modals
 
             public void DidPushEnter(Memory<object> args)
             {
-                LevelManager.Instance.SetPause(true);
+                GameManager.Instance.SetPause(true);
             }
             public void DidPopEnter(Memory<object> args)
             {
-                LevelManager.Instance.SetPause(true);
+                GameManager.Instance.SetPause(true);
             }
 
             public void DidPushExit(Memory<object> args)
             {
-                LevelManager.Instance.SetPause(false);
+                GameManager.Instance.SetPause(false);
             }
             public void DidPopExit(Memory<object> args)
             {
-                LevelManager.Instance.SetPause(false);
+                GameManager.Instance.SetPause(false);
             }
             public async UniTask OnButtonRetryClick()
             {
@@ -130,7 +130,7 @@ namespace Core.UI.Modals
                     (Func<UniTask>)(async () =>
                     {
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(true);
-                        await GameManager.Instance.ReloadCurrentLevel();
+                        await GameManager.Instance.ReplayLevel();
                     }),
                     null
                 });
@@ -159,7 +159,7 @@ namespace Core.UI.Modals
                         ScreenOptions screenOptions = new ScreenOptions(nameof(ScreenMainMenu), stack: false);
                         await ScreenContainer.Find(ContainerKey.Screens).PushAsync(screenOptions);
                         await ModalContainer.Find(ContainerKey.Modals).PopAsync(true);
-                        GameManager.Instance.currentLevelManager.ClearLevel();
+                        GameManager.Instance.ClearLevel();
                     }),
                     null
                 });
