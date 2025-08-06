@@ -79,6 +79,8 @@ namespace _Game.Scripts.GameObj.Unit
 
         public override void LoadData(UnitPositionConfig dataLoad)
         {
+            trsWayOut.localPosition = dataLoad.wayOutPosition;
+            trsWayOut.localEulerAngles = new Vector3(0, dataLoad.wayOutRotation, 0);
             lastPencil = PoolingObject.Instance.SpawnLastPencilController(lastPencilParents);
             
             trsLastPencil = lastPencil.transform;

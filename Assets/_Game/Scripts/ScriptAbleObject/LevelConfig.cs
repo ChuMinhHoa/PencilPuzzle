@@ -31,7 +31,9 @@ namespace _Game.Scripts.ScriptAbleObject
             int unitId,
             SharpenerColorType colorType,
             List<float3> splineNodes,
-            List<float3> wayOutNodes
+            List<float3> wayOutNodes,
+            Vector3 wayOutPosition,
+            float wayOutRotationInit
             )
         {
             for (var i = 0; i < unitPositionConfig.Count; i++)
@@ -41,7 +43,9 @@ namespace _Game.Scripts.ScriptAbleObject
                     unitPositionConfig[i].SaveData(
                         colorType, 
                         splineNodes,
-                        wayOutNodes
+                        wayOutNodes,
+                        wayOutPosition,
+                        wayOutRotationInit
                     );
                     
 #if UNITY_EDITOR
@@ -57,7 +61,9 @@ namespace _Game.Scripts.ScriptAbleObject
             newUnitConfig.SaveData(
                 colorType, 
                 splineNodes,
-                wayOutNodes
+                wayOutNodes,
+                wayOutPosition,
+                wayOutRotationInit
             );
             unitPositionConfig.Add(newUnitConfig);
 #if UNITY_EDITOR
@@ -101,9 +107,13 @@ namespace _Game.Scripts.ScriptAbleObject
         public SharpenerColorType unitColor;
         public List<float3> pathMesh = new();
         public List<float3> wayOut = new();
+        public Vector3 wayOutPosition;
+        public float wayOutRotation;
         public void SaveData(SharpenerColorType colorType,
             List<float3> splineNodes,
-            List<float3> wayOutNodes)
+            List<float3> wayOutNodes,
+            Vector3 wayOutPositionInit, 
+            float wayOutRotationInit)  
         {
             unitColor = colorType;
 
@@ -119,6 +129,8 @@ namespace _Game.Scripts.ScriptAbleObject
             {
                 wayOut.Add(wayOutNodes[i]);
             }
+            wayOutPosition = wayOutPositionInit;
+            wayOutRotation = wayOutRotationInit;
         }
     }
 }

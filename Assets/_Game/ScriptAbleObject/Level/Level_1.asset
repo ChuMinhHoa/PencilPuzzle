@@ -51,12 +51,14 @@ MonoBehaviour:
     - x: 0
       y: 0
       z: 0
-    - x: 0.2
-      y: 0.4141076
+    - x: 0.302737
+      y: 0.9406071
       z: 0
     - x: 0.5
-      y: 2.5
+      y: 5
       z: 0
+    wayOutPosition: {x: 2, y: 0, z: 0}
+    wayOutRotation: 0
   - unitId: 1
     unitColor: 3
     pathMesh:
@@ -88,6 +90,8 @@ MonoBehaviour:
     - x: 2.5
       y: 2
       z: 0
+    wayOutPosition: {x: -2, y: 0, z: 0}
+    wayOutRotation: 270
   - unitId: 3
     unitColor: 3
     pathMesh:
@@ -119,6 +123,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 2
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: 0}
+    wayOutRotation: 270
   - unitId: 2
     unitColor: 1
     pathMesh:
@@ -150,6 +156,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 2
       z: 0
+    wayOutPosition: {x: -1, y: 0, z: 0}
+    wayOutRotation: 270
   - unitId: 4
     unitColor: 1
     pathMesh:
@@ -181,6 +189,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 2
       z: 0
+    wayOutPosition: {x: 1, y: 0, z: 0}
+    wayOutRotation: 270
   - unitId: 5
     unitColor: 3
     pathMesh:
@@ -212,6 +222,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 2
       z: 0
+    wayOutPosition: {x: 2, y: 0, z: 0}
+    wayOutRotation: 270
   sharpenerColors: 0100000003000000
   startSharpenerCount: 1
   levelPrefabReference:

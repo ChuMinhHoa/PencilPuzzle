@@ -116,12 +116,15 @@ namespace _Game.Scripts.Manager.Controller
 
                 var pMesh = GetPathPoint(pencils[i]);
                 var pOut = GetPathPointOut(pencils[i]);
-            
+                var wayOutPosition = pencils[i].trsWayOut.localPosition;
+                var rotateWayOut = pencils[i].trsWayOut.eulerAngles.y;
                 currentLevelConfig.SaveUnitData(
                     pencils[i].unitId,
                     pencils[i].colorType,
                     pMesh,
-                    pOut
+                    pOut,
+                    wayOutPosition,
+                    rotateWayOut
                 );
             }
         }

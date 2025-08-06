@@ -104,12 +104,16 @@ namespace _Game.Scripts.FTool
             }
 
             var pMesh = GetPathPointFollowCurrentPencilTransform();
+            var wayOutPosition = currentPencilUnit.trsWayOut.localPosition;
+            var rotateWayOut = currentPencilUnit.trsWayOut.eulerAngles.y;
             var pOut = GetPathPointOut();
             levelConfig.SaveUnitData(
                 currentPencilUnit.unitId,
                 currentPencilUnit.colorType,
                 pMesh,
-                pOut
+                pOut,
+                wayOutPosition,
+                rotateWayOut
             );
         }
 
@@ -126,6 +130,8 @@ namespace _Game.Scripts.FTool
             }
 
             var pMesh = GetPathPoint();
+            var wayOutPosition = currentPencilUnit.trsWayOut.localPosition;
+            var rotateWayOut = currentPencilUnit.trsWayOut.eulerAngles.y;
             var pOut = GetPathPointOut();
           
             
@@ -133,7 +139,9 @@ namespace _Game.Scripts.FTool
                 currentPencilUnit.unitId,
                 currentPencilUnit.colorType,
                 pMesh,
-                pOut
+                pOut,
+                wayOutPosition,
+                rotateWayOut
             );
         }
 

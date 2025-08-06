@@ -45,6 +45,8 @@ MonoBehaviour:
     - x: 1.5
       y: 2
       z: 0
+    wayOutPosition: {x: -0.5, y: 0, z: 0.1}
+    wayOutRotation: 270
   - unitId: 1
     unitColor: 5
     pathMesh:
@@ -79,6 +81,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -1.5, y: 0, z: 0.1}
+    wayOutRotation: 270
   - unitId: 2
     unitColor: 5
     pathMesh:
@@ -110,6 +114,8 @@ MonoBehaviour:
     - x: 1.5
       y: 2
       z: 0
+    wayOutPosition: {x: -2.5, y: 0, z: 0.1}
+    wayOutRotation: 270
   - unitId: 3
     unitColor: 2
     pathMesh:
@@ -139,8 +145,10 @@ MonoBehaviour:
       y: 0.17881548
       z: 0
     - x: 1.5
-      y: 2
+      y: 3
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: 0}
+    wayOutRotation: 180
   - unitId: 4
     unitColor: 2
     pathMesh:
@@ -172,6 +180,8 @@ MonoBehaviour:
     - x: 1.5
       y: 2
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: -1}
+    wayOutRotation: 180
   - unitId: 5
     unitColor: 2
     pathMesh:
@@ -203,6 +213,8 @@ MonoBehaviour:
     - x: 1.5
       y: 2
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: -2}
+    wayOutRotation: 180
   - unitId: 6
     unitColor: 4
     pathMesh:
@@ -237,6 +249,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: 0.5, y: 0, z: -2.9}
+    wayOutRotation: 270
   - unitId: 7
     unitColor: 4
     pathMesh:
@@ -271,6 +285,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: 1.5, y: 0, z: -2.9}
+    wayOutRotation: 270
   - unitId: 8
     unitColor: 4
     pathMesh:
@@ -305,6 +321,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: 2.5, y: 0, z: -2.9}
+    wayOutRotation: 270
   - unitId: 9
     unitColor: 1
     pathMesh:
@@ -339,6 +357,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: -3}
+    wayOutRotation: 0
   - unitId: 10
     unitColor: 1
     pathMesh:
@@ -373,6 +393,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -0, y: 0, z: -4}
+    wayOutRotation: 0
   - unitId: 11
     unitColor: 1
     pathMesh:
@@ -407,6 +429,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: 0, y: 0, z: -5}
+    wayOutRotation: 0
   - unitId: 12
     unitColor: 3
     pathMesh:
@@ -441,6 +465,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -0.5, y: 0, z: -5.9}
+    wayOutRotation: 270
   - unitId: 13
     unitColor: 3
     pathMesh:
@@ -475,6 +501,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -1.5, y: 0, z: -5.9}
+    wayOutRotation: 270
   - unitId: 14
     unitColor: 3
     pathMesh:
@@ -509,6 +537,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: -2.5, y: 0, z: -5.9}
+    wayOutRotation: 270
   - unitId: 15
     unitColor: 1
     pathMesh:
@@ -543,6 +573,8 @@ MonoBehaviour:
     - x: 2.5000005
       y: 1.3605679
       z: 0
+    wayOutPosition: {x: 0, y: 0, z: 0}
+    wayOutRotation: 0
   sharpenerColors: 0400000003000000010000000200000005000000
   startSharpenerCount: 3
   levelPrefabReference:

@@ -208,6 +208,7 @@ MonoBehaviour:
   currentLevelConfig: {fileID: 11400000, guid: 1e93ec40e99c870438438fa0bbeb5a9b, type: 2}
   currentWaveIndex: 0
   currentLevelDuration: 0
+  unitConditionController: {fileID: 0}
 --- !u!1 &4979864541640220766
 GameObject:
   m_ObjectHideFlags: 0

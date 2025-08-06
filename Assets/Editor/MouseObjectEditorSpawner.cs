@@ -98,7 +98,7 @@ public class MouseObjectEditorSpawner : EditorWindow
         {
             if (e.type == EventType.MouseMove || e.type == EventType.MouseDrag)
             {
-                Vector3 worldPos = GetMouseWorldPosition(sceneView);
+                Vector3 worldPos = GetMouseWorldPositionWithCollision(sceneView, spawnedObject);
                 Undo.RecordObject(spawnedObject.transform, "Move Object");
                 spawnedObject.transform.position = worldPos;
                 sceneView.Repaint();
@@ -135,6 +135,33 @@ public class MouseObjectEditorSpawner : EditorWindow
         pos.y = Mathf.Round(pos.y * 2f) / 2f;
         pos.z = Mathf.Round(pos.z * 2f) / 2f;
 
+        return pos;
+    }
+    
+    static Vector3 GetMouseWorldPositionWithCollision(SceneView sceneView, GameObject obj)
+    {
+        Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+        plane.Raycast(ray, out float enter);
+        Vector3 pos = ray.GetPoint(enter);
+
+        pos.x = Mathf.Round(pos.x * 2f) / 2f;
+        pos.z = Mathf.Round(pos.z * 2f) / 2f;
+
+        Vector3 checkPos = new Vector3(pos.x, 0, pos.z);
+        Collider[] colliders = Physics.OverlapBox(checkPos, obj.transform.localScale / 2f);
+
+        bool hasCollision = false;
+        foreach (var col in colliders)
+        {
+            if (col.transform != obj.transform && !col.transform.IsChildOf(obj.transform))
+            {
+                hasCollision = true;
+                break;
+            }
+        }
+
+        pos.y = hasCollision ? 1f : 0f;
         return pos;
     }
 }
