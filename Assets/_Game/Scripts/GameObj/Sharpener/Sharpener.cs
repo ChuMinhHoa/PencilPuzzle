@@ -5,6 +5,7 @@ using _Game.Scripts.GlobalConfig;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Sirenix.OdinInspector;
+using TW.UGUI.Utility;
 using UnityEngine;
 
 namespace _Game.Scripts.GameObj.Sharpener
@@ -41,6 +42,8 @@ namespace _Game.Scripts.GameObj.Sharpener
         public Animator anim;
 
         public List<PointGoal> pointGoals = new();
+        public List<ParticleSystem> listFx = new();
+        public Vector3 pointGoalLastMove = new();
 
         public virtual PointGoal TryGetPointGoal()
         {
@@ -91,6 +94,7 @@ namespace _Game.Scripts.GameObj.Sharpener
             sharpenerMesh.material = UnitGlobalConfig.Instance.GetTipMaterial(sharpenerColorType);
             //waveIndex = currentWaveIndex;
             ClearLastPencilController();
+            ChangeColorFx();
         }
 
         public void AnimMove(Transform trsTarget, Action onFinished = null)
@@ -122,10 +126,19 @@ namespace _Game.Scripts.GameObj.Sharpener
 
             _cleared = true;
             PlayAnimRoll();
+            AnimPointGoal();
             await UniTask.WaitForSeconds(UnitGlobalConfig.Instance.timeSharpenerRoll);
             ResetPointGoal();
             GameManager.Instance.currentLevelManager.ClearSharpenerPoint(this);
             GameManager.Instance.currentLevelManager.SpawnNextWave();
+        }
+        
+        private void AnimPointGoal()
+        {
+            for (var i = 0; i < pointGoals.Count; i++)
+            {
+                pointGoals[i].AnimPointGoal(pointGoalLastMove);
+            }
         }
 
         public virtual async UniTask AnimDone()
@@ -159,6 +172,15 @@ namespace _Game.Scripts.GameObj.Sharpener
             for (var i = 0; i < pointGoals.Count; i++)
             {
                 pointGoals[i].ClearLastPencilController();
+            }
+        }
+
+        private void ChangeColorFx()
+        {
+            var color = UnitGlobalConfig.Instance.GetColorFx(sharpenerColorType);
+            for (var i = 0; i < listFx.Count; i++)
+            {
+                listFx[i].startColor = color;
             }
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using _Game.Scripts.Manager;
 using _Game.Scripts.UI.Core;
+using Core.UI;
 using CoreData;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -85,24 +86,26 @@ namespace BaseGame.Scripts.UI.Modals
             {
                 await Model.Initialize(args);
                 await View.Initialize(args);
-                //View.BuyHeartWithAdsBtn.button.SetOnClickDestination(BuyHeartWithAds);
-                //View.BuyHeartWithCoinBtn.button.SetOnClickDestination(BuyHeartWithCoin);
-                View.BuyClose.button.SetOnClickDestination(OnButtonCloseClick);
+                View.BuyHeartWithAdsBtn.button.SetOnClickDestination(BuyHeartWithAds);
+                View.BuyHeartWithCoinBtn.button.SetOnClickDestination(BuyHeartWithCoin);
+                ReactiveValueExtension.SetOnClickDestination(View.BuyClose.button, OnButtonCloseClick);
             }
 
-            void BuyHeartWithAds()
+            private void BuyHeartWithAds()
             {
                 //InGameAdsController.EventShowAdsReward?.Invoke("AdsRw_BuyHeart", BuyHeartWithAdsSuccess, BuyHeartWithAdsFail);
+                Debug.LogError("need ads");
+                BuyHeartWithAdsSuccess();
             }
-            void BuyHeartWithAdsSuccess()
+            private void BuyHeartWithAdsSuccess()
             {
                 PlayerResourceManager.Instance.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, 1);
             }
-            void BuyHeartWithAdsFail()
+            private void BuyHeartWithAdsFail()
             {
                 
             }
-            void BuyHeartWithCoin()
+            private void BuyHeartWithCoin()
             {
                 PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.DefaultFullHeartCoin);
                 PlayerResourceManager.Instance.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, DefaultGlobalConfig.Instance.DefaultLife);

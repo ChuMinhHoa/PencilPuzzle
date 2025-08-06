@@ -179,7 +179,7 @@ namespace _Game.Scripts.Manager
 
         public void SetPause(bool active)
         {
-            throw new NotImplementedException();
+            isPause.Value = active;
         }
     }
 }

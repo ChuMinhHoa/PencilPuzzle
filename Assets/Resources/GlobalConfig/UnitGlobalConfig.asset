@@ -71,4 +71,23 @@ MonoBehaviour:
     colorMat: {fileID: 0}
   - colorType: 11
     colorMat: {fileID: 2100000, guid: 9216c075c48996345b2aa6ce68aeafe5, type: 2}
+  colorFx:
+  - colorType: 1
+    color: {r: 0.9811321, g: 0.19149111, b: 0.087931626, a: 1}
+  - colorType: 2
+    color: {r: 0.59891576, g: 0.8867924, b: 0.2216981, a: 1}
+  - colorType: 3
+    color: {r: 0.13381095, g: 0.65053284, b: 0.9150943, a: 1}
+  - colorType: 4
+    color: {r: 0.9528302, g: 0.82325464, b: 0.22022964, a: 1}
+  - colorType: 5
+    color: {r: 0.53936064, g: 0.16487186, b: 0.8962264, a: 1}
+  - colorType: 6
+    color: {r: 0.8867924, g: 0.3387741, b: 0.12130654, a: 1}
+  - colorType: 7
+    color: {r: 0.9622642, g: 0.22241013, b: 0.48434606, a: 1}
+  - colorType: 8
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - colorType: 9
+    color: {r: 0, g: 0, b: 0, a: 0}
   defaultMaterial: {fileID: 2100000, guid: ecd07f7d4a7e6324c824c53f418c2821, type: 2}

@@ -19,6 +19,7 @@ namespace _Game.Scripts.GameObj.Sharpener
         {
             objOnPoint = -1;
             _isMoveDone = false;
+            trsPoint.localPosition = Vector3.zero;
         }
 
         public override bool isFree => objOnPoint == -1;
@@ -49,6 +50,13 @@ namespace _Game.Scripts.GameObj.Sharpener
         public bool IsMoveDone()
         {
             return _isMoveDone;
+        }
+
+        public void AnimPointGoal(Vector3 point)
+        {
+            LMotion.Create(trsPoint.localPosition, point, 1f)
+                .Bind(x=> trsPoint.localPosition = x)
+                .AddTo(trsPoint);
         }
     }
 }

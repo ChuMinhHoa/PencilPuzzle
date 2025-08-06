@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using _Game.Scripts.Manager.Etc;
 using _Game.Scripts.OnGameManager;
+using _Game.Scripts.UI.Core;
 using Cysharp.Threading.Tasks;
 using LitMotion;
 using Lofelt.NiceVibrations;

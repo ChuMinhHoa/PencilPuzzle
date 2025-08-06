@@ -23,6 +23,7 @@ namespace _Game.Scripts.GlobalConfig
         public Vector3 unitHeadScale;
         public List<SharpenerColor> unitMaterial = new();
         public List<SharpenerColor> tipMaterial = new();
+        public List<ColorFx> colorFx = new();
         public Material defaultMaterial;
         
         public Material GetUnitMaterial(SharpenerColorType colorType)
@@ -33,6 +34,11 @@ namespace _Game.Scripts.GlobalConfig
         public Material GetTipMaterial(SharpenerColorType colorType)
         {
             return tipMaterial.Find(color => color.colorType == colorType)?.colorMat;
+        }
+        
+        public Color GetColorFx(SharpenerColorType sharpenerColorType)
+        {
+            return colorFx.Find(color => color.colorType == sharpenerColorType)?.color ?? Color.white;
         }
 
 #if UNITY_EDITOR
@@ -66,6 +72,14 @@ namespace _Game.Scripts.GlobalConfig
             }
         }
 #endif
+       
+    }
+    
+    [System.Serializable]
+    public class ColorFx
+    {
+        public SharpenerColorType colorType;
+        public Color color;
     }
     
     [System.Serializable]
