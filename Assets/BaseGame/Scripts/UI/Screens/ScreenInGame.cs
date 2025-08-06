@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Game.Scripts.Manager;
 using _Game.Scripts.UI.Core;
+using BaseGame.Scripts.UI.Modals;
 using BaseGame.Scripts.UI.Other;
 using Core.UI.Modals;
 using Core.UI.Other;

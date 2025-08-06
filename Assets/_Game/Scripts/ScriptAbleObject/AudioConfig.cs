@@ -1,5 +1,5 @@
 using System;
-using Manager;
+using _Game.Scripts.OnGameManager;
 using UnityEngine;
 
 namespace _Game.Scripts.ScriptAbleObject

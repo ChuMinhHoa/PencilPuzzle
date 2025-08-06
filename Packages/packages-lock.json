@@ -11,6 +11,218 @@
       },
       "hash": "b651c5866fe0e3fba065ce2e56dfdfcd59d3d109"
     },
+    "com.applovin.mediation.adapters.bidmachine.android": {
+      "version": "3030002.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.bidmachine.ios": {
+      "version": "303000002.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.bytedance.android": {
+      "version": "703000500.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.bytedance.ios": {
+      "version": "704010000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.facebook.android": {
+      "version": "6200000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.facebook.ios": {
+      "version": "6200100.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.google.android": {
+      "version": "24050000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.google.ios": {
+      "version": "12080000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.googleadmanager.android": {
+      "version": "24050000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.googleadmanager.ios": {
+      "version": "12080000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.inmobi.android": {
+      "version": "10080700.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.inmobi.ios": {
+      "version": "10080600.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.ironsource.android": {
+      "version": "810000000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.ironsource.ios": {
+      "version": "810000000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.mintegral.android": {
+      "version": "16099100.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.mintegral.ios": {
+      "version": "707090000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.mobilefuse.android": {
+      "version": "1090201.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.mobilefuse.ios": {
+      "version": "1090201.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.moloco.android": {
+      "version": "3120000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.moloco.ios": {
+      "version": "3120000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.smaato.android": {
+      "version": "22070201.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.smaato.ios": {
+      "version": "22090301.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.unityads.android": {
+      "version": "4160000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.unityads.ios": {
+      "version": "4160000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.vungle.android": {
+      "version": "7050003.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.vungle.ios": {
+      "version": "7050200.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.yandex.android": {
+      "version": "7150000.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.adapters.yandex.ios": {
+      "version": "7150100.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.applovin.mediation.ads": {
+      "version": "8.3.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.182"
+      },
+      "url": "https://unity.packages.applovin.com"
+    },
+    "com.appsflyer.unity": {
+      "version": "https://github.com/AppsFlyerSDK/appsflyer-unity-plugin.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "e721ea0a27556a35a899afc69d2a7a4c8c092f7d"
+    },
     "com.cysharp.memorypack": {
       "version": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/MemoryPack.Unity",
       "depth": 0,
@@ -40,6 +252,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "f789083c31250c83082da9b29be0c976152d699b"
+    },
+    "com.google.external-dependency-manager": {
+      "version": "1.2.182",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "com.tw.acacheeverything": {
       "version": "https://github.com/thinhwar123/TW-CustomPackage.git?path=Packages/TW.CacheEverything",

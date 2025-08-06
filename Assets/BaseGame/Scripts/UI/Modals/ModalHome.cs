@@ -99,7 +99,7 @@ namespace Core.UI.Modals
 
             private async UniTask OnClickButtonPlay()
             {
-                if (InGameDataManager.Instance.InGameData.ResourceData.IsEnoughResourceValue(ResourceType.Currency,
+                if (PlayerResourceManager.Instance.IsEnoughResourceValue(ResourceType.Currency,
                         (int)CurrencyType.Life, 1))
                 {
                     await LoadGame();
@@ -113,6 +113,7 @@ namespace Core.UI.Modals
 
             async UniTask LoadGame()
             {
+                PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Life, 1);
                 ViewOptions activityLoading = new ViewOptions(nameof(ActivityLoading));
                 Memory<object> args = new Memory<object>(new object[]
                 {

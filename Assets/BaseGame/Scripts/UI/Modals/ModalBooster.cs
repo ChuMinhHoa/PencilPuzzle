@@ -109,8 +109,8 @@ namespace Core.UI.Modals
             
             private async UniTask OnButtonBuyBoosterClick()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Booster, (int)(Model.BoosterSelector.BoosterType), 1);
-                InGameDataManager.Instance.InGameData.ResourceData.SubResourceValue(ResourceType.Currency, (int)(CurrencyType.Money), Model.BoosterData.Price);
+                PlayerResourceManager.Instance.AddResourceValue(ResourceType.Booster, (int)(Model.BoosterSelector.BoosterType), 1);
+                PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)(CurrencyType.Money), Model.BoosterData.Price);
                 await OnButtonCloseClick();
                 Model.BoosterSelector.SelectBooster();
             }
@@ -123,7 +123,7 @@ namespace Core.UI.Modals
             
             private async UniTask OnAdsButtonBuyBoosterSuccess()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Booster, (int)(Model.BoosterSelector.BoosterType), 1);
+                PlayerResourceManager.Instance.AddResourceValue(ResourceType.Booster, (int)(Model.BoosterSelector.BoosterType), 1);
                 await OnButtonCloseClick();
                 Model.BoosterSelector.SelectBooster();
             }

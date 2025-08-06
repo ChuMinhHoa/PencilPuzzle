@@ -33,7 +33,7 @@ public class BoosterSelector : MonoBehaviour
     private bool isShowOnTutorial;
     private void Start()
     {
-        BoosterAmount = InGameDataManager.Instance.InGameData.ResourceData.GetResource(ResourceType.Booster, (int)BoosterType).Value;
+        BoosterAmount = PlayerResourceManager.Instance.GetResource(ResourceType.Booster, (int)BoosterType).Value;
         BoosterAmount.Subscribe(UpdateBoosterAmount).AddTo(this);
         Button.AddListener(SelectBooster);
         boosterData = ItemGlobalConfig.Instance.GetBoosterData(BoosterType);
@@ -52,7 +52,7 @@ public class BoosterSelector : MonoBehaviour
     {
         if (level == boosterData.UnlockLevel)
         {
-            if (InGameDataManager.Instance.InGameData.ResourceData.IsBoosterUsedOnTut(BoosterType)
+            if (PlayerResourceManager.Instance.IsBoosterUsedOnTut(BoosterType)
                 || boosterData.skeletonDataAsset == null)
             {
                 LockedObj.SetActive(false);
@@ -98,7 +98,7 @@ public class BoosterSelector : MonoBehaviour
         }
         else
         {
-            if (InGameDataManager.Instance.InGameData.ResourceData.IsBoosterUsedOnTut(BoosterType)
+            if (PlayerResourceManager.Instance.IsBoosterUsedOnTut(BoosterType)
                 || boosterData.skeletonDataAsset == null)
             {
                 LockedObj.SetActive(false);
@@ -125,7 +125,7 @@ public class BoosterSelector : MonoBehaviour
         Button.SetInteractable(false);
         BoosterIcon.gameObject.SetActive(true);
         BoosterCG.alpha = 1f;
-        InGameDataManager.Instance.InGameData.ResourceData.AddBoosterUsedOnTut(BoosterType);
+        PlayerResourceManager.Instance.AddBoosterUsedOnTut(BoosterType);
         LockedObj.SetActive(false);
         UnlockedObj.SetActive(true);
         BoosterIcon.transform.position = root;
@@ -164,7 +164,7 @@ public class BoosterSelector : MonoBehaviour
     async UniTask DelayHideTut()
     {
         await UniTask.Delay(15000);
-        InGameDataManager.Instance.InGameData.ResourceData.AddBoosterUsedOnTut(BoosterType);
+        PlayerResourceManager.Instance.AddBoosterUsedOnTut(BoosterType);
         TutorialHand.SetActive(false);
     }
     
@@ -208,10 +208,10 @@ public class BoosterSelector : MonoBehaviour
             }
             else
             {
-                if(InGameDataManager.Instance.InGameData.ResourceData.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, boosterData.Price))
+                if(PlayerResourceManager.Instance.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, boosterData.Price))
                 {
-                    InGameDataManager.Instance.InGameData.ResourceData.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, boosterData.Price);
-                    InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Booster, (int)boosterData.BoosterType, DefaultGlobalConfig.Instance.BoosterAmountOnPurchase);
+                    PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, boosterData.Price);
+                    PlayerResourceManager.Instance.AddResourceValue(ResourceType.Booster, (int)boosterData.BoosterType, DefaultGlobalConfig.Instance.BoosterAmountOnPurchase);
                     //InGameAnalyticController.EventTrackResourceSpend?.Invoke(ResourceType.Currency, (CurrencyType.Money).ToString(), "ingame", "buy_booster", (int)boosterData.Price);
                 }
                 else

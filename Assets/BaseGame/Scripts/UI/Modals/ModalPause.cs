@@ -1,23 +1,21 @@
 using System;
 using _Game.Scripts.Manager;
 using _Game.Scripts.UI.Core;
-using BaseGame.Scripts.UI.Modals;
-using Core.UI.Activities;
+using Core.UI;
+using Core.UI.Modals;
 using Core.UI.Screens;
 using CoreData;
 using Cysharp.Threading.Tasks;
-using Manager;
-using TW.UGUI.MVPPattern;
-using UnityEngine;
 using R3;
 using Sirenix.OdinInspector;
 using TW.UGUI.Core.Activities;
 using TW.UGUI.Core.Modals;
 using TW.UGUI.Core.Screens;
 using TW.UGUI.Core.Views;
-using UnityEngine.UI;
+using TW.UGUI.MVPPattern;
+using UnityEngine;
 
-namespace Core.UI.Modals
+namespace BaseGame.Scripts.UI.Modals
 {
     public class ModalPause : Modal
     {
@@ -109,7 +107,7 @@ namespace Core.UI.Modals
             }
             public async UniTask OnButtonRetryClick()
             {
-                if (InGameDataManager.Instance.InGameData.ResourceData.IsEnoughResourceValue(ResourceType.Currency,
+                if (PlayerResourceManager.Instance.IsEnoughResourceValue(ResourceType.Currency,
                         (int)CurrencyType.Life, 1))
                 {
                     await OnRetry();

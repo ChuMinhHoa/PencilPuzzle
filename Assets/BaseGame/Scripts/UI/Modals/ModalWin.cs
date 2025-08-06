@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Game.Scripts.Manager;
+using _Game.Scripts.OnGameManager;
 using _Game.Scripts.UI.Core;
 using Core.UI;
 using Core.UI.Screens;
 using CoreData;
 using Cysharp.Threading.Tasks;
 using LitMotion;
-using Manager;
 using R3;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -152,7 +152,7 @@ namespace BaseGame.Scripts.UI.Modals
             
             private async UniTask OnClickButtonClaim()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.WinGameReward * 2);
+                PlayerResourceManager.Instance.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.WinGameReward);
                 await UIAnimationBase.ButtonBasic(View.ButtonClaim.transform);
                 //InGameAdsController.EventShowAdsInter?.Invoke("AdsInter_WinLevel", null);
                 Debug.LogError("AdsInter_WinLevel");

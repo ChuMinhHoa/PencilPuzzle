@@ -24,7 +24,7 @@ namespace Core.UI.Other
         private float Amount { get; set; }
         private void Start()
         {
-            GameResource gameResource = ResourceData.Instance.GetResource(ResourceType.Currency, (int)CurrencyType);
+            GameResource gameResource = PlayerResourceManager.Instance.GetResource(ResourceType.Currency, (int)CurrencyType);
             gameResource.Value.Subscribe(OnResourceChange).AddTo(this);
             if (ShowResourseBtn != null)
             {

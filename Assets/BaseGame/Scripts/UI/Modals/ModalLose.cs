@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Game.Scripts.Manager;
+using _Game.Scripts.OnGameManager;
 using _Game.Scripts.UI.Core;
 using Core.UI.Activities;
 using Core.UI.Screens;
@@ -80,7 +81,7 @@ namespace Core.UI.Modals
                 reviveCoinTxt.text = $"{DefaultGlobalConfig.Instance.ReviveCoin}";
                 reviveTime1Txt.text = $"Get {DefaultGlobalConfig.Instance.ReviveValue.reviveTime}s to keep playing";
                 reviveTime2Txt.text = $"+{DefaultGlobalConfig.Instance.ReviveValue.reviveTime}s";
-                ButtonKeepPlaying.interactable = InGameDataManager.Instance.InGameData.ResourceData.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.ReviveCoin);
+                ButtonKeepPlaying.interactable = PlayerResourceManager.Instance.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.ReviveCoin);
                 for (var i = 0; i < UiShopReviveTime.Count; i++)
                 {
                     UiShopReviveTime[i].text = $"Instant<br>+ {DefaultGlobalConfig.Instance.ReviveValue.reviveTime}s";
@@ -107,7 +108,7 @@ namespace Core.UI.Modals
             }
             private async UniTask OnClickButtonKeepPlaying()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, Model.ReviveCoin);
+                PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, Model.ReviveCoin);
                 await ContinueSuccess();
             }
             

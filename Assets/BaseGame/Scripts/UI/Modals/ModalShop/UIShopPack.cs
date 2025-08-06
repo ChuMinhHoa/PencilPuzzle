@@ -118,7 +118,7 @@ public class UIShopPack : MonoBehaviour
     bool CheckPackAvaiable()
     {
         if(PackageName == PackageName.removeads)
-            return !InGameDataManager.Instance.InGameData.ResourceData.IsPackPurchased(PackageName.ToString());
+            return !PlayerResourceManager.Instance.IsPackPurchased(PackageName.ToString());
         return true;
     }
     
@@ -192,7 +192,7 @@ public class UIShopPack : MonoBehaviour
         {
             RewardManager.Instance.ShowReward();
         }
-        InGameDataManager.Instance.InGameData.ResourceData.AddPurchasedPack(ShopPackageDataConfig.packageName.ToString());
+        PlayerResourceManager.Instance.AddPurchasedPack(ShopPackageDataConfig.packageName.ToString());
         callBackFromParent?.Invoke();
         if(reInit)
             gameObject.SetActive(CheckPackAvaiable());

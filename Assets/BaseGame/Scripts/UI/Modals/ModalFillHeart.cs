@@ -67,7 +67,7 @@ namespace BaseGame.Scripts.UI.Modals
 
             public UniTask Initialize(Memory<object> args)
             {
-                BuyHeartWithCoinBtn.SetInteractable(InGameDataManager.Instance.InGameData.ResourceData.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.DefaultFullHeartCoin));
+                BuyHeartWithCoinBtn.SetInteractable(PlayerResourceManager.Instance.IsEnoughResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.DefaultFullHeartCoin));
                 CoinPriceTxt.text = $"{DefaultGlobalConfig.Instance.DefaultFullHeartCoin}";
                 NotEnoughLifeObj.SetActive(GameManager.Instance._inGame);
                 return UniTask.CompletedTask;
@@ -96,7 +96,7 @@ namespace BaseGame.Scripts.UI.Modals
             }
             void BuyHeartWithAdsSuccess()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, 1);
+                PlayerResourceManager.Instance.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, 1);
             }
             void BuyHeartWithAdsFail()
             {
@@ -104,8 +104,8 @@ namespace BaseGame.Scripts.UI.Modals
             }
             void BuyHeartWithCoin()
             {
-                InGameDataManager.Instance.InGameData.ResourceData.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.DefaultFullHeartCoin);
-                InGameDataManager.Instance.InGameData.ResourceData.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, DefaultGlobalConfig.Instance.DefaultLife);
+                PlayerResourceManager.Instance.SubResourceValue(ResourceType.Currency, (int)CurrencyType.Money, DefaultGlobalConfig.Instance.DefaultFullHeartCoin);
+                PlayerResourceManager.Instance.AddResourceValue(ResourceType.Currency, (int)CurrencyType.Life, DefaultGlobalConfig.Instance.DefaultLife);
                 OnButtonCloseClick().Forget();
             }
             private async UniTask OnButtonCloseClick()

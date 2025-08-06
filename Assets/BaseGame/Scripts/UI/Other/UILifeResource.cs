@@ -31,13 +31,13 @@ namespace Core.UI.Other
         private float Amount { get; set; }
         private void Start()
         {
-            GameResource gameResource = ResourceData.Instance.GetResource(ResourceType.Currency, (int)CurrencyType);
+            GameResource gameResource = PlayerResourceManager.Instance.GetResource(ResourceType.Currency, (int)CurrencyType);
             gameResource.Value.Subscribe(OnResourceChange).AddTo(this);
             if (ShowResourseBtn != null)
             {
                 ShowResourseBtn.SetOnClickDestination(ShowResource);
             }
-            infinityLifeTime = InGameDataManager.Instance.InGameData.ResourceData.GetResource(ResourceType.Special, (int)SpecialResourceType.InfiniteLife).Value;
+            infinityLifeTime = PlayerResourceManager.Instance.GetResource(ResourceType.Special, (int)SpecialResourceType.InfiniteLife).Value;
             infinityLifeTime.Subscribe(OnInfinityLifeTimeChange).AddTo(this);
         }
         private void OnResourceChange(float value)
@@ -64,7 +64,7 @@ namespace Core.UI.Other
             }
             else
             {
-                OnResourceChange(ResourceData.Instance.GetResource(ResourceType.Currency, (int)CurrencyType).Value.Value);
+                OnResourceChange(PlayerResourceManager.Instance.GetResource(ResourceType.Currency, (int)CurrencyType).Value.Value);
             }
         }
 
